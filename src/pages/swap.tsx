@@ -19,8 +19,11 @@ const Page: NextPage = () => {
               <div className={'flex w-full gap-4'}>
                 <Input
                 />
-                <Input
-                />
+                <div className="border-primary pl-4 text-2xl w-1/2 rounded-xl py-2 bg-white">
+                  <select className="w-10/12 border-primary-900 px-4 border-[0.2px] rounded-full py-1">
+                    <option>----</option>
+                  </select>
+                </div>
               </div>
               <div className="flex justify-between">
                 <span className="text-grey-900">$0</span>
