@@ -253,7 +253,7 @@ const TableElement = React.forwardRef<
                   {currentIndexesArr?.map((val, index) => (
                     <Button
                       key={index}
-                      variant="label"
+                      variant="ghost"
                       className="h-8 w-8 p-0"
                       onClick={() => table.setPageIndex(val - 1)}
                       data-true={currentIndex === val}
@@ -265,7 +265,7 @@ const TableElement = React.forwardRef<
                   {lastIndexes?.map((val, index) => (
                     <Button
                       key={index}
-                      variant="label"
+                      variant="ghost"
                       className="h-8 w-8 p-0"
                       onClick={() => table.setPageIndex(val - 1)}
                       data-true={currentIndex === val}
