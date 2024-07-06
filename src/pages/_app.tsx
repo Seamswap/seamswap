@@ -1,10 +1,19 @@
-import "@src/styles/globals.css";
-import type { AppProps } from "next/app";
-import Layout from "@src/components/atoms/Layout";
+import '@src/styles/globals.css';
+import type { AppProps } from 'next/app';
+import Layout from '@src/components/atoms/Layout';
+import { ThirdwebProvider } from 'thirdweb/react';
+import LoginProvider from '@src/components/providers/LoginProvider';
+import WalletPopup from '@src/components/atoms/WalletPopup';
 
 export default function App({ Component, pageProps }: AppProps) {
-  return(
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>)
+  return (
+    <ThirdwebProvider>
+      <LoginProvider>
+        <WalletPopup />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </LoginProvider>
+    </ThirdwebProvider>
+  );
 }
