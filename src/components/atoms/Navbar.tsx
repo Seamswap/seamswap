@@ -5,6 +5,9 @@ import WalletAdd from '@src/components/icons/WalletAdd.icon';
 import { createThirdwebClient } from 'thirdweb';
 import { LoginProviderContext } from '@src/components/providers/LoginProvider';
 import { generateUserNameImage, truncateWalletAddress } from '@src/lib/utils';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
+
 
 export interface INavbarProps {
 }
@@ -31,6 +34,7 @@ export const thirdWebClient = createThirdwebClient({ clientId: 'd420daa7ec213774
 const Navbar: React.FC<INavbarProps> = props => {
   const { openLoginModal, account } = useContext(LoginProviderContext);
   const [userNameImage, setUserNameImage] = React.useState<string>('');
+  const { pathname } = useRouter();
 
   async function setImageUrlHandler() {
     if (account) {
@@ -49,14 +53,13 @@ const Navbar: React.FC<INavbarProps> = props => {
       <Image src={'/logo.png'} alt={'Logo'} width={168} height={40} className="h-10 w-auto" />
       <div className="space-x-16">
         {LINKS.map(link => (
-          <a key={link.name} href={link.href} className="font-medium text-secondary-700">{link.name}</a>
+          <Link key={link.name} href={link.href} className="font-medium text-secondary-700 data-true:text-primary-900"  data-true={link.href === pathname}>{link.name}</Link>
         ))}
       </div>
       {account ? <button className="bg-primary-400 px-5 py-3.5 rounded-md flex items-center text-primary-900">
           <Image src={userNameImage} alt="User Avatar" width={30} height={30}
                  className="mr-2" /><span>{truncateWalletAddress(account.address)}</span></button> :
-        <button onClick={() => openLoginModal()
-        } className="bg-primary-900 px-5 py-3.5 rounded-md text-white inline-flex items-center"><WalletAdd
+        <button onClick={openLoginModal} className="bg-primary-900 px-5 py-3.5 rounded-md text-white inline-flex items-center"><WalletAdd
           className="mr-1.5" />Connect wallet
         </button>}
     </nav>);
