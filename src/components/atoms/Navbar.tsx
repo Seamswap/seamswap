@@ -50,7 +50,7 @@ const Navbar: React.FC<INavbarProps> = props => {
   console.log(generateUserNameImage(account?.address || ''));
   return (
     <nav className="px-5 py-4 flex justify-between items-center mx-auto w-3/4 bg-white mt-7 border-primary rounded-xl">
-      <Image src={'/logo.png'} alt={'Logo'} width={168} height={40} className="h-10 w-auto" />
+      <Link href="/swap"><Image src={'/logo.png'} alt={'Logo'} width={168} height={40} className="h-10 w-auto" /></Link>
       <div className="space-x-16">
         {LINKS.map(link => (
           <Link key={link.name} href={link.href} className="font-medium text-secondary-700 data-true:text-primary-900"  data-true={link.href === pathname}>{link.name}</Link>
