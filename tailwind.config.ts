@@ -19,12 +19,17 @@ const config: Config = {
           400: '#DBFFFB',
           300: '#EBFFFD',
           100: '#F5FFFE',
+          50: '#F0FFFD',
         },
         grey: {
           900: '#778B89',
+          700: '#878787'
         },
       },
     },
+    data: {
+      true: 'true="true"',
+    }
   },
   plugins: [],
 };
