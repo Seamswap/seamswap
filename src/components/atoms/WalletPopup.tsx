@@ -21,8 +21,8 @@ const WalletPopup: React.FC<IWalletPopupProps> = props => {
     login(wallet.getAccount() || null);
     closeLoginModal();
   };
-  return isLoginModalOpen && (
-    <div className="fixed w-full h-full flex items-center">
+  return (
+    <div className={`fixed w-full h-full items-center z-50 ${!isLoginModalOpen ? 'hidden' : 'flex'}`}>
       <ConnectEmbed
         client={thirdWebClient}
         theme={lightTheme({
