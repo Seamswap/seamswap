@@ -3,13 +3,19 @@ import * as React from 'react';
 import {
   ColumnDef,
   ColumnFiltersState,
-  getCoreRowModel, getFilteredRowModel,
-  getPaginationRowModel, getSortedRowModel,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
   SortingState,
   VisibilityState,
 } from '@tanstack/table-core';
-import { useReactTable, Table } from '@tanstack/react-table';
+import { useReactTable } from '@tanstack/react-table';
 import { TableElement } from '@src/components/ui/Table';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@src/components/ui/Tabs';
+import Input from '@src/components/ui/Input';
+import { Search } from 'lucide-react';
+import Export from '@src/components/icons/Export.icon';
 
 
 export interface Explorer {
@@ -101,12 +107,31 @@ const Page: NextPage = () => {
   });
 
   return (
-    <div className="px-12 py-14">
+    <Tabs defaultValue="watchlist" className="px-12 py-14">
       <h2 className="text-4xl">Seamless Explorer</h2>
-      <p className="w-7/12 mb-6">Track important data across seamless protocol and swapped assets. This page shows data about transactions,
+      <p className="w-4/12 mb-6 text-grey-700">Track important data across seamless protocol and swapped assets. This
+        page shows data about transactions,
         assets etc.</p>
-      <TableElement columns={columns} table={table} />
-    </div>
+      <div className="flex justify-between mb-6">
+        <TabsList>
+          <TabsTrigger value="watchlist">Watchlist</TabsTrigger>
+          <TabsTrigger value="markets">Markets</TabsTrigger>
+          <TabsTrigger value="transaction-history">Transactions History</TabsTrigger>
+        </TabsList>
+        <div className="flex space-x-4 items-center basis-3/12">
+          <div className="inline-flex items-center"><span>Lend</span> <Export className="ml-2.5 w-4" /></div>
+          <div className="inline-flex items-center"><span>Borrow</span> <Export className="ml-2.5 w-4" /></div>
+          <span className="relative w-full">
+            <Search className="text-primary-900 absolute inset-y-0 my-auto left-4" />
+          <Input className="bg-transparent text-primary-900 placeholder:text-primary-900 pl-12 text-sm w-full"
+                 placeholder="Search by Asset name" />
+            </span>
+        </div>
+      </div>
+      <TabsContent value="watchlist">
+        <TableElement columns={columns} table={table} />
+      </TabsContent>
+    </Tabs>
   );
 };
 export default Page;
