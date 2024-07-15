@@ -37,9 +37,8 @@ const Navbar: React.FC<INavbarProps> = props => {
   const { pathname } = useRouter();
 
   async function setImageUrlHandler() {
-    if (account) {
-      const url = await generateUserNameImage(account?.address || '');
-      console.log({ url });
+    if (account?.address) {
+      const url = await generateUserNameImage(account?.address);
       setUserNameImage(url);
     }
   }
