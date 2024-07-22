@@ -47,3 +47,6 @@ function convertSvgToPng(svgData: string): Promise<string> {
     img.src = url;
   });
 }
+export const metadataQueryConfig = {
+  staleTime: Infinity,
+};
