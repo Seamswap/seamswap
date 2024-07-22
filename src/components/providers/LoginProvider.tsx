@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Account } from 'thirdweb/wallets';
+import { Account } from '../ui/ConnectButton';
 
 export interface ILoginProviderProps {
   children: React.ReactNode;
@@ -8,9 +8,9 @@ export interface ILoginProviderProps {
 interface InitialLoginContext {
   openLoginModal: () => void;
   closeLoginModal: () => void;
-  login: (account: Account | null) => void;
+  login: (account?: Account) => void;
   logout: () => void;
-  account: Account | null;
+  account?: Account;
   isLoginModalOpen: boolean;
 }
 
@@ -23,22 +23,22 @@ const initialLoginContext: InitialLoginContext = {
   },
   logout: () => {
   },
-  account: null,
+  account: undefined,
   isLoginModalOpen: false,
 };
 
 export const LoginProviderContext = React.createContext<InitialLoginContext>(initialLoginContext);
 
 const LoginProvider: React.FC<ILoginProviderProps> = props => {
-  const [account, setAccount] = React.useState<Account | null>(null);
+  const [account, setAccount] = React.useState<Account | undefined>(undefined);
   const [isLoginModalOpen, setIsLoginModalOpen] = React.useState<boolean>(false);
   const openLoginModal = () => setIsLoginModalOpen(true);
   const closeLoginModal = () => setIsLoginModalOpen(false);
-  const login = (account: Account | null) => {
+  const login = (account?: Account) => {
     setAccount(account);
   };
   const logout = () => {
-    setAccount(null);
+    setAccount(undefined);
   };
 
   return (

@@ -1,19 +1,13 @@
 import * as React from 'react';
 import { useContext } from 'react';
-import { ConnectEmbed, lightTheme } from 'thirdweb/react';
-import { thirdWebClient } from '@src/components/atoms/Navbar';
-import { createWallet, Wallet } from 'thirdweb/wallets';
+
+
 import { LoginProviderContext } from '@src/components/providers/LoginProvider';
+import { Wallet } from '@rainbow-me/rainbowkit';
 
 export interface IWalletPopupProps {
 }
 
-const wallets = [
-  // inAppWallet(),
-  createWallet('io.metamask'),
-  createWallet('com.coinbase.wallet'),
-  createWallet('me.rainbow'),
-];
 const WalletPopup: React.FC<IWalletPopupProps> = props => {
   const { closeLoginModal, login, isLoginModalOpen } = useContext(LoginProviderContext);
   const onConnect = async (wallet: Wallet) => {
@@ -23,7 +17,7 @@ const WalletPopup: React.FC<IWalletPopupProps> = props => {
   };
   return (
     <div className={`fixed w-full h-full items-center z-50 ${!isLoginModalOpen ? 'hidden' : 'flex'}`}>
-      <ConnectEmbed
+      {/* <ConnectEmbed
         client={thirdWebClient}
         theme={lightTheme({
           colors: {
@@ -47,7 +41,7 @@ const WalletPopup: React.FC<IWalletPopupProps> = props => {
         walletConnect={{
           projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID!,
         }}
-      />
+      /> */}
     </div>
   );
 };
