@@ -66,6 +66,9 @@ export const columns: ColumnDef<Explorer>[] = [
   {
     accessorKey: 'position',
     header: 'Position',
+    cell: (row) => (
+      <button className="bg-blue-500 text-white p-2 rounded">Star</button>
+    ),
   },
   {
     header: 'Add watchlist',

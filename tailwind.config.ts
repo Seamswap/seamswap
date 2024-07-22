@@ -27,6 +27,10 @@ const config: Config = {
           900: '#778B89',
           700: '#878787'
         },
+        warning:{
+          900: '#FFBB0B',
+          200: '#FFF5DB'
+        }
       },
     },
     data: {

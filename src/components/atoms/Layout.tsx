@@ -1,9 +1,6 @@
 import * as React from 'react';
-import Navbar, { thirdWebClient } from '@src/components/atoms/Navbar';
+import Navbar  from '@src/components/atoms/Navbar';
 import { Inter } from 'next/font/google';
-
-import { ConnectEmbed, darkTheme, lightTheme } from 'thirdweb/react';
-import { createWallet, inAppWallet, Wallet } from 'thirdweb/wallets';
 
 export interface ILayoutProps {
   children: React.ReactNode;
