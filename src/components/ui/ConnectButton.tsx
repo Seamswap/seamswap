@@ -1,12 +1,12 @@
-import * as React from "react";
+import * as React from 'react';
 import { AuthenticationStatus, ConnectButton } from '@rainbow-me/rainbowkit';
-import Image from "next/image";
-import { generateUserNameImage } from "@src/lib/utils";
-import WalletAdd from "../icons/WalletAdd.icon";
-import { LoginProviderContext } from "../providers/LoginProvider";
+import Image from 'next/image';
+import { generateUserNameImage } from '@src/lib/utils';
+import WalletAdd from '../icons/WalletAdd.icon';
+import { LoginProviderContext } from '../providers/LoginProvider';
 
 export interface Account {
-  address: string;
+  address: `0x${string}`;
   balanceDecimals?: number;
   balanceFormatted?: string;
   balanceSymbol?: string;
@@ -16,8 +16,9 @@ export interface Account {
   ensName?: string;
   hasPendingTransactions: boolean;
 }
+
 export interface IConnectButtonProps {
-  account?: Account
+  account?: Account;
   chain?: {
     hasIcon: boolean;
     iconUrl?: string;
@@ -36,16 +37,17 @@ export interface IConnectButtonProps {
   connectModalOpen: boolean;
   isExternal?: boolean;
 }
+
 const ConnectorButton: React.FC<IConnectButtonProps> = ({
-  account,
-  chain,
-  openAccountModal,
-  openChainModal,
-  openConnectModal,
-  authenticationStatus,
-  mounted,
-  isExternal,
-}) => {
+                                                          account,
+                                                          chain,
+                                                          openAccountModal,
+                                                          openChainModal,
+                                                          openConnectModal,
+                                                          authenticationStatus,
+                                                          mounted,
+                                                          isExternal,
+                                                        }) => {
   const [userNameImage, setUserNameImage] = React.useState<string>('');
   const { openLoginModal, login } = React.useContext(LoginProviderContext);
 
@@ -58,12 +60,14 @@ const ConnectorButton: React.FC<IConnectButtonProps> = ({
     chain &&
     (!authenticationStatus ||
       authenticationStatus === 'authenticated');
+
   async function setImageUrlHandler() {
     if (account?.address) {
       const url = await generateUserNameImage(account?.address);
       setUserNameImage(url);
     }
   }
+
   React.useEffect(() => {
     setImageUrlHandler();
     login(account);
@@ -89,31 +93,33 @@ const ConnectorButton: React.FC<IConnectButtonProps> = ({
             >
               Connect wallet
             </button>
-          )
+          );
         }
         if (!connected) {
           return (
-            <button onClick={openConnectModal} className="bg-primary-900 px-5 py-3.5 rounded-md text-white inline-flex items-center"><WalletAdd
+            <button onClick={openConnectModal}
+                    className="bg-primary-900 px-5 py-3.5 rounded-md text-white inline-flex items-center"><WalletAdd
               className="mr-1.5" />Connect wallet
             </button>
           );
         }
         return (
           <div style={{ display: 'flex', gap: 12 }}>
-            <button onClick={openAccountModal} type="button" className="bg-primary-400 px-5 py-3.5 rounded-md flex items-center text-primary-900">
+            <button onClick={openAccountModal} type="button"
+                    className="bg-primary-400 px-5 py-3.5 rounded-md flex items-center text-primary-900">
               <Image src={userNameImage} alt="User Avatar" width={30} height={30}
-                className="mr-2" /><span>{account.displayName}</span>
+                     className="mr-2" /><span>{account.displayName}</span>
             </button>
           </div>
         );
       })()}
     </div>
   );
-}
+};
 const ConnectionButton: React.FC<{ isExternal?: boolean }> = prop => {
   return (
     <ConnectButton.Custom>
-      {(props) => <ConnectorButton {...props} isExternal={prop.isExternal} />}
+      {(props) => <ConnectorButton {...(props as IConnectButtonProps)} isExternal={prop.isExternal} />}
     </ConnectButton.Custom>
   );
 };
