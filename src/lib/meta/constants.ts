@@ -3,7 +3,8 @@ import seamLogo from "@assets/tokens/seam.svg";
 import usdcLogo from "@assets/tokens/usdc.svg";
 import ogPointsLogo from "@assets/tokens/og-points.svg";
 import brettLogo from "@assets/tokens/brett.svg";
-import type { DecimalsOptions } from "@shared";
+import { DecimalsOptions } from '@src/lib/types/helpers';
+
 
 export const walletBalanceDecimalsOptions: Partial<DecimalsOptions> = {
   singleDigitNumberDecimals: 6,
@@ -33,6 +34,7 @@ export const AERO_ADDRESS: Address = "0x940181a94A35A4569E4529A3CDfB74e38FD98631
 export const BRETT_ADDRESS: Address = "0x532f27101965dd16442E59d40670FaF5eBB142E4";
 export const ESSEAM_ADDRESS: Address = "0x998e44232BEF4F8B033e5A5175BDC97F2B10d5e5";
 export const OG_POINTS: Address = "0x5607718c64334eb5174CB2226af891a6ED82c7C6";
+
 
 export const OG_POINTS_MOCK_PRICE: bigint = 0n;
 

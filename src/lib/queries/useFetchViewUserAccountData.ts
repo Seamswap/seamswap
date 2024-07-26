@@ -1,9 +1,15 @@
-import { useAccount } from "wagmi";
-import { Address } from "viem";
-import { Displayable, FetchBigInt, formatFetchBigIntToHealthFactor, formatFetchBigIntToViewBigInt, ViewUserAccountData } from "../types/helpers";
-import { lendingPoolAbi, lendingPoolAddress } from "../config/contract";
-import { useSeamlessContractRead } from "../shared/useSeamlessContractRead";
-import { ONE_ETHER } from "../meta";
+import { useAccount } from 'wagmi';
+import { Address } from 'viem';
+import {
+  Displayable,
+  FetchBigInt,
+  formatFetchBigIntToHealthFactor,
+  formatFetchBigIntToViewBigInt,
+  ViewUserAccountData,
+} from '../types/helpers';
+import { lendingPoolAbi, lendingPoolAddress } from '../config/contract';
+import { useSeamlessContractRead } from '../shared/useSeamlessContractRead';
+import { ONE_ETHER } from '../meta';
 
 
 export interface FetchUserAccountData {
@@ -23,63 +29,64 @@ export const useFetchUserAccountData = () => {
   const { data, ...rest } = useSeamlessContractRead({
     address: lendingPoolAddress,
     abi: lendingPoolAbi,
-    functionName: "getUserAccountData",
+    functionName: 'getUserAccountData',
     args: [account.address as Address],
     query: {
       enabled: !!account.address,
-    }
+    },
   });
 
   const [totalCollateralUsd, totalDebtUsd, availableBorrowUsd, currentLiquidationThreshold, ltv, healthFactor] =
-    data || [0n, 0n, 0n, 0n, 0n, 0n];
+  data || [0n, 0n, 0n, 0n, 0n, 0n];
 
   const borrowPowerUsed: bigint =
     totalDebtUsd !== 0n && availableBorrowUsd !== 0n
-      ? ((totalDebtUsd * ONE_ETHER) / (totalDebtUsd + availableBorrowUsd)) * 100
+      ? ((totalDebtUsd * ONE_ETHER) / (totalDebtUsd + availableBorrowUsd)) * BigInt(100)
       : 0n;
 
   return {
     ...rest,
     data: {
       balance: {
-        bigIntValue: totalCollateralUsd - totalDebtUsd,
+        bigIntValue:
+          totalCollateralUsd - totalDebtUsd,
         decimals: 8,
-        symbol: "$",
+        symbol: '$',
       },
       totalCollateralUsd: {
         bigIntValue: totalCollateralUsd,
         decimals: 8,
-        symbol: "$",
+        symbol: '$',
       },
       totalDebtUsd: {
         bigIntValue: totalDebtUsd,
         decimals: 8,
-        symbol: "$",
+        symbol: '$',
       },
       availableBorrowUsd: {
         bigIntValue: availableBorrowUsd,
         decimals: 8,
-        symbol: "$",
+        symbol: '$',
       },
       borrowPowerUsed: {
         bigIntValue: borrowPowerUsed,
         decimals: 18,
-        symbol: "%",
+        symbol: '%',
       },
       currentLiquidationThreshold: {
         bigIntValue: currentLiquidationThreshold,
         decimals: 2,
-        symbol: "%",
+        symbol: '%',
       },
       ltv: {
         bigIntValue: ltv,
         decimals: 2,
-        symbol: "%",
+        symbol: '%',
       },
       healthFactor: {
         bigIntValue: healthFactor,
         decimals: 18,
-        symbol: "",
+        symbol: '',
       },
     },
   };
@@ -108,6 +115,7 @@ export const useFetchViewUserAccountData = (): Displayable<ViewUserAccountData> 
       totalDebt: formatFetchBigIntToViewBigInt(totalDebtUsd),
       availableBorrow: formatFetchBigIntToViewBigInt(availableBorrowUsd),
       borrowPowerUsed: formatFetchBigIntToViewBigInt(borrowPowerUsed),
+      ViewAssetBalance: formatFetchBigIntToViewBigInt(totalCollateralUsd),
       currentLiquidationThreshold: formatFetchBigIntToViewBigInt(currentLiquidationThreshold),
       ltv: formatFetchBigIntToViewBigInt(ltv),
       healthFactor: formatFetchBigIntToHealthFactor(healthFactor),

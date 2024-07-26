@@ -3,28 +3,30 @@ import type { NextPage } from 'next';
 import * as React from 'react';
 import { useContext, useEffect } from 'react';
 import Input from '@src/components/ui/Input';
+import { getBalance } from '@wagmi/core';
 import SwapIcon from '@src/components/icons/SwapIcon.icon';
 import Settings from '@src/components/icons/Settings.icon';
 import { LoginProviderContext } from '@src/components/providers/LoginProvider';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@src/components/ui/Select';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@src/components/ui/Popover';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@src/components/ui/Select';
+import { Popover, PopoverContent, PopoverTrigger } from '@src/components/ui/Popover';
 import { CircleX } from 'lucide-react';
 import { Button } from '@src/components/ui/Button';
-import { getRoutes, getToken, Route, RoutesRequest, Token } from '@lifi/sdk';
-import { truncateWalletAddress } from '@src/lib/utils';
+import { ChainId, getRoutes, getToken, Route, RoutesRequest, Token } from '@lifi/sdk';
 import { useDebounceValue } from 'usehooks-ts';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
 import ConnectionButton from '@src/components/ui/ConnectButton';
+import { TOKENS } from '@src/lib/meta';
+import SwapHandler from '@src/components/SwapHandler';
+import { assetsConfig } from '@src/lib/config/config';
+import { config } from '@src/lib/config/rainbow.config';
+
+interface ExtendedToken extends Token {
+  balance?: {
+    decimals: number
+    formatted: string
+    symbol: string
+    value: bigint
+  };
+}
 
 const Page: NextPage = () => {
   const { openLoginModal, account } = useContext(LoginProviderContext);
@@ -32,49 +34,43 @@ const Page: NextPage = () => {
   const [route, setRoute] = React.useState<Route | null>(null);
   const [baseToken, setBaseToken] = React.useState<Token | null>(null);
   const [fromAmount, setFromAmount] = React.useState<string>('');
-  const [fromToken, setFromToken] = React.useState<Token | null>(null);
+  const [fromToken, setFromToken] = React.useState<ExtendedToken | null>(null);
   const [toAmount, setToAmount] = React.useState<string>('');
-  const [toToken, setToToken] = React.useState<Token | null>(null);
+  const [toToken, setToToken] = React.useState<ExtendedToken | null>(null);
   const [debouncedValue] = useDebounceValue(fromAmount, 500);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const TOKENS = [
-    {
-      label: 'WETH/ETH',
-      value: '0x4200000000000000000000000000000000000006',
-    },
-    {
-      label: 'wstETH/ETH',
-      value: '0xc1CBa3fCea344f92D9239c08C0568f6F2F0ee452',
-    },
-  ];
+
+  // const { handleSwap: swapToken } = useTokenSwap('0x4200000000000000000000000000000000000006', '0xc1CBa3fCea344f92D9239c08C0568f6F2F0ee452', 0, 0, undefined)
+
 
   async function handleSwap() {
     if (!fromToken || !toToken || parseFloat(debouncedValue) <= 0) return;
     setIsLoading(true);
     try {
       const routesRequest: RoutesRequest = {
-        fromChainId: 8453, // Arbitrum
-        toChainId: 8453, // Optimism
+        fromChainId: ChainId.BAS, // Arbitrum
+        toChainId: ChainId.BAS, // Optimism
         fromTokenAddress: fromToken?.address, // USDC on Arbitrum
         toTokenAddress: toToken?.address, // DAI on Optimism
         fromAmount: (
           parseFloat(debouncedValue) * 10 ** fromToken.decimals
         ).toString(), // 10 USDC,
         options: { slippage: parseFloat(slippage) },
+        fromAddress: account?.address,
       };
 
       const result = await getRoutes(routesRequest);
       const routes = result.routes;
       const token = await getToken(
-        8453,
+        ChainId.BAS,
         '0x0000000000000000000000000000000000000000',
       );
       setBaseToken(token);
       setRoute(routes[0]);
       setToAmount(
         parseFloat(routes[0].toAmount) /
-          10 ** routes[0].toToken.decimals +
-          '',
+        10 ** routes[0].toToken.decimals +
+        '',
       );
     } catch (e) {
       console.log(e);
@@ -86,21 +82,38 @@ const Page: NextPage = () => {
     if (!Number.isNaN(debouncedValue)) {
       handleSwap();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedValue]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedValue, fromToken, toToken]);
   const handlePositionSwap = () => {
     setFromToken(toToken);
     setToToken(fromToken);
     setFromAmount(toAmount);
     setToAmount(fromAmount);
   };
-  const handleFromTokenChange = async (address: string) => {
-    const token = await getToken(8453, address);
-    setFromToken(token);
+  const handleFromTokenChange = async (address: `0x${string}`) => {
+    try {
+      const token = await getToken(8453, address);
+      let balance;
+      if (account?.address) {
+        balance = await getBalance(config, {
+          address: account?.address,
+          token: assetsConfig[address].sTokenAddress,
+        });
+      }
+      setFromToken({ ...token, balance });
+    } catch (e) {
+    }
   };
-  const handleToTokenChange = async (address: string) => {
+  const handleToTokenChange = async (address: `0x${string}`) => {
     const token = await getToken(8453, address);
-    setToToken(token);
+    let balance;
+    if (account?.address) {
+      balance = await getBalance(config, {
+        address: account?.address,
+        token: assetsConfig[address].sTokenAddress,
+      });
+    }
+    setToToken({ ...token, balance });
   };
   return (
     <div className="grid place-content-center min-h-[80vh]">
@@ -140,7 +153,7 @@ const Page: NextPage = () => {
                       value={slippage}
                       onChange={(e) => setSlippage(e.target.value)}
                     />
-                    <span className="absolute right-4 inset-y-0 flex items-center">
+                    <span className="absolute right-4 inset-y-0 flex items-center grid-cols-2">
                       %
                     </span>
                   </div>
@@ -155,7 +168,11 @@ const Page: NextPage = () => {
           </div>
           <div className="flex flex-col space-y-2">
             <div className="flex flex-col rounded-xl bg-primary-100 border-primary px-4 py-5 w-full space-y-1.5">
-              <span>Sell</span>
+              <div className={'flex w-full gap-4 justify-between'}>
+                <span>Sell</span>
+
+                {fromToken?.balance && (<span>balance: {fromToken.balance.formatted} {fromToken.balance.symbol}</span>)}
+              </div>
               <div className={'flex w-full gap-4'}>
                 <Input
                   value={fromAmount}
@@ -165,7 +182,7 @@ const Page: NextPage = () => {
                 <div className="border-primary px-4 text-2xl w-1/2 rounded-xl py-2 bg-white flex space-x-4">
                   {fromToken && (
                     <img
-                    alt={fromToken.name}
+                      alt={fromToken.name}
                       src={fromToken.logoURI}
                       width={200}
                       height={200}
@@ -176,15 +193,16 @@ const Page: NextPage = () => {
                     value={fromToken?.address}
                     onValueChange={handleFromTokenChange}
                   >
-                    <SelectTrigger className="w-10/12 border-primary-900 px-4 border-[0.2px] rounded-full py-1 placeholder:font-bold text-base placeholder:text-xl mr-4">
+                    <SelectTrigger
+                      className="w-10/12 border-primary-900 px-4 border-[0.2px] rounded-full py-1 placeholder:font-bold text-base placeholder:text-xl mr-4">
                       <SelectValue placeholder="----" />
                     </SelectTrigger>
                     <SelectContent>
                       {TOKENS.filter(
-                        (val) => val.value !== toToken?.address,
+                        (val) => val.address !== toToken?.address,
                       ).map((token) => (
-                        <SelectItem key={token.value} value={token.value}>
-                          {token.label}
+                        <SelectItem key={token.address} value={token.address}>
+                          {token.name}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -198,7 +216,8 @@ const Page: NextPage = () => {
                 </span>
               </div>
             </div>
-            <div className="flex flex-col rounded-xl bg-primary-100 border-primary px-4 py-5 w-full space-y-1.5 relative">
+            <div
+              className="flex flex-col rounded-xl bg-primary-100 border-primary px-4 py-5 w-full space-y-1.5 relative">
               <div
                 className="w-fit p-1 border-primary absolute z-10 inset-x-0 mx-auto -top-5 bg-white rounded-sm cursor-pointer"
                 onClick={handlePositionSwap}
@@ -231,15 +250,16 @@ const Page: NextPage = () => {
                     value={toToken?.address}
                     onValueChange={handleToTokenChange}
                   >
-                    <SelectTrigger className="w-10/12 border-primary-900 px-4 border-[0.2px] rounded-full py-1 placeholder:font-bold text-base placeholder:text-xl">
+                    <SelectTrigger
+                      className="w-10/12 border-primary-900 px-4 border-[0.2px] rounded-full py-1 placeholder:font-bold text-base placeholder:text-xl">
                       <SelectValue placeholder="----" />
                     </SelectTrigger>
                     <SelectContent>
                       {TOKENS.filter(
-                        (val) => val.value !== fromToken?.address,
+                        (val) => val.address !== fromToken?.address,
                       ).map((token) => (
-                        <SelectItem key={token.value} value={token.value}>
-                          {token.label}
+                        <SelectItem key={token.address} value={token.address}>
+                          {token.name}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -253,6 +273,7 @@ const Page: NextPage = () => {
                 </span>
               </div>
             </div>
+
             {isLoading ? (
               <span>Loading...</span>
             ) : (
@@ -267,82 +288,23 @@ const Page: NextPage = () => {
                 </span>
               )
             )}
-            {isLoading ? (
-              <span>Loading...</span>
-            ) : (
-              route && (
-                <div className="bg-primary-150 border-primary p-3 rounded-xl space-y-2">
-                  <div className="flex justify-between">
-                    <span>Est. asset received</span>
-                    <span>
-                      {parseFloat(route.toAmount) /
-                        10 ** route.toToken.decimals}{' '}
-                      {route.toToken.coinKey}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Min. asset received</span>
-                    <span>
-                      {parseFloat(route.toAmountMin) /
-                        10 ** route.toToken.decimals}{' '}
-                      {route.toToken.coinKey}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Network fee</span>
-                    <span>
-                      {(
-                        parseFloat(route.gasCostUSD ?? '0') /
-                        parseFloat(baseToken?.priceUSD ?? '0')
-                      ).toFixed(16)}{' '}
-                      {baseToken?.coinKey}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span>Routing path</span>
-                    <div className="flex space-x-1.5 items-center">
-                      <img
-                        src={route.steps[0]?.toolDetails.logoURI}
-                        alt={route.steps[0]?.toolDetails.name}
-                        width={200}
-                        height={200}
-                        className="w-6 h-auto rounded-full"
-                      />
-                      <span>{route.steps[0]?.toolDetails.name}</span>
-                    </div>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Slippage tolerance</span>
-                    <span>{slippage}%</span>
-                  </div>
-                  <div className="border-t border-t-primary-900 flex justify-between items-center pt-1.5">
-                    <span>Recipient</span>
-                    <div className="flex gap-2 items-center justify-between text-sm">
-                      <span className="text-primary-200">
-                        {truncateWalletAddress(account?.address || '')}
-                      </span>
-                      <Button variant="link" className="px-0">
-                        Add another wallet
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              )
-            )}
-            {account ? (
+            {isLoading ? <span>Loading...</span> : route ? (
+              <SwapHandler inTokenAmount={fromAmount} account={account} baseToken={baseToken} route={route} slippage={slippage} />
+            ) : account ? (
               <button
-                onClick={handleSwap}
-                className="bg-primary-900 px-5 py-3.5 text-white w-full rounded-xl"
-              >
-                Swap
-              </button>
-            ) : (
-              <ConnectionButton isExternal />
-            )}
-          </div>
+              onClick={handleSwap}
+               className="bg-primary-900 px-5 py-3.5 text-white w-full rounded-xl"
+          >
+            Swap
+          </button>
+          ) : (
+          <ConnectionButton isExternal />
+          )}
         </div>
       </div>
     </div>
-  );
+</div>
+)
+  ;
 };
 export default Page;

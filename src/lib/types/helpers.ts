@@ -1,5 +1,11 @@
 import { QueryKey, UseQueryResult } from "@tanstack/react-query";
 import { formatUnits } from "viem";
+import { INFINITE_HEALTH_FACTOR_BORDER } from '@src/lib/meta';
+
+export interface FetchNumber {
+  value?: number;
+  symbol?: string;
+}
 
 export interface AssetBalance {
   viewValue?: string;
