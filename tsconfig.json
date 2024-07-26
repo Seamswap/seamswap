@@ -17,6 +17,7 @@
     "paths": {
       "@src/*": ["./src/*"],
       "@components/*": ["./src/components/*"],
+      "@meta/*": ["./src/lib/meta/*"],
       "@assets/*": ["./src/assets/*"]
     }
   },

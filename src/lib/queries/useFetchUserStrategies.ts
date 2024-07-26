@@ -2,6 +2,7 @@ import { mergeQueryStates } from '@src/lib/formatters/mergeQueryStates';
 import { FetchData } from '@src/lib/types/helpers';
 import { Address } from 'viem';
 import { useFetchUserSupplyTokens } from '@src/lib/queries/useFetchUserSupplyTokens';
+import { useFetchUserDepositStrategies } from '@src/lib/queries/useFetchUserDepositStrategies';
 
 interface UserStrategies {
   asset: Address;

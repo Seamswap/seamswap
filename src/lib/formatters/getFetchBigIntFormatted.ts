@@ -1,4 +1,5 @@
-import { FetchBigInt, FetchNumber } from "../types/Fetch";
+import { FetchBigInt, FetchNumber } from '@src/lib/types/helpers';
+
 
 export const fFetchBigIntStructured = (
   bigIntValue?: bigint,

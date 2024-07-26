@@ -11,18 +11,20 @@ export interface ISwapHandlerProps {
   baseToken: Token | null;
   slippage: number | string;
   account?: Account;
+  inTokenAmount: string
 }
 
 const SwapHandler: React.FC<ISwapHandlerProps> = ({
-                                                    route,
-                                                    baseToken,
-                                                    slippage,
-                                                    account,
-                                                  }) => {
+  route,
+  baseToken,
+  slippage,
+  account,
+  inTokenAmount
+}) => {
   const { beginSwap, isPending } = useTokenSwap(
     route.fromToken.address as Address,
     route.toToken.address as Address,
-    route.fromAmount,
+    inTokenAmount,
     route,
   );
   React.useEffect(() => {

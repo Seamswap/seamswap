@@ -11,12 +11,10 @@ export const useMutateWithdrawLending = (asset?: Address) => {
   const { address } = useAccount();
 
   const {
-    data: { decimals },
+    data: { decimals, ...restof },
   } = useToken(asset);
-
   // cache data
   const { queryKey: accountAssetBalanceQK } = useFetchAssetBalance(asset);
-
   // hook call
   const { writeContractAsync, ...rest } = useSeamlessContractWrite({
     queriesToInvalidate: [accountAssetBalanceQK],

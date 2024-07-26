@@ -80,3 +80,63 @@ export const TokenDataDict: ITokenDataDict = {
     logo: brettLogo,
   },
 };
+/**
+ * export const WETH_ADDRESS: Address = "0x4200000000000000000000000000000000000006";
+export const CBETH_ADDRESS: Address = "0x2Ae3F1Ec7F1F5012CFEab0185bfc7aa3cf0DEc22";
+export const WSTETH_ADDRESS: Address = "0xc1CBa3fCea344f92D9239c08C0568f6F2F0ee452";
+export const USDBC_ADDRESS: Address = "0xd9aAEc86B65D86f6A7B5B1b0c42FFA531710b6CA";
+export const DAI_ADDRESS: Address = "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb";
+export const USDC_ADDRESS: Address = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913";
+export const rwstETH_ADDRESS: Address = "0xc9ae3B5673341859D3aC55941D27C8Be4698C9e4";
+export const rWETH_ADDRESS: Address = "0x3e8707557d4ad25d6042f590bcf8a06071da2c5f";
+export const DEGEN_ADDRESS: Address = "0x4ed4E862860beD51a9570b96d89aF5E1B0Efefed";
+export const SEAM_ADDRESS: Address = "0x1C7a460413dD4e964f96D8dFC56E7223cE88CD85";
+export const AERO_ADDRESS: Address = "0x940181a94A35A4569E4529A3CDfB74e38FD98631";
+export const BRETT_ADDRESS: Address = "0x532f27101965dd16442E59d40670FaF5eBB142E4";
+export const ESSEAM_ADDRESS: Address = "0x998e44232BEF4F8B033e5A5175BDC97F2B10d5e5";
+export const OG_POINTS: Address = "0x5607718c64334eb5174CB2226af891a6ED82c7C6";
+ */
+export const TOKENS = [
+  {
+    name: "Wrapped Ether",
+    address: WETH_ADDRESS,
+  },
+  {
+    name: "Wrapped stETH",
+    address: WSTETH_ADDRESS,
+  },
+  {
+    name: "Wrapped Compound Ether",
+    address: CBETH_ADDRESS,
+  },
+  {
+    name: "USD Coin",
+    address: USDC_ADDRESS,
+  },
+  {
+    name: "USD Coin Borrowed",
+    address: USDBC_ADDRESS,
+  },
+  {
+    name: "Dai",
+    address: DAI_ADDRESS,
+    
+  },
+  {
+    name: "Degen",
+    address: DEGEN_ADDRESS,
+  },
+  {
+    name: "Seam",
+    address: SEAM_ADDRESS,
+  },
+  {
+    name: "Aero",
+    address: AERO_ADDRESS,
+  },
+  {
+    name: "Brett",
+    address: BRETT_ADDRESS,
+  },
+
+]

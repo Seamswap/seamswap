@@ -11,12 +11,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Popover, PopoverContent, PopoverTrigger } from '@src/components/ui/Popover';
 import { CircleX } from 'lucide-react';
 import { Button } from '@src/components/ui/Button';
-import { getRoutes, getToken, Route, RoutesRequest, Token } from '@lifi/sdk';
+import { ChainId, getRoutes, getToken, Route, RoutesRequest, Token } from '@lifi/sdk';
 import { useDebounceValue } from 'usehooks-ts';
 import ConnectionButton from '@src/components/ui/ConnectButton';
 import { TOKENS } from '@src/lib/meta';
-import { wagmiConfig } from './_app';
 import SwapHandler from '@src/components/SwapHandler';
+import { assetsConfig } from '@src/lib/config/config';
+import { config } from '@src/lib/config/rainbow.config';
 
 interface ExtendedToken extends Token {
   balance?: {
@@ -47,8 +48,8 @@ const Page: NextPage = () => {
     setIsLoading(true);
     try {
       const routesRequest: RoutesRequest = {
-        fromChainId: 8453, // Arbitrum
-        toChainId: 8453, // Optimism
+        fromChainId: ChainId.BAS, // Arbitrum
+        toChainId: ChainId.BAS, // Optimism
         fromTokenAddress: fromToken?.address, // USDC on Arbitrum
         toTokenAddress: toToken?.address, // DAI on Optimism
         fromAmount: (
@@ -61,7 +62,7 @@ const Page: NextPage = () => {
       const result = await getRoutes(routesRequest);
       const routes = result.routes;
       const token = await getToken(
-        8453,
+        ChainId.BAS,
         '0x0000000000000000000000000000000000000000',
       );
       setBaseToken(token);
@@ -94,9 +95,9 @@ const Page: NextPage = () => {
       const token = await getToken(8453, address);
       let balance;
       if (account?.address) {
-        balance = await getBalance(wagmiConfig, {
+        balance = await getBalance(config, {
           address: account?.address,
-          token: address,
+          token: assetsConfig[address].sTokenAddress,
         });
       }
       setFromToken({ ...token, balance });
@@ -107,9 +108,9 @@ const Page: NextPage = () => {
     const token = await getToken(8453, address);
     let balance;
     if (account?.address) {
-      balance = await getBalance(wagmiConfig, {
+      balance = await getBalance(config, {
         address: account?.address,
-        token: address,
+        token: assetsConfig[address].sTokenAddress,
       });
     }
     setToToken({ ...token, balance });
@@ -288,7 +289,7 @@ const Page: NextPage = () => {
               )
             )}
             {isLoading ? <span>Loading...</span> : route ? (
-              <SwapHandler account={account} baseToken={baseToken} route={route} slippage={slippage} />
+              <SwapHandler inTokenAmount={fromAmount} account={account} baseToken={baseToken} route={route} slippage={slippage} />
             ) : account ? (
               <button
               onClick={handleSwap}

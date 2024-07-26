@@ -2,91 +2,44 @@ import '@src/styles/globals.css';
 import type { AppProps } from 'next/app';
 import Layout from '@src/components/atoms/Layout';
 import '@rainbow-me/rainbowkit/styles.css';
-import { connectorsForWallets, lightTheme, RainbowKitProvider, Theme } from '@rainbow-me/rainbowkit';
-import {
-  Config,
-  createConfig as createWagmiConfig,
-  CreateConnectorFn,
-  fallback,
-  http,
-  WagmiProvider,
-  webSocket,
-} from 'wagmi';
-import { arbitrum, base, mainnet, optimism, polygon, zkSync } from 'wagmi/chains';
+import { lightTheme, RainbowKitProvider, Theme } from '@rainbow-me/rainbowkit';
+import { base } from 'wagmi/chains';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import LoginProvider from '@src/components/providers/LoginProvider';
-import WalletPopup from '@src/components/atoms/WalletPopup';
-import { ChainType, config, createConfig, EVM, getChains } from '@lifi/sdk';
-import { createClient, createWalletClient } from 'viem';
-import { privateKeyToAccount } from 'viem/accounts';
-import { injected } from 'wagmi/connectors';
-import { getWalletClient, switchChain } from '@wagmi/core';
+import { ChainId, ChainType, config as lifiConfig, createConfig, EVM, getChains } from '@lifi/sdk';
+import { getWalletClient } from '@wagmi/core';
 import { FC, PropsWithChildren } from 'react';
 import { useSyncWagmiConfig } from '@lifi/wallet-management';
 import { Toaster } from '@src/components/ui/toaster';
-import {
-  coinbaseWallet,
-  metaMaskWallet,
-  rabbyWallet,
-  rainbowWallet,
-  walletConnectWallet,
-} from "@rainbow-me/rainbowkit/wallets";
-import logoSeamSwap from "@assets/tokens/seamswap.svg";
-const rpcConfig = [
-  // Free
-  { url: 'https://rpc.ankr.com/base', isWebSocket: false },
-  { url: 'https://base.drpc.org', isWebSocket: false },
-  { url: 'wss://base.drpc.org', isWebSocket: true },
-].filter(({ url }) => url);
+import { WagmiProvider } from 'wagmi';
+import { config, connectors } from '@src/lib/config/rainbow.config';
+import type { WalletClient } from 'viem';
+// const connectors: CreateConnectorFn[] = [injected()];
+
 // Create Wagmi config with default chain and without connectors
-const connectors = connectorsForWallets(
-  [
-    {
-      groupName: "Smart wallets",
-      wallets: [
-        () =>
-          // todo double check () =>
-          coinbaseWallet({
-            appName: "Seamless Protocol",
-            appIcon: logoSeamSwap,
-          }),
-      ],
-    },
-    {
-      groupName: "Popular",
-      wallets: [metaMaskWallet, rabbyWallet, walletConnectWallet, rainbowWallet],
-    },
-  ],
-  {
-    appName: "Seamswap",
-    appDescription: "Seamswap is a decentralized exchange for token positions lending and borrowing protocol on Base.",
-    appUrl: "https://seamseap.com/",
-    appIcon: logoSeamSwap,
-    projectId: '521bbfde80d7a5b3d05df9f024a68807',
-  }
-);
-
-export const wagmiConfig = createWagmiConfig({
-  connectors,
-  chains: [base],
-  transports: {
-    [base.id]: fallback(
-      rpcConfig.map(({ url, isWebSocket }) => (isWebSocket ? webSocket(url) : http(url))),
-      { rank: true }
-    ),
-  },
-});
-
+// export const wagmiConfig = createWagmiConfig({
+//   // appName: 'Seamswap',
+//
+//   projectId: '521bbfde80d7a5b3d05df9f024a68807',
+//   chains: [base],
+//   ssr: true, // If your dApp uses server side rendering (SSR)
+//   client({ chain }) {
+//     return createClient({ chain, transport: http() });
+//   },
+// });
 // Create SDK config using Wagmi actions and configuration
 createConfig({
   integrator: 'Seamswap',
+  rpcUrls: {
+    [ChainId.BAS]: ['https://base-mainnet.g.alchemy.com/v2/ITJZYemtXDZswsfcino5vXg6ikpUq1zI', 'wss://base-mainnet.g.alchemy.com/v2/ITJZYemtXDZswsfcino5vXg6ikpUq1zI'],
+  },
   providers: [
     EVM({
-      getWalletClient: () => getWalletClient(wagmiConfig),
-      switchChain: async (chainId) => {
-        const chain = await switchChain(wagmiConfig, { chainId });
-        return getWalletClient(wagmiConfig, { chainId: chain.id });
-      },
+      getWalletClient: (() => (getWalletClient(config))) as any,
+      // switchChain: async (chainId) => {
+      //   const chain = await switchChain(config, { chainId });
+      //   return getWalletClient(config, { chainId: chain.id });
+      // },
     }),
   ],
   // We disable chain preloading and will update chain configuration in runtime
@@ -101,17 +54,17 @@ export const CustomWagmiProvider: FC<PropsWithChildren> = ({ children }) => {
       const chains = await getChains({
         chainTypes: [ChainType.EVM],
       });
+      const base = chains.filter((chain) => chain.id === ChainId.BAS);
       // Update chain configuration for LI.FI SDK
-      config.setChains(chains);
-      return chains;
+      lifiConfig.setChains(base);
+      return base;
     },
   });
-
   // Synchronize fetched chains with Wagmi config and update connectors
-  useSyncWagmiConfig(wagmiConfig, connectors, chains);
+  // useSyncWagmiConfig(config, connectors, [base]);
 
   return (
-    <WagmiProvider config={wagmiConfig} reconnectOnMount={false}>
+    <WagmiProvider config={config}>
       {children}
     </WagmiProvider>
   );
@@ -145,9 +98,8 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <CustomWagmiProvider>
-        <RainbowKitProvider theme={myRainbowkitThemeConfigV2}>
+        <RainbowKitProvider initialChain={base} theme={myRainbowkitThemeConfigV2}>
           <LoginProvider>
-            <WalletPopup />
             <Layout>
               <Component {...pageProps} />
               <Toaster />
@@ -156,5 +108,6 @@ export default function App({ Component, pageProps }: AppProps) {
         </RainbowKitProvider>
       </CustomWagmiProvider>
     </QueryClientProvider>
-  );
+  )
+    ;
 }
