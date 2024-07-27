@@ -7,7 +7,13 @@ import { getBalance } from '@wagmi/core';
 import SwapIcon from '@src/components/icons/SwapIcon.icon';
 import Settings from '@src/components/icons/Settings.icon';
 import { LoginProviderContext } from '@src/components/providers/LoginProvider';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@src/components/ui/Select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@src/components/ui/Select';
 import { Popover, PopoverContent, PopoverTrigger } from '@src/components/ui/Popover';
 import { CircleX } from 'lucide-react';
 import { Button } from '@src/components/ui/Button';
@@ -96,8 +102,7 @@ const Page: NextPage = () => {
       }
       let logoURI = token.symbol === 'WETH' ? '/weth.svg' : token.logoURI;
       setFromToken({ ...token, balance, logoURI });
-    } catch (e) {
-    }
+    } catch (e) {}
   };
   const handleToTokenChange = async (address: `0x${string}`) => {
     const token = await getToken(8453, address);
@@ -178,10 +183,9 @@ const Page: NextPage = () => {
                   <Input
                     value={fromAmount}
                     onChange={(e) => setFromAmount(e.target.value)}
-                    className="w-1/2"
+                    className="w-1/2 rounded-[10px]"
                   />
-                  <div
-                    className="overflow-hidden border-primary px-2 md:px-4 text-2xl w-1/2 rounded-xl py-2 bg-white flex items-center gap-x-2 md:gap-x-4">
+                  <div className="overflow-hidden border-primary px-2 md:px-4 text-2xl w-1/2 rounded-[10px] py-2 bg-white flex items-center gap-x-2 md:gap-x-4">
                     {fromToken && (
                       <img
                         alt={fromToken.name}
@@ -195,8 +199,7 @@ const Page: NextPage = () => {
                       value={fromToken?.address}
                       onValueChange={handleFromTokenChange}
                     >
-                      <SelectTrigger
-                        className="w-10/12 !border-transparent px-0 md:border-primary-900 md:px-2 !ring-transparent text-left border-[0.2px] rounded-full py-1 placeholder:font-bold text-sm placeholder:text-xl mr-4">
+                      <SelectTrigger className="w-10/12 px-1 border-primary-900 md:px-2 ring-primary-240 text-left border-[0.2px] rounded-full py-1 placeholder:font-bold text-sm placeholder:text-xl mr-4">
                         <SelectValue placeholder="----" />
                       </SelectTrigger>
                       <SelectContent>
@@ -220,8 +223,7 @@ const Page: NextPage = () => {
                 </div>
               </div>
 
-              <div
-                className="flex flex-col rounded-xl bg-primary-100 border-primary px-4 py-5 w-full space-y-1.5 relative">
+              <div className="flex flex-col rounded-xl bg-primary-100 border-primary px-4 py-5 w-full space-y-1.5 relative">
                 <div
                   className="w-fit p-1 border-primary absolute z-10 inset-x-0 mx-auto -top-5 bg-white rounded-sm cursor-pointer"
                   onClick={handlePositionSwap}
@@ -236,13 +238,12 @@ const Page: NextPage = () => {
                     <Input
                       value={toAmount}
                       onChange={(e) => setToAmount(e.target.value)}
-                      className="w-1/2"
+                      className="w-1/2 rounded-[10px]"
                       disabled
                     />
                   )}
 
-                  <div
-                    className="overflow-hidden border-primary px-2 md:px-4 text-2xl w-1/2 rounded-xl py-2 bg-white flex items-center gap-x-2 md:gap-x-4">
+                  <div className="overflow-hidden border-primary px-2 md:px-4 text-2xl w-1/2 rounded-[10px] py-2 bg-white flex items-center gap-x-2 md:gap-x-4">
                     {toToken && (
                       <img
                         src={toToken.logoURI}
@@ -253,8 +254,7 @@ const Page: NextPage = () => {
                       />
                     )}
                     <Select value={toToken?.address} onValueChange={handleToTokenChange}>
-                      <SelectTrigger
-                        className="w-10/12 !border-transparent px-0 md:border-primary-900 md:px-2 !ring-transparent text-left border-[0.2px] rounded-full py-1 placeholder:font-bold text-sm placeholder:text-xl">
+                      <SelectTrigger className="w-10/12 px-1 border-primary-900 md:px-2 ring-primary-240 text-left border-[0.2px] rounded-full py-1 placeholder:font-bold text-sm placeholder:text-xl">
                         <SelectValue placeholder="----" />
                       </SelectTrigger>
                       <SelectContent>
