@@ -25,6 +25,7 @@ import { truncateWalletAddress } from '@src/lib/utils';
 import { useDebounceValue } from 'usehooks-ts';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import ConnectionButton from '@src/components/ui/ConnectButton';
+import Container from '@src/components/ui/Container';
 
 const Page: NextPage = () => {
   const { openLoginModal, account } = useContext(LoginProviderContext);
@@ -58,7 +59,8 @@ const Page: NextPage = () => {
         fromTokenAddress: fromToken?.address, // USDC on Arbitrum
         toTokenAddress: toToken?.address, // DAI on Optimism
         fromAmount: (
-          parseFloat(debouncedValue) * 10 ** fromToken.decimals
+          parseFloat(debouncedValue) *
+          10 ** fromToken.decimals
         ).toString(), // 10 USDC,
         options: { slippage: parseFloat(slippage) },
       };
@@ -72,9 +74,7 @@ const Page: NextPage = () => {
       setBaseToken(token);
       setRoute(routes[0]);
       setToAmount(
-        parseFloat(routes[0].toAmount) /
-          10 ** routes[0].toToken.decimals +
-          '',
+        parseFloat(routes[0].toAmount) / 10 ** routes[0].toToken.decimals + '',
       );
     } catch (e) {
       console.log(e);
@@ -86,7 +86,7 @@ const Page: NextPage = () => {
     if (!Number.isNaN(debouncedValue)) {
       handleSwap();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedValue]);
   const handlePositionSwap = () => {
     setFromToken(toToken);
@@ -103,246 +103,250 @@ const Page: NextPage = () => {
     setToToken(token);
   };
   return (
-    <div className="grid place-content-center min-h-[80vh]">
-      <div className="w-3/4 mx-auto flex flex-col space-y-2">
-        <h2 className="font-semibold text-4xl text-center">
-          Swap Positions Seamlessly, Maximize reward.
-        </h2>
-        <div className="w-full bg-white pt-6 pb-14 px-8 rounded-xl border-primary space-y-4 flex flex-col">
-          <div className="flex justify-between items-center w-full">
-            <h3 className="text-xl font-medium">Swap</h3>
-            <Popover>
-              <PopoverTrigger>
-                <Settings />
-              </PopoverTrigger>
-              <PopoverContent
-                align="start"
-                className="ml-24 p-6 w-80 rounded-xl"
-                sideOffset={-48}
-              >
-                <div className="flex flex-col space-y-6">
-                  <div className="flex flex-col space-y-3.5">
-                    <div className="flex justify-between">
-                      <span className="text-xl font-bold">Max slippage</span>
-                      <CircleX className="w-6 h-6 text-[#878787]" />
+    <Container>
+      <div className="grid place-content-center min-h-[80vh]">
+        <div className="mx-auto flex flex-col space-y-2">
+          <h2 className="font-semibold text-2xl lg:text-4xl text-center mb-4">
+            Swap Positions Seamlessly, Maximize reward.
+          </h2>
+
+          <div className="w-full bg-white pt-6 pb-14 px-8 rounded-xl border-primary space-y-4 flex flex-col">
+            <div className="flex justify-between items-center w-full">
+              <h3 className="text-xl font-medium">Swap</h3>
+              <Popover>
+                <PopoverTrigger>
+                  <Settings />
+                </PopoverTrigger>
+                <PopoverContent
+                  align="start"
+                  className="ml-24 p-6 w-80 rounded-xl"
+                  sideOffset={-48}
+                >
+                  <div className="flex flex-col space-y-6">
+                    <div className="flex flex-col space-y-3.5">
+                      <div className="flex justify-between">
+                        <span className="text-xl font-bold">Max slippage</span>
+                        <CircleX className="w-6 h-6 text-[#878787]" />
+                      </div>
+                      <div className="space-x-4">
+                        <Button variant="default">Auto</Button>
+                        <Button variant="outline" className="">
+                          Custom
+                        </Button>
+                      </div>
                     </div>
-                    <div className="space-x-4">
-                      <Button variant="default">Auto</Button>
-                      <Button variant="outline" className="">
-                        Custom
+                    <div className="relative">
+                      <Input
+                        className="w-full pr-10"
+                        placeholder="0.1"
+                        value={slippage}
+                        onChange={(e) => setSlippage(e.target.value)}
+                      />
+                      <span className="absolute right-4 inset-y-0 flex items-center">
+                        %
+                      </span>
+                    </div>
+                    <div className="flex flex-col space-y-2">
+                      <Button className="py-4 rounded-xl">
+                        Update Tolerance
                       </Button>
                     </div>
                   </div>
-                  <div className="relative">
-                    <Input
-                      className="w-full pr-10"
-                      placeholder="0.1"
-                      value={slippage}
-                      onChange={(e) => setSlippage(e.target.value)}
-                    />
-                    <span className="absolute right-4 inset-y-0 flex items-center">
-                      %
-                    </span>
-                  </div>
-                  <div className="flex flex-col space-y-2">
-                    <Button className="py-4 rounded-xl">
-                      Update Tolerance
-                    </Button>
-                  </div>
-                </div>
-              </PopoverContent>
-            </Popover>
-          </div>
-          <div className="flex flex-col space-y-2">
-            <div className="flex flex-col rounded-xl bg-primary-100 border-primary px-4 py-5 w-full space-y-1.5">
-              <span>Sell</span>
-              <div className={'flex w-full gap-4'}>
-                <Input
-                  value={fromAmount}
-                  onChange={(e) => setFromAmount(e.target.value)}
-                  className="w-1/2"
-                />
-                <div className="border-primary px-4 text-2xl w-1/2 rounded-xl py-2 bg-white flex space-x-4">
-                  {fromToken && (
-                    <img
-                    alt={fromToken.name}
-                      src={fromToken.logoURI}
-                      width={200}
-                      height={200}
-                      className="w-10 h-auto rounded-full"
-                    />
-                  )}
-                  <Select
-                    value={fromToken?.address}
-                    onValueChange={handleFromTokenChange}
-                  >
-                    <SelectTrigger className="w-10/12 border-primary-900 px-4 border-[0.2px] rounded-full py-1 placeholder:font-bold text-base placeholder:text-xl mr-4">
-                      <SelectValue placeholder="----" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {TOKENS.filter(
-                        (val) => val.value !== toToken?.address,
-                      ).map((token) => (
-                        <SelectItem key={token.value} value={token.value}>
-                          {token.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-grey-900">${fromToken?.priceUSD}</span>
-                <span className="underline underline-offset-2 text-primary-900">
-                  Max
-                </span>
-              </div>
+                </PopoverContent>
+              </Popover>
             </div>
-            <div className="flex flex-col rounded-xl bg-primary-100 border-primary px-4 py-5 w-full space-y-1.5 relative">
-              <div
-                className="w-fit p-1 border-primary absolute z-10 inset-x-0 mx-auto -top-5 bg-white rounded-sm cursor-pointer"
-                onClick={handlePositionSwap}
-              >
-                <SwapIcon className="w-6 h-6" />
-              </div>
-              <span>Buy</span>
-              <div className={'flex w-full gap-4'}>
-                {isLoading ? (
-                  <span className="w-1/2">Loading</span>
-                ) : (
+            <div className="flex flex-col space-y-2">
+              <div className="flex flex-col rounded-xl bg-primary-100 border-primary px-4 py-5 w-full space-y-1.5">
+                <span>Sell</span>
+                <div className={'flex w-full gap-4'}>
                   <Input
-                    value={toAmount}
-                    onChange={(e) => setToAmount(e.target.value)}
+                    value={fromAmount}
+                    onChange={(e) => setFromAmount(e.target.value)}
                     className="w-1/2"
-                    disabled
                   />
-                )}
-                <div className="border-primary px-4 text-2xl w-1/2 rounded-xl py-2 bg-white flex space-x-4">
-                  {toToken && (
-                    <img
-                      src={toToken.logoURI}
-                      alt={toToken.name}
-                      width={200}
-                      height={200}
-                      className="w-10 h-auto rounded-full"
-                    />
-                  )}
-                  <Select
-                    value={toToken?.address}
-                    onValueChange={handleToTokenChange}
-                  >
-                    <SelectTrigger className="w-10/12 border-primary-900 px-4 border-[0.2px] rounded-full py-1 placeholder:font-bold text-base placeholder:text-xl">
-                      <SelectValue placeholder="----" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {TOKENS.filter(
-                        (val) => val.value !== fromToken?.address,
-                      ).map((token) => (
-                        <SelectItem key={token.value} value={token.value}>
-                          {token.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-grey-900">${toToken?.priceUSD}</span>
-                <span className="underline underline-offset-2 text-primary-900">
-                  Max
-                </span>
-              </div>
-            </div>
-            {isLoading ? (
-              <span>Loading...</span>
-            ) : (
-              route && (
-                <span className="text-grey-900">
-                  1 {route.fromToken?.coinKey} ={' '}
-                  {(
-                    parseFloat(route.fromToken?.priceUSD) /
-                    parseFloat(route.toToken?.priceUSD)
-                  ).toFixed(3)}{' '}
-                  {route.toToken.coinKey}
-                </span>
-              )
-            )}
-            {isLoading ? (
-              <span>Loading...</span>
-            ) : (
-              route && (
-                <div className="bg-primary-150 border-primary p-3 rounded-xl space-y-2">
-                  <div className="flex justify-between">
-                    <span>Est. asset received</span>
-                    <span>
-                      {parseFloat(route.toAmount) /
-                        10 ** route.toToken.decimals}{' '}
-                      {route.toToken.coinKey}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Min. asset received</span>
-                    <span>
-                      {parseFloat(route.toAmountMin) /
-                        10 ** route.toToken.decimals}{' '}
-                      {route.toToken.coinKey}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Network fee</span>
-                    <span>
-                      {(
-                        parseFloat(route.gasCostUSD ?? '0') /
-                        parseFloat(baseToken?.priceUSD ?? '0')
-                      ).toFixed(16)}{' '}
-                      {baseToken?.coinKey}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span>Routing path</span>
-                    <div className="flex space-x-1.5 items-center">
+                  <div className="border-primary px-4 text-2xl w-1/2 rounded-xl py-2 bg-white flex space-x-4">
+                    {fromToken && (
                       <img
-                        src={route.steps[0]?.toolDetails.logoURI}
-                        alt={route.steps[0]?.toolDetails.name}
+                        alt={fromToken.name}
+                        src={fromToken.logoURI}
                         width={200}
                         height={200}
-                        className="w-6 h-auto rounded-full"
+                        className="w-10 h-auto rounded-full"
                       />
-                      <span>{route.steps[0]?.toolDetails.name}</span>
-                    </div>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Slippage tolerance</span>
-                    <span>{slippage}%</span>
-                  </div>
-                  <div className="border-t border-t-primary-900 flex justify-between items-center pt-1.5">
-                    <span>Recipient</span>
-                    <div className="flex gap-2 items-center justify-between text-sm">
-                      <span className="text-primary-200">
-                        {truncateWalletAddress(account?.address || '')}
-                      </span>
-                      <Button variant="link" className="px-0">
-                        Add another wallet
-                      </Button>
-                    </div>
+                    )}
+                    <Select
+                      value={fromToken?.address}
+                      onValueChange={handleFromTokenChange}
+                    >
+                      <SelectTrigger className="w-10/12 border-primary-900 px-4 border-[0.2px] rounded-full py-1 placeholder:font-bold text-base placeholder:text-xl mr-4">
+                        <SelectValue placeholder="----" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {TOKENS.filter(
+                          (val) => val.value !== toToken?.address,
+                        ).map((token) => (
+                          <SelectItem key={token.value} value={token.value}>
+                            {token.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
-              )
-            )}
-            {account ? (
-              <button
-                onClick={handleSwap}
-                className="bg-primary-900 px-5 py-3.5 text-white w-full rounded-xl"
-              >
-                Swap
-              </button>
-            ) : (
-              <ConnectionButton isExternal />
-            )}
+                <div className="flex justify-between">
+                  <span className="text-grey-900">${fromToken?.priceUSD}</span>
+                  <span className="underline underline-offset-2 text-primary-900">
+                    Max
+                  </span>
+                </div>
+              </div>
+              <div className="flex flex-col rounded-xl bg-primary-100 border-primary px-4 py-5 w-full space-y-1.5 relative">
+                <div
+                  className="w-fit p-1 border-primary absolute z-10 inset-x-0 mx-auto -top-5 bg-white rounded-sm cursor-pointer"
+                  onClick={handlePositionSwap}
+                >
+                  <SwapIcon className="w-6 h-6" />
+                </div>
+                <span>Buy</span>
+                <div className={'flex w-full gap-4'}>
+                  {isLoading ? (
+                    <span className="w-1/2">Loading</span>
+                  ) : (
+                    <Input
+                      value={toAmount}
+                      onChange={(e) => setToAmount(e.target.value)}
+                      className="w-1/2"
+                      disabled
+                    />
+                  )}
+                  <div className="border-primary px-4 text-2xl w-1/2 rounded-xl py-2 bg-white flex space-x-4">
+                    {toToken && (
+                      <img
+                        src={toToken.logoURI}
+                        alt={toToken.name}
+                        width={200}
+                        height={200}
+                        className="w-10 h-auto rounded-full"
+                      />
+                    )}
+                    <Select
+                      value={toToken?.address}
+                      onValueChange={handleToTokenChange}
+                    >
+                      <SelectTrigger className="w-10/12 border-primary-900 px-4 border-[0.2px] rounded-full py-1 placeholder:font-bold text-base placeholder:text-xl">
+                        <SelectValue placeholder="----" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {TOKENS.filter(
+                          (val) => val.value !== fromToken?.address,
+                        ).map((token) => (
+                          <SelectItem key={token.value} value={token.value}>
+                            {token.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-grey-900">${toToken?.priceUSD}</span>
+                  <span className="underline underline-offset-2 text-primary-900">
+                    Max
+                  </span>
+                </div>
+              </div>
+              {isLoading ? (
+                <span>Loading...</span>
+              ) : (
+                route && (
+                  <span className="text-grey-900">
+                    1 {route.fromToken?.coinKey} ={' '}
+                    {(
+                      parseFloat(route.fromToken?.priceUSD) /
+                      parseFloat(route.toToken?.priceUSD)
+                    ).toFixed(3)}{' '}
+                    {route.toToken.coinKey}
+                  </span>
+                )
+              )}
+              {isLoading ? (
+                <span>Loading...</span>
+              ) : (
+                route && (
+                  <div className="bg-primary-150 border-primary p-3 rounded-xl space-y-2">
+                    <div className="flex justify-between">
+                      <span>Est. asset received</span>
+                      <span>
+                        {parseFloat(route.toAmount) /
+                          10 ** route.toToken.decimals}{' '}
+                        {route.toToken.coinKey}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Min. asset received</span>
+                      <span>
+                        {parseFloat(route.toAmountMin) /
+                          10 ** route.toToken.decimals}{' '}
+                        {route.toToken.coinKey}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Network fee</span>
+                      <span>
+                        {(
+                          parseFloat(route.gasCostUSD ?? '0') /
+                          parseFloat(baseToken?.priceUSD ?? '0')
+                        ).toFixed(16)}{' '}
+                        {baseToken?.coinKey}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span>Routing path</span>
+                      <div className="flex space-x-1.5 items-center">
+                        <img
+                          src={route.steps[0]?.toolDetails.logoURI}
+                          alt={route.steps[0]?.toolDetails.name}
+                          width={200}
+                          height={200}
+                          className="w-6 h-auto rounded-full"
+                        />
+                        <span>{route.steps[0]?.toolDetails.name}</span>
+                      </div>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Slippage tolerance</span>
+                      <span>{slippage}%</span>
+                    </div>
+                    <div className="border-t border-t-primary-900 flex justify-between items-center pt-1.5">
+                      <span>Recipient</span>
+                      <div className="flex gap-2 items-center justify-between text-sm">
+                        <span className="text-primary-200">
+                          {truncateWalletAddress(account?.address || '')}
+                        </span>
+                        <Button variant="link" className="px-0">
+                          Add another wallet
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                )
+              )}
+              {account ? (
+                <button
+                  onClick={handleSwap}
+                  className="bg-primary-900 px-5 py-3.5 text-white w-full rounded-xl"
+                >
+                  Swap
+                </button>
+              ) : (
+                <ConnectionButton isExternal />
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </Container>
   );
 };
+
 export default Page;
