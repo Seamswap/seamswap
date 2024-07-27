@@ -21,6 +21,7 @@ import Container from '@src/components/ui/Container';
 import { TableButton } from '@src/components/atoms/TableUIs';
 import ilmwstETHLogo from '@assets/tokens/ilmEthUsdc.svg';
 import MarketsTable from '@src/components/molecule/MarketsTable';
+import TransactionsTable from '@src/components/molecule/TransactionsTable';
 
 export interface Explorer {
   id: number;
@@ -124,6 +125,12 @@ const Page: NextPage = () => {
         <TabsContent value="markets">
           <MarketsTable data={demoData} tableOptions={tableOptions} />
         </TabsContent>
+
+        <TabsContent value="transaction-history">
+          <p className="mb-4 md:text-lg font-medium">Protocol wide history</p>
+
+          <TransactionsTable data={demoHistoryData} tableOptions={tableOptions} />
+        </TabsContent>
       </Tabs>
     </Container>
   );
@@ -163,6 +170,8 @@ const demoData = [
     actions: 'Actions',
   },
 ];
+
+const demoHistoryData: any[] = [];
 
 export const watchlistColumns: ColumnDef<Explorer>[] = [
   {
