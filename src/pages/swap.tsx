@@ -109,7 +109,7 @@ const Page: NextPage = () => {
     <Container>
       <div className="grid place-content-center min-h-[80vh]">
         <div className="mx-auto flex flex-col space-y-2">
-          <h2 className="font-semibold text-4xl text-center">
+          <h2 className="font-semibold text-2xl md:text-4xl text-center mb-3">
             Swap Positions Seamlessly, Maximize reward.
           </h2>
           <div className="w-full bg-white pt-6 pb-14 px-8 rounded-xl border-primary space-y-4 flex flex-col">

@@ -33,35 +33,25 @@ const LINKS = [
 
 const Navbar: React.FC<INavbarProps> = (props) => {
   const { pathname } = useRouter();
-  const [openNavbar, OpenNavbar] = React.useState(false);
+  const [openNavbar, setOpenNavbar] = React.useState(false);
 
   const toggleNavbar = () => {
-    OpenNavbar(!openNavbar);
+    setOpenNavbar(!openNavbar);
   };
 
-  const closeNavOnClick = (path: string) => {
-    // if (pathname == path) {}
-    toggleNavbar();
-  };
+  useEffect(() => {
+    // Close the navbar when the route changes
+    setOpenNavbar(false);
+  }, [pathname]);
 
   return (
     <Container className="relative">
       <nav className="px-5 py-2 xl:px-6 xl:py-3 flex justify-between items-center mx-auto bg-white mt-6 border-primary rounded-xl">
         <Link href="/swap">
-          <Image
-            src={'/logo.png'}
-            alt={'Logo'}
-            width={168}
-            height={40}
-            className="h-7 lg:h-9 w-auto"
-          />
+          <Image src={'/logo.png'} alt={'Logo'} width={168} height={40} className="h-7 lg:h-9 w-auto" />
         </Link>
 
-        <div
-          className={`md:!block transition-all ${
-            openNavbar ? 'mobile_nav md:hidden' : 'hidden'
-          }`}
-        >
+        <div className={`md:!block transition-all ${openNavbar ? 'mobile_nav md:hidden' : 'hidden'}`}>
           <ul className="flex gap-x-5 lg:gap-x-10">
             {LINKS.map((link) => (
               <Link
@@ -69,28 +59,12 @@ const Navbar: React.FC<INavbarProps> = (props) => {
                 href={link.href}
                 className="font-medium text-black data-true:text-primary-900"
                 data-true={link.href === pathname}
-                onClick={() => closeNavOnClick(link.href)}
               >
                 {link.name}
               </Link>
             ))}
           </ul>
         </div>
-
-        {/* <div className="hidden md:block">
-          <div className="space-x-5 lg:space-x-10">
-            {LINKS.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className="font-medium text-secondary-700 data-true:text-primary-900"
-                data-true={link.href === pathname}
-              >
-                {link.name}
-              </Link>
-            ))}
-          </div>
-        </div> */}
 
         <div className="flex items-center flex-row-reverse gap-x-4">
           <button
