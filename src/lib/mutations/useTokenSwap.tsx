@@ -11,7 +11,6 @@ export const useTokenSwap = (inToken: Address, outToken: Address, inAmount: stri
   const [withdrawalStarted, setWithdrawalStarted] = useState(false);
   const [isSwapping, setIsSwapping] = useState(false);
   const toast = useToast();
-  console.log({ inAmount });
   const beginSwap = async () => {
     try {
       await withdrawAsync({ amount: inAmount }, {
