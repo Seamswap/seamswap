@@ -46,12 +46,22 @@ const Navbar: React.FC<INavbarProps> = (props) => {
 
   return (
     <Container className="relative">
-      <nav className="px-5 py-2 xl:px-6 xl:py-3 flex justify-between items-center mx-auto bg-white mt-6 border-primary rounded-xl">
+      <nav className="px-5 py-4 xl:px-6 xl:py-3 flex justify-between items-center mx-auto bg-white mt-6 border-primary rounded-xl">
         <Link href="/swap">
-          <Image src={'/logo.png'} alt={'Logo'} width={168} height={40} className="h-7 lg:h-9 w-auto" />
+          <Image
+            src={'/logo.png'}
+            alt={'Logo'}
+            width={168}
+            height={40}
+            className="h-[30px] lg:h-9 w-auto"
+          />
         </Link>
 
-        <div className={`md:!block transition-all ${openNavbar ? 'mobile_nav md:hidden' : 'hidden'}`}>
+        <div
+          className={`md:!block transition-all ${
+            openNavbar ? 'mobile_nav md:hidden' : 'hidden'
+          }`}
+        >
           <ul className="flex gap-x-5 lg:gap-x-10">
             {LINKS.map((link) => (
               <Link
