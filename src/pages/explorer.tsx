@@ -80,32 +80,38 @@ const Page: NextPage = () => {
   return (
     <Container>
       <Tabs defaultValue="watchlist" className="">
-        <h2 className="text-4xl">Seamless Explorer</h2>
-        <p className="lg:w-4/12 mb-6 text-grey-700">
+        <h2 className="text-3xl md:text-4xl mb-3">Seamless Explorer</h2>
+        <p className="lg:w-4/12 mb-8 text-grey-700">
           Track important data across seamless protocol and swapped assets. This page
           shows data about transactions, assets etc.
         </p>
 
-        <div className="flex justify-between mb-6 flex-wrap">
+        <div className="flex justify-between mb-6 flex-wrap gap-y-4">
           <TabsList>
             <TabsTrigger value="watchlist">Watchlist</TabsTrigger>
             <TabsTrigger value="markets">Markets</TabsTrigger>
             <TabsTrigger value="transaction-history">Transactions History</TabsTrigger>
           </TabsList>
 
-          <div className="flex space-x-4 items-center basis-3/12">
+          <div className="flex space-x-4 items-center md:basis-3/12">
             <div className="inline-flex items-center">
-              <span>Lend</span> <Export className="ml-2.5 w-4" />
-            </div>
-            <div className="inline-flex items-center">
-              <span>Borrow</span> <Export className="ml-2.5 w-4" />
+              <span className="text-sm font-medium">Lend</span>
+              <Export className="ml-2.5 w-4" />
             </div>
 
-            <span className="relative w-full">
-              <Search className="text-primary-900 absolute inset-y-0 my-auto left-4" />
+            <div className="inline-flex items-center">
+              <span className="text-sm font-medium">Borrow</span>
+              <Export className="ml-2.5 w-4" />
+            </div>
+
+            <span className="relative w-full min-w-[120px] lg:min-w-[240px]">
+              <Search
+                size={16}
+                className="text-primary-900 absolute inset-y-0 my-auto left-3"
+              />
               <Input
-                className="bg-transparent text-primary-900 placeholder:text-primary-900 pl-12 text-sm w-full"
-                placeholder="Search by Asset name"
+                className="bg-transparent text-primary-900 placeholder:text-primary-900 pl-9 pr-1 md:pl-10 text-sm w-full placeholder:text-[13px]"
+                placeholder="Search by asset name"
               />
             </span>
           </div>

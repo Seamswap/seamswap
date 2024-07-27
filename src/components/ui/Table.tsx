@@ -7,18 +7,17 @@ import { Button } from '@src/components/ui/Button';
 import { ArrowLeftIcon, ArrowRightIcon } from 'lucide-react';
 import { ColumnDef } from '@tanstack/table-core';
 
-const Table = React.forwardRef<
-  HTMLTableElement,
-  React.HTMLAttributes<HTMLTableElement>
->(({ className, ...props }, ref) => (
-  <div className="relative w-full overflow-auto">
-    <table
-      ref={ref}
-      className={cn('w-full caption-bottom text-sm', className)}
-      {...props}
-    />
-  </div>
-));
+const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableElement>>(
+  ({ className, ...props }, ref) => (
+    <div className="relative w-full overflow-auto">
+      <table
+        ref={ref}
+        className={cn('w-full caption-bottom text-sm', className)}
+        {...props}
+      />
+    </div>
+  ),
+);
 Table.displayName = 'Table';
 
 const TableHeader = React.forwardRef<
@@ -33,11 +32,7 @@ const TableBody = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...props }, ref) => (
-  <tbody
-    ref={ref}
-    className={cn('[&_tr:last-child]:border-0', className)}
-    {...props}
-  />
+  <tbody ref={ref} className={cn('[&_tr:last-child]:border-0', className)} {...props} />
 ));
 TableBody.displayName = 'TableBody';
 
@@ -47,10 +42,7 @@ const TableFooter = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <tfoot
     ref={ref}
-    className={cn(
-      'border-t bg-muted/50 font-medium [&>tr]:last:border-b-0',
-      className,
-    )}
+    className={cn('border-t bg-muted/50 font-medium [&>tr]:last:border-b-0', className)}
     {...props}
   />
 ));
@@ -122,12 +114,12 @@ function padArray(arr: number[], hostArr: number[]): number[] {
 const TableElement = React.forwardRef<
   HTMLTableCaptionElement,
   React.HTMLAttributes<HTMLTableCaptionElement> & {
-  table: TableType<any>;
-  hide?: boolean;
-  tableClass?: string;
-  columns: ColumnDef<any>[];
-  isLoading?: boolean;
-}
+    table: TableType<any>;
+    hide?: boolean;
+    tableClass?: string;
+    columns: ColumnDef<any>[];
+    isLoading?: boolean;
+  }
 >(
   (
     {
@@ -191,9 +183,9 @@ const TableElement = React.forwardRef<
                             {header.isPlaceholder
                               ? null
                               : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext(),
-                              )}
+                                  header.column.columnDef.header,
+                                  header.getContext(),
+                                )}
                           </TableHead>
                         );
                       })}
@@ -210,10 +202,7 @@ const TableElement = React.forwardRef<
                         >
                           {row.getVisibleCells().map((cell) => (
                             <TableCell colSpan={1} key={cell.id}>
-                              {flexRender(
-                                cell.column.columnDef.cell,
-                                cell.getContext(),
-                              )}
+                              {flexRender(cell.column.columnDef.cell, cell.getContext())}
                             </TableCell>
                           ))}
                         </TableRow>
@@ -221,10 +210,7 @@ const TableElement = React.forwardRef<
                     })
                   ) : (
                     <TableRow>
-                      <TableCell
-                        colSpan={columns_length}
-                        className="h-24 text-center"
-                      >
+                      <TableCell colSpan={columns_length} className="h-24 text-center">
                         No results.
                       </TableCell>
                     </TableRow>
@@ -234,15 +220,15 @@ const TableElement = React.forwardRef<
             ))}
         </div>
         {!hide && !isLoading && (
-          <div className="flex items-center justify-between px-6 w-full bg-white  py-5 space-x-6">
+          <div className="flex items-center justify-between px-4 md:px-6 w-full bg-white py-5 md:space-x-6">
             <Button
               variant="outline"
-              className="px-3.5 py-2 flex space-x-2 items-center text-grey-650 shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] border-grey-375 transition-colors duration-300 ease-in"
+              className="px-3.5 py-2 flex gap-x-2 items-center text-grey-650 shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] border-grey-375 transition-colors duration-300 ease-in"
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
             >
               <ArrowLeftIcon className="h-5 w-5 transition-colors duration-300 ease-in" />
-              <span className="transition-colors duration-300 ease-in">
+              <span className="transition-colors duration-300 ease-in hidden md:block">
                 Previous
               </span>
               <span className="sr-only">Go to previous page</span>
@@ -288,8 +274,7 @@ const TableElement = React.forwardRef<
                     </Button>
                   ))}
                 </div>
-              )
-              }
+              )}
               {/*<SelectInput*/}
               {/*  onValueChange={(value) => {*/}
               {/*    table.setPageSize(Number(value));*/}
@@ -304,12 +289,12 @@ const TableElement = React.forwardRef<
             </div>
             <Button
               variant="outline"
-              className="px-3.5 py-2 flex space-x-2 items-center text-grey-650 shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] border-grey-375 transition-colors duration-300 ease-in"
+              className="px-3.5 py-2 flex gap-x-2 items-center text-grey-650 shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] border-grey-375 transition-colors duration-300 ease-in"
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
             >
               <span className="sr-only">Go to next page</span>
-              <span className="transition-colors duration-300 ease-in">
+              <span className="transition-colors duration-300 ease-in hidden md:block">
                 Next
               </span>
               <ArrowRightIcon className="h-5 w-5 transition-colors duration-300 ease-in" />
