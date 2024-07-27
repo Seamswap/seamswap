@@ -20,6 +20,7 @@ import Export from '@src/components/icons/Export.icon';
 import Container from '@src/components/ui/Container';
 import { TableButton } from '@src/components/atoms/TableUIs';
 import ilmwstETHLogo from '@assets/tokens/ilmEthUsdc.svg';
+import MarketsTable from '@src/components/molecule/MarketsTable';
 
 export interface Explorer {
   id: number;
@@ -32,82 +33,18 @@ export interface Explorer {
   actions: string;
 }
 
-const currencyFormatter = new Intl.NumberFormat('en-US', {
+export const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
 });
-const compactNumberFormatter = new Intl.NumberFormat('en-US', {
+export const compactNumberFormatter = new Intl.NumberFormat('en-US', {
   notation: 'compact',
   compactDisplay: 'short',
 });
-const percentageFormatter = new Intl.NumberFormat('en-US', {
+export const percentageFormatter = new Intl.NumberFormat('en-US', {
   style: 'percent',
   minimumFractionDigits: 2,
 });
-
-export const watchlistColumns: ColumnDef<Explorer>[] = [
-  {
-    accessorKey: 'id',
-    header: '#',
-    cell: ({ getValue }) => <span className="text-gray-500">{getValue() as number}</span>,
-  },
-  {
-    accessorKey: 'ilmName',
-    header: 'ILM Name',
-    cell: ({ getValue }) => {
-      return (
-        <div className="flex items-center gap-x-2">
-          <img src={ilmwstETHLogo.src} className="w-[26px]" alt="ilmwstETHLogo" />
-          <span className="text-black font-normal">{getValue() as string}</span>
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: 'TVL',
-    header: 'TVL',
-    cell: ({ getValue }) => (
-      <span className="">${compactNumberFormatter.format(getValue() as number)}</span>
-    ),
-  },
-  {
-    accessorKey: 'EstimatedAPY',
-    header: 'Est. % Yield',
-    cell: ({ getValue }) => (
-      <span className="text-[#00B25D] text-[17px]">{getValue() as string}%</span>
-    ),
-  },
-  {
-    accessorKey: 'performance',
-    header: 'Performance',
-    cell: ({ getValue }) => (
-      <span className="">{getValue() as string}% cap remaining</span>
-    ),
-  },
-  {
-    accessorKey: 'oraclePrice',
-    header: 'Oracle Price',
-    cell: ({ getValue }) => (
-      <span className="">{compactNumberFormatter.format(getValue() as number)}</span>
-    ),
-  },
-  {
-    accessorKey: 'position',
-    header: 'Position',
-    cell: ({ getValue }) => (
-      <span className="text-gray-500">{Number(getValue()).toLocaleString()}</span>
-    ),
-  },
-
-  {
-    accessorKey: 'actions',
-    header: 'Actions',
-    cell: ({ row }) => {
-      console.log('row', row.id);
-      return <TableButton onClick={() => console.log('swap')} text="Swap" />;
-    },
-  },
-];
 
 const Page: NextPage = () => {
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -177,6 +114,10 @@ const Page: NextPage = () => {
         <TabsContent value="watchlist">
           <TableElement columns={watchlistColumns} table={watchlistTable} />
         </TabsContent>
+
+        <TabsContent value="markets">
+          <MarketsTable data={demoData} tableOptions={tableOptions} />
+        </TabsContent>
       </Tabs>
     </Container>
   );
@@ -214,6 +155,70 @@ const demoData = [
     oraclePrice: 67500.5,
     position: 11500,
     actions: 'Actions',
+  },
+];
+
+export const watchlistColumns: ColumnDef<Explorer>[] = [
+  {
+    accessorKey: 'id',
+    header: '#',
+    cell: ({ getValue }) => <span className="text-gray-500">{getValue() as number}</span>,
+  },
+  {
+    accessorKey: 'ilmName',
+    header: 'ILM Name',
+    cell: ({ getValue }) => {
+      return (
+        <div className="flex items-center gap-x-2">
+          <img src={ilmwstETHLogo.src} className="w-[26px]" alt="ilmwstETHLogo" />
+          <span className="text-black font-normal">{getValue() as string}</span>
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: 'TVL',
+    header: 'TVL',
+    cell: ({ getValue }) => (
+      <span className="">${compactNumberFormatter.format(getValue() as number)}</span>
+    ),
+  },
+  {
+    accessorKey: 'EstimatedAPY',
+    header: 'Est. % Yield',
+    cell: ({ getValue }) => (
+      <span className="text-[#00B25D] text-[17px]">{getValue() as string}%</span>
+    ),
+  },
+  {
+    accessorKey: 'performance',
+    header: 'Performance',
+    cell: ({ getValue }) => (
+      <span className="">{getValue() as string}% cap remaining</span>
+    ),
+  },
+  {
+    accessorKey: 'oraclePrice',
+    header: 'Oracle Price',
+    cell: ({ getValue }) => (
+      <span className="">{compactNumberFormatter.format(getValue() as number)}</span>
+    ),
+  },
+  {
+    accessorKey: 'position',
+    header: 'Position',
+    cell: ({ getValue }) => (
+      <span className="text-gray-500">{Number(getValue()).toLocaleString()}</span>
+    ),
+  },
+
+  {
+    accessorKey: 'actions',
+    header: 'Actions',
+    cell: ({ row }) => {
+      console.log('row', row.id);
+      return <TableButton onClick={() => console.log('swap')} text="Swap" />;
+    },
   },
 ];
 
