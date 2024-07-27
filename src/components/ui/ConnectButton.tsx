@@ -39,15 +39,15 @@ export interface IConnectButtonProps {
 }
 
 const ConnectorButton: React.FC<IConnectButtonProps> = ({
-                                                          account,
-                                                          chain,
-                                                          openAccountModal,
-                                                          openChainModal,
-                                                          openConnectModal,
-                                                          authenticationStatus,
-                                                          mounted,
-                                                          isExternal,
-                                                        }) => {
+  account,
+  chain,
+  openAccountModal,
+  openChainModal,
+  openConnectModal,
+  authenticationStatus,
+  mounted,
+  isExternal,
+}) => {
   const [userNameImage, setUserNameImage] = React.useState<string>('');
   const { openLoginModal, login } = React.useContext(LoginProviderContext);
 
@@ -55,11 +55,7 @@ const ConnectorButton: React.FC<IConnectButtonProps> = ({
   // can remove all 'authenticationStatus' checks
   const ready = mounted && authenticationStatus !== 'loading';
   const connected =
-    ready &&
-    account &&
-    chain &&
-    (!authenticationStatus ||
-      authenticationStatus === 'authenticated');
+    ready && account && chain && (!authenticationStatus || authenticationStatus === 'authenticated');
 
   async function setImageUrlHandler() {
     if (account?.address) {
@@ -77,7 +73,7 @@ const ConnectorButton: React.FC<IConnectButtonProps> = ({
     <div
       {...(!ready && {
         'aria-hidden': true,
-        'style': {
+        style: {
           opacity: 0,
           pointerEvents: 'none',
           userSelect: 'none',
@@ -97,18 +93,30 @@ const ConnectorButton: React.FC<IConnectButtonProps> = ({
         }
         if (!connected) {
           return (
-            <button onClick={openConnectModal}
-                    className="bg-primary-900 px-5 py-3.5 rounded-md text-white inline-flex items-center"><WalletAdd
-              className="mr-1.5" />Connect wallet
+            <button
+              onClick={openConnectModal}
+              className="connectBtn bg-primary-900 px-4 py-2 md:py-3 gap-x-2 text-sm rounded-md text-white inline-flex items-center"
+            >
+              <WalletAdd className="" />
+              <span className="">Connect wallet</span>
             </button>
           );
         }
         return (
           <div style={{ display: 'flex', gap: 12 }}>
-            <button onClick={openAccountModal} type="button"
-                    className="bg-primary-400 px-5 py-3.5 rounded-md flex items-center text-primary-900">
-              <Image src={userNameImage} alt="User Avatar" width={30} height={30}
-                     className="mr-2" /><span>{account.displayName}</span>
+            <button
+              onClick={openAccountModal}
+              type="button"
+              className="connectBtn bg-primary-400 px-4 py-1 md:py-2 gap-x-3 rounded-md flex items-center text-primary-900"
+            >
+              <Image
+                src={userNameImage}
+                alt="User Avatar"
+                width={26}
+                height={26}
+                className="md:w-[28px]"
+              />
+              <span>{account.displayName}</span>
             </button>
           </div>
         );
@@ -116,7 +124,7 @@ const ConnectorButton: React.FC<IConnectButtonProps> = ({
     </div>
   );
 };
-const ConnectionButton: React.FC<{ isExternal?: boolean }> = prop => {
+const ConnectionButton: React.FC<{ isExternal?: boolean }> = (prop) => {
   return (
     <ConnectButton.Custom>
       {(props) => <ConnectorButton {...(props as IConnectButtonProps)} isExternal={prop.isExternal} />}
