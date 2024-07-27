@@ -14,8 +14,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@src/components/ui/Select';
-import { Popover, PopoverContent, PopoverTrigger } from '@src/components/ui/Popover';
-import { CircleX } from 'lucide-react';
+import {
+  Popover,
+  PopoverCloser,
+  PopoverContent,
+  PopoverTrigger,
+} from '@src/components/ui/Popover';
 import { Button } from '@src/components/ui/Button';
 import { ChainId, getRoutes, getToken, Route, RoutesRequest, Token } from '@lifi/sdk';
 import { useDebounceValue } from 'usehooks-ts';
@@ -25,6 +29,7 @@ import SwapHandler from '@src/components/SwapHandler';
 import { assetsConfig } from '@src/lib/config/config';
 import { config } from '@src/lib/config/rainbow.config';
 import Container from '@src/components/ui/Container';
+import CircleX from '@src/components/icons/CircleX.icon';
 
 interface ExtendedToken extends Token {
   balance?: {
@@ -133,15 +138,18 @@ const Page: NextPage = () => {
 
                 <PopoverContent
                   align="start"
-                  className="ml-24 p-6 w-80 rounded-xl"
+                  className="relative top-[-20px] xl:top-[-3px] mx-[22px] md:ml-20 p-6 w-80 border-primary rounded-[10px] shadow-xl xl:shadow-none"
                   sideOffset={-48}
                 >
                   <div className="flex flex-col space-y-6">
                     <div className="flex flex-col space-y-3.5">
                       <div className="flex justify-between">
                         <span className="text-xl font-bold">Max slippage</span>
-                        <CircleX className="w-6 h-6 text-[#878787]" />
+                        <PopoverCloser>
+                          <CircleX className="w-7 md:w-6" />
+                        </PopoverCloser>
                       </div>
+
                       <div className="space-x-4">
                         <Button variant="default">Auto</Button>
                         <Button variant="outline" className="">
@@ -149,6 +157,7 @@ const Page: NextPage = () => {
                         </Button>
                       </div>
                     </div>
+
                     <div className="relative">
                       <Input
                         className="w-full pr-10"
