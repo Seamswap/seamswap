@@ -95,7 +95,6 @@ const Page: NextPage = () => {
         });
       }
       let logoURI = token.symbol === 'WETH' ? '/weth.svg' : token.logoURI;
-      console.log({ logoURI, token });
       setFromToken({ ...token, balance, logoURI });
     } catch (e) {
     }
