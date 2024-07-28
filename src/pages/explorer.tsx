@@ -32,6 +32,7 @@ export interface Explorer {
   oraclePrice: number;
   position: number;
   actions: string;
+  [key: string]: any;
 }
 
 export const currencyFormatter = new Intl.NumberFormat('en-US', {
