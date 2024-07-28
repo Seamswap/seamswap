@@ -52,6 +52,7 @@ const Page: NextPage = () => {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+  const [transactionType, setTransactionType] = React.useState('personal');
 
   const tableOptions = {
     onSortingChange: setSorting,
@@ -111,7 +112,7 @@ const Page: NextPage = () => {
                 className="text-primary-900 absolute inset-y-0 my-auto left-3"
               />
               <Input
-                className="bg-transparent text-primary-900 placeholder:text-primary-900 pl-9 pr-1 md:pl-10 text-sm w-full placeholder:text-[13px]"
+                className="bg-transparent text-primary-900 placeholder:text-primary-900 pl-9 pr-1.5 md:pl-10 text-sm w-full placeholder:text-[13px]"
                 placeholder="Search by asset name"
               />
             </span>
@@ -127,7 +128,30 @@ const Page: NextPage = () => {
         </TabsContent>
 
         <TabsContent value="transaction-history">
-          <p className="mb-4 md:text-lg font-medium">Protocol wide history</p>
+          <div className="mb-3 flex justify-between items-center">
+            <p className="md:text-lg font-medium hidden md:block">
+              {transactionType == 'personal'
+                ? 'Personal history'
+                : 'Protocol wide history'}
+            </p>
+
+            <div className="px-2 py-[6px] bg-white rounded-[10px] justify-center items-center gap-[8px] flex *:cursor-pointer">
+              <div
+                onClick={() => setTransactionType('personal')}
+                data-state={transactionType === 'personal' ? 'active' : 'inactive'}
+                className="py-[7px] px-4 rounded-[10px] data-[state=active]:bg-primary-50 data-[state=active]:text-primary-900"
+              >
+                <div className="text-[#00b7a1] text-sm font-medium">Personal</div>
+              </div>
+              <div
+                onClick={() => setTransactionType('protocol_wide')}
+                data-state={transactionType === 'protocol_wide' ? 'active' : 'inactive'}
+                className="py-[7px] px-4 rounded-[10px] data-[state=active]:bg-primary-50 data-[state=active]:text-primary-900"
+              >
+                <div className="text-[#868686] text-sm font-medium">Protocol wide</div>
+              </div>
+            </div>
+          </div>
 
           <TransactionsTable data={demoHistoryData} tableOptions={tableOptions} />
         </TabsContent>
@@ -171,7 +195,35 @@ const demoData = [
   },
 ];
 
-const demoHistoryData: any[] = [];
+const demoHistoryData: any[] = [
+  {
+    id: 1,
+    time: '3 secs ago',
+    from: 'Boost wstETH',
+    to: 'Boost wstETH',
+    quantity_swapped: 0.001,
+    quantity_received: 0.001,
+    status: 'Successful',
+  },
+  {
+    id: 2,
+    time: '2 hours ago',
+    from: 'Multiply ETH Long',
+    to: 'Multiply ETH Long',
+    quantity_swapped: 0.001,
+    quantity_received: 0.001,
+    status: 'Confirming',
+  },
+  {
+    id: 2,
+    time: '2 hours ago',
+    from: 'Boost wstETH',
+    to: 'Boost wstETH',
+    quantity_swapped: 0.001,
+    quantity_received: 0.001,
+    status: 'Failed',
+  },
+];
 
 export const watchlistColumns: ColumnDef<Explorer>[] = [
   {

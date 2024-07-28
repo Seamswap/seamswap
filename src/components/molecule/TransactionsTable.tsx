@@ -1,21 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
 import { TableElement } from '../ui/Table';
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  SortingState,
-  VisibilityState,
-} from '@tanstack/table-core';
+import { ColumnDef } from '@tanstack/table-core';
 import { useReactTable } from '@tanstack/react-table';
-import { compactNumberFormatter, Explorer } from '@src/pages/explorer';
+import { Explorer } from '@src/pages/explorer';
 import ilmwstETHLogo from '@assets/tokens/ilmEthUsdc.svg';
-import { Star } from 'lucide-react';
-import { TableButton } from '../atoms/TableUIs';
+import Badge from '../ui/Badge';
 
 type Props = {
   data: Explorer[];
@@ -45,7 +35,7 @@ export const transactionsColumns: ColumnDef<Explorer>[] = [
   {
     accessorKey: 'time',
     header: 'Time',
-    cell: ({ getValue }) => <span className="text-gray-500">{getValue() as string}</span>,
+    cell: ({ getValue }) => <span className="text-gray-800">{getValue() as string}</span>,
   },
   {
     accessorKey: 'from',
@@ -72,19 +62,35 @@ export const transactionsColumns: ColumnDef<Explorer>[] = [
     },
   },
   {
-    accessorKey: 'quantity',
+    accessorKey: 'quantity_swapped',
     header: 'Quantity swapped',
-    cell: ({ getValue }) => <span className="text-gray-500">{getValue() as string}</span>,
+    cell: ({ getValue, row }) => (
+      <span className="text-gray-800">
+        {getValue() as string} {row.original.from}
+      </span>
+    ),
   },
   {
-    accessorKey: 'quantity',
+    accessorKey: 'quantity_received',
     header: 'Quantity received',
-    cell: ({ getValue }) => <span className="text-gray-500">{getValue() as string}</span>,
+    cell: ({ getValue, row }) => (
+      <span className="text-gray-800">
+        {getValue() as string} {row.original.to}
+      </span>
+    ),
   },
   {
     accessorKey: 'status',
     header: 'Status',
-    cell: ({ getValue }) => <span className="">{getValue() as string}</span>,
+    cell: ({ getValue }) => {
+      const status =
+        getValue() == 'Successful'
+          ? 'success'
+          : getValue() == 'Confirming'
+          ? 'warning'
+          : 'error';
+      return <Badge variant={status}>{getValue() as string}</Badge>;
+    },
   },
 ];
 
