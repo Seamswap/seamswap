@@ -1,20 +1,22 @@
-import { base } from "wagmi/chains";
-import logoSeamless from "@assets/logos/logo-seamless.svg";
-import { createConfig, fallback, http, WagmiProvider, webSocket } from 'wagmi';
+import { base } from 'wagmi/chains';
+import { createConfig, http } from 'wagmi';
 
-import { connectorsForWallets } from "@rainbow-me/rainbowkit";
+import { connectorsForWallets } from '@rainbow-me/rainbowkit';
 import {
   coinbaseWallet,
   metaMaskWallet,
   rabbyWallet,
   rainbowWallet,
   walletConnectWallet,
-} from "@rainbow-me/rainbowkit/wallets";
+} from '@rainbow-me/rainbowkit/wallets';
 import seamSwap from '@assets/tokens/seamswap.svg';
 
 
 const rpcConfig = [
-  { url: 'https://lb.drpc.org/ogrpc?network=base&dkey=AvBCZwsn-kqoqXOvbbV6cPmFUTfiS3oR77PsvmJKmvm9', isWebSocket: false },
+  {
+    url: 'https://lb.drpc.org/ogrpc?network=base&dkey=AvBCZwsn-kqoqXOvbbV6cPmFUTfiS3oR77PsvmJKmvm9',
+    isWebSocket: false,
+  },
   { url: 'wss://lb.drpc.org/ogws?network=base&dkey=AvBCZwsn-kqoqXOvbbV6cPmFUTfiS3oR77PsvmJKmvm9', isWebSocket: true },
   { url: 'https://rpc.ankr.com/base', isWebSocket: false },
   // { url: 'https://base-mainnet.g.alchemy.com/v2/ITJZYemtXDZswsfcino5vXg6ikpUq1zI', isWebSocket: false },
@@ -53,15 +55,12 @@ export const config = createConfig({
   connectors,
   chains: [base],
   transports: {
-    [base.id]: fallback(
-      rpcConfig.map(({ url, isWebSocket }) => (isWebSocket ? webSocket(url) : http(url))),
-      { rank: true },
-    ),
+    [base.id]: http('https://base-mainnet.g.alchemy.com/v2/ITJZYemtXDZswsfcino5vXg6ikpUq1zI'),
   },
 });
 
 
-declare module "wagmi" {
+declare module 'wagmi' {
   interface Register {
     config: typeof config;
   }
