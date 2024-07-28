@@ -49,6 +49,7 @@ export const srwstETH_ADDRESS: Address = "0xb01C5c4eB40d2F2b64Daa3170F89849d00eA
 export const srWETH_ADDRESS: Address = "0xC52D72B89931fDA7C7B7B13cc3359EF6207d4638";
 export const sDEGEN_ADDRESS: Address = "0x39c0926455682A2aFB5680045f309848C350de34";
 export const sSEAM_ADDRESS: Address = "0x67368dF7734aee0bc65A845AC6d73974626b7A34";
+export const sBRETT_ADDRESS: Address = "0xCE335056A7b3Be1B0B23Ea4DF1Fd0969328c7c0c";
 
 export const variableDebtSeamcbETH_ADDRESS: Address = "0x72Dbdbe3423cdA5e92A3cC8ba9BFD41F67EE9168";
 export const variableDebtSeamDAI_ADDRESS: Address = "0x2733e1DA7d35c5ea3ed246ed6b613DC3dA97Ce2E";

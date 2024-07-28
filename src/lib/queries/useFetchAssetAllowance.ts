@@ -29,6 +29,7 @@ export const useFetchAssetAllowance = ({ asset, spender }: { asset?: Address; sp
       enabled: !!asset && !!spender && !!account.address,
     }
   });
+  console.log({ allowance })
 
   const retData =
     tokenData && allowance
