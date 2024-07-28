@@ -35,8 +35,8 @@ import {
   variableDebtSeamwstETH_ADDRESS,
   ethLong,
   multiplyETH_ADDRESS_STRATEGY_ID,
-  wstETHBooster_ADDRESS_STRATEGY_ID,
-} from "@meta/constants";
+  wstETHBooster_ADDRESS_STRATEGY_ID, sBRETT_ADDRESS,
+} from '@meta/constants';
 import ilmwstETHLogo from "@assets/tokens/ilmWstethEth.svg";
 import ilmEthUsdcLogo from "@assets/tokens/ilmEthUsdc.svg";
 import WstEthLogo from "@assets/tokens/wsteth.svg";
@@ -149,6 +149,7 @@ export const assetsConfig: { [key: Address]: LendMarketConfig } = {
     name: "Brett",
     symbol: "BRETT",
     address: BRETT_ADDRESS,
+    sTokenAddress: sBRETT_ADDRESS,
     logo: brettLogo,
     useCoinGeckoPrice: true,
     description: "BRETT is PEPE's best friend on Base.",
