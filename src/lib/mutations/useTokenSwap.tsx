@@ -53,6 +53,7 @@ export const useTokenSwap = (inToken: Address, outToken: Address, inAmount: stri
       setToAmount(toAmount);
       console.log({ toAmount, isSuccessful });
       await approveAsync();
+      await handleDeposit()
     } catch (e) {
       console.log(e);
       toast.toast({
@@ -102,13 +103,13 @@ export const useTokenSwap = (inToken: Address, outToken: Address, inAmount: stri
       handleSwap();
     }
   }, [isWithdrawPending, withdrawalStarted]);
-  useEffect(() => {
-    if (toAmount !== '0' && isApproved) {
-      setTimeout(() =>
-        handleDeposit(), 5000,
-      );
-    }
-  }, [isApproved]);
+  // useEffect(() => {
+  //   if (toAmount !== '0' && isApproved) {
+  //     setTimeout(() =>
+  //       handleDeposit(), 5000,
+  //     );
+  //   }
+  // }, [isApproved]);
 
   return { beginSwap, isPending: isSwapping || isWithdrawPending };
 };
