@@ -4,10 +4,19 @@ import { useEffect, useState } from 'react';
 import { executeRoute, Route, RouteExtended } from '@lifi/sdk';
 import { useToast } from '../hooks/use-toast';
 import { useMutateSupplyLending } from './useMutateSupplyLending';
+import { useERC20Approve } from '@src/lib/mutations/useERC20Approve';
+import { lendingPoolAddress } from '@src/lib/config/contract';
 
-export const useTokenSwap = (inToken: Address, outToken: Address, inAmount: string, route: Route) => {
+export const useTokenSwap = (inToken: Address, outToken: Address, inAmount: string, route: Route, spenderAddress?: Address) => {
   const { withdrawAsync, isPending, isWithdrawPending } = useMutateWithdrawLending(inToken);
   const { supplyAsync } = useMutateSupplyLending(outToken);
+  console.log(route.toAmount);
+  const {
+    approveAsync,
+    justApproved,
+    isApproved,
+  } = useERC20Approve(outToken, lendingPoolAddress, BigInt(route.toAmount));
+  const [toAmount, setToAmount] = useState<string>('0');
   const [withdrawalStarted, setWithdrawalStarted] = useState(false);
   const [isSwapping, setIsSwapping] = useState(false);
   const toast = useToast();
@@ -43,20 +52,12 @@ export const useTokenSwap = (inToken: Address, outToken: Address, inAmount: stri
       });
       console.log({ executedRoute });
       const isSuccessful = executedRoute.steps.every(step => step.execution?.status === 'DONE');
-      const toAmount = parseInt(formatUnits(BigInt(executedRoute?.steps.at(-1)?.execution?.toAmount || '0'), executedRoute?.steps.at(-1)?.execution?.toToken?.decimals || 0)).toFixed(1);
+      const tokenAmount = BigInt(executedRoute?.steps.at(-1)?.execution?.toAmount || '0');
+      const toAmount = formatUnits(tokenAmount, executedRoute?.steps.at(-1)?.execution?.toToken?.decimals || 0);
+      setToAmount(toAmount);
       console.log({ toAmount, isSuccessful });
-      supplyAsync({ amount: toAmount.toString() }, {
-        onSuccess(txHash) {
-          toast.toast({
-            title: 'Deposit Successful',
-            description: txHash,
-          });
-        },
-        onSettled: () => {
-          console.log('here...');
-        },
-      });
-    } catch(e){
+      await approveAsync();
+    } catch (e) {
       console.log(e);
       toast.toast({
         title: 'Error',
@@ -64,6 +65,19 @@ export const useTokenSwap = (inToken: Address, outToken: Address, inAmount: stri
         variant: 'destructive',
       });
     }
+  };
+  const handleDeposit = async () => {
+    await supplyAsync({ amount: toAmount }, {
+      onSuccess(txHash) {
+        toast.toast({
+          title: 'Deposit Successful',
+          description: txHash,
+        });
+      },
+      onSettled: () => {
+        console.log('here...');
+      },
+    });
   };
   const getTransactionLinks = (route: RouteExtended) => {
     route.steps.forEach((step, index) => {
@@ -92,6 +106,11 @@ export const useTokenSwap = (inToken: Address, outToken: Address, inAmount: stri
       handleSwap();
     }
   }, [isWithdrawPending, withdrawalStarted]);
+  useEffect(() => {
+    if (isApproved) {
+      handleDeposit();
+    }
+  }, [isApproved]);
 
   return { beginSwap, isPending: isSwapping || isWithdrawPending };
 };
