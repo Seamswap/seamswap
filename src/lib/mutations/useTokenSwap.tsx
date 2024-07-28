@@ -11,7 +11,11 @@ export const useTokenSwap = (inToken: Address, outToken: Address, inAmount: stri
   const { withdrawAsync, isPending, isWithdrawPending } = useMutateWithdrawLending(inToken);
   const { supplyAsync } = useMutateSupplyLending(outToken);
   console.log(route.toAmount);
-  const { approveAsync, justApproved, isApproved } = useERC20Approve(outToken, lendingPoolAddress, BigInt(route.toAmount));
+  const {
+    approveAsync,
+    justApproved,
+    isApproved,
+  } = useERC20Approve(outToken, lendingPoolAddress, BigInt(route.toAmount));
   const [toAmount, setToAmount] = useState<string>('0');
   const [withdrawalStarted, setWithdrawalStarted] = useState(false);
   const [isSwapping, setIsSwapping] = useState(false);
@@ -53,7 +57,6 @@ export const useTokenSwap = (inToken: Address, outToken: Address, inAmount: stri
       setToAmount(toAmount);
       console.log({ toAmount, isSuccessful });
       await approveAsync();
-      await handleDeposit()
     } catch (e) {
       console.log(e);
       toast.toast({
@@ -103,13 +106,11 @@ export const useTokenSwap = (inToken: Address, outToken: Address, inAmount: stri
       handleSwap();
     }
   }, [isWithdrawPending, withdrawalStarted]);
-  // useEffect(() => {
-  //   if (toAmount !== '0' && isApproved) {
-  //     setTimeout(() =>
-  //       handleDeposit(), 5000,
-  //     );
-  //   }
-  // }, [isApproved]);
+  useEffect(() => {
+    if (isApproved) {
+      handleDeposit();
+    }
+  }, [isApproved]);
 
   return { beginSwap, isPending: isSwapping || isWithdrawPending };
 };
