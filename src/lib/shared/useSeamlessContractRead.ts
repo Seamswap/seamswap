@@ -45,6 +45,7 @@ export function useSeamlessContractRead<
   // ************* //
   // Read contract //
   // ************* //
+  // @ts-ignore
   const result = useReadContract({ ...parameters });
 
   return {
