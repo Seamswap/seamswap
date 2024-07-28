@@ -15,11 +15,9 @@ import { useReactTable } from '@tanstack/react-table';
 import { TableElement } from '@src/components/ui/Table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@src/components/ui/Tabs';
 import Input from '@src/components/ui/Input';
-import { Search } from 'lucide-react';
 import Export from '@src/components/icons/Export.icon';
 import Container from '@src/components/ui/Container';
-import { TableButton } from '@src/components/atoms/TableUIs';
-import ilmwstETHLogo from '@assets/tokens/ilmEthUsdc.svg';
+import { IlmNameRow, TableButton } from '@src/components/atoms/TableUIs';
 import MarketsTable from '@src/components/molecule/MarketsTable';
 import TransactionsTable from '@src/components/molecule/TransactionsTable';
 
@@ -54,6 +52,7 @@ const Page: NextPage = () => {
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
   const [transactionType, setTransactionType] = React.useState('personal');
+  const [currentTab, setCurrentTab] = React.useState('watchlist');
 
   const tableOptions = {
     onSortingChange: setSorting,
@@ -82,43 +81,14 @@ const Page: NextPage = () => {
 
   return (
     <Container>
-      <Tabs defaultValue="watchlist" className="">
-        <h2 className="text-3xl md:text-4xl mb-3">Seamless Explorer</h2>
-        <p className="lg:w-4/12 mb-8 text-grey-700">
+      <Tabs defaultValue={currentTab} onValueChange={(val) => setCurrentTab(val)}>
+        <h2 className="text-3xl md:text-4xl font-[500] mb-3">Seamless Explorer</h2>
+        <p className="max-w-[490px] mb-8 text-grey-700">
           Track important data across seamless protocol and swapped assets. This page
           shows data about transactions, assets etc.
         </p>
 
-        <div className="flex justify-between mb-6 flex-wrap gap-y-4">
-          <TabsList>
-            <TabsTrigger value="watchlist">Watchlist</TabsTrigger>
-            <TabsTrigger value="markets">Markets</TabsTrigger>
-            <TabsTrigger value="transaction-history">Transactions History</TabsTrigger>
-          </TabsList>
-
-          <div className="flex space-x-4 items-center md:basis-3/12">
-            <div className="inline-flex items-center">
-              <span className="text-sm font-medium">Lend</span>
-              <Export className="ml-2.5 w-4" />
-            </div>
-
-            <div className="inline-flex items-center">
-              <span className="text-sm font-medium">Borrow</span>
-              <Export className="ml-2.5 w-4" />
-            </div>
-
-            <span className="relative w-full min-w-[120px] lg:min-w-[240px]">
-              <Search
-                size={16}
-                className="text-primary-900 absolute inset-y-0 my-auto left-3"
-              />
-              <Input
-                className="bg-transparent text-primary-900 placeholder:text-primary-900 pl-9 pr-1.5 md:pl-10 text-sm w-full placeholder:text-[13px]"
-                placeholder="Search by asset name"
-              />
-            </span>
-          </div>
-        </div>
+        <TabHeader currentTab={currentTab} />
 
         <TabsContent value="watchlist">
           <TableElement columns={watchlistColumns} table={watchlistTable} />
@@ -128,7 +98,7 @@ const Page: NextPage = () => {
           <MarketsTable data={demoData} tableOptions={tableOptions} />
         </TabsContent>
 
-        <TabsContent value="transaction-history">
+        <TabsContent value="transaction">
           <div className="mb-3 flex justify-between items-center">
             <p className="md:text-lg font-medium hidden md:block">
               {transactionType == 'personal'
@@ -161,11 +131,68 @@ const Page: NextPage = () => {
   );
 };
 
+const TabHeader = ({ currentTab }: { currentTab: string }) => {
+  return (
+    <div className="flex justify-between items-center mb-6 flex-wrap gap-y-4">
+      <TabsList>
+        <TabsTrigger value="watchlist">Watchlist</TabsTrigger>
+        <TabsTrigger value="markets">Markets</TabsTrigger>
+        <TabsTrigger value="transaction">Transactions History</TabsTrigger>
+      </TabsList>
+
+      <div className="flex gap-x-5 xl:gap-x-8 items-center md:basis-3/12">
+        <div className="inline-flex items-center">
+          <span className="text-sm font-medium lg:text-[17px]">Lend</span>
+          <Export className="ml-2.5 w-4" />
+        </div>
+
+        <div className="inline-flex items-center">
+          <span className="text-sm font-medium lg:text-[17px]">Borrow</span>
+          <Export className="ml-2.5 w-4" />
+        </div>
+
+        <span className="relative w-full min-w-[120px] lg:w-[24vw] max-w-[320px]">
+          <svg
+            className="w-[16px] lg:w-[20px] absolute inset-y-0 my-auto left-3"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z"
+              stroke="#00B8A1"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M22 22L20 20"
+              stroke="#00B8A1"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+
+          <Input
+            className="bg-transparent text-primary-900 placeholder:text-primary-900 pl-9 pr-1.5 py-[13px] lg:pl-[42px] text-sm w-full"
+            placeholder={
+              currentTab == 'transaction'
+                ? ' Search transaction by Address'
+                : 'Search by Asset name'
+            }
+          />
+        </span>
+      </div>
+    </div>
+  );
+};
+
 const demoData = [
   {
     id: 1,
     ilmName: 'Boost wstETH',
-    TVL: 150000,
+    TVL: 16350,
     EstimatedAPY: 55.85,
     performance: 90,
     oraclePrice: 67500.5,
@@ -236,26 +263,23 @@ export const watchlistColumns: ColumnDef<Explorer>[] = [
     accessorKey: 'ilmName',
     header: 'ILM Name',
     cell: ({ getValue }) => {
-      return (
-        <div className="flex items-center gap-x-2">
-          <img src={ilmwstETHLogo.src} className="w-[26px]" alt="ilmwstETHLogo" />
-          <span className="text-black font-normal">{getValue() as string}</span>
-        </div>
-      );
+      return <IlmNameRow value={getValue() as string} />;
     },
   },
   {
     accessorKey: 'TVL',
     header: 'TVL',
     cell: ({ getValue }) => (
-      <span className="">${compactNumberFormatter.format(getValue() as number)}</span>
+      <span className="text-black">
+        ${compactNumberFormatter.format(getValue() as number)}
+      </span>
     ),
   },
   {
     accessorKey: 'EstimatedAPY',
     header: 'Est. % Yield',
     cell: ({ getValue }) => (
-      <span className="text-[#00B25D] text-[17px]">{getValue() as string}%</span>
+      <div className="text-[#00B25D] min-w-[70px]">{getValue() as string}%</div>
     ),
   },
   {

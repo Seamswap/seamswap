@@ -1,4 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
 import * as React from 'react';
+import ilmwstETHLogo from '@assets/tokens/ilmEthUsdc.svg';
 
 export const TableButton = ({
   text,
@@ -11,3 +13,12 @@ export const TableButton = ({
     {text}
   </button>
 );
+
+export const IlmNameRow = ({ value }: { value: string }) => {
+  return (
+    <div className="flex items-center gap-x-2 min-w-[140px]">
+      <img src={ilmwstETHLogo.src} className="w-[26px]" alt="ilmwstETHLogo" />
+      <span className="text-black font-normal">{value}</span>
+    </div>
+  );
+};

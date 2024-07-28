@@ -55,7 +55,7 @@ const TableRow = React.forwardRef<
   <tr
     ref={ref}
     className={cn(
-      'border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted',
+      'transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted',
       className,
     )}
     {...props}
@@ -70,7 +70,7 @@ const TableHead = React.forwardRef<
   <th
     ref={ref}
     className={cn(
-      'h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0',
+      'h-[64px] px-3 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0',
       className,
     )}
     {...props}
@@ -84,7 +84,10 @@ const TableCell = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <td
     ref={ref}
-    className={cn('p-4 align-middle [&:has([role=checkbox])]:pr-0', className)}
+    className={cn(
+      'pb-[22px] px-3 align-middle [&:has([role=checkbox])]:pr-0 text-[15.5px] border-0',
+      className,
+    )}
     {...props}
   />
 ));
@@ -160,7 +163,7 @@ const TableElement = React.forwardRef<
     return (
       <div
         className={cn(
-          'flex flex-col gap-4 lg:pb-0 pb-16 rounded-lg border border-grey-195 shadow-[0px_1px_2px_0px_rgba(16,24,40,0.06),0px_1px_3px_0px_rgba(16,24,40,0.10)] bg-white overflow-hidden',
+          'flex flex-col rounded-[10px] border border-primary-900 bg-white overflow-hidden',
           className,
         )}
       >
@@ -175,11 +178,11 @@ const TableElement = React.forwardRef<
                   {table.getHeaderGroups().map((headerGroup) => (
                     <TableRow
                       key={headerGroup.id}
-                      className="bg-white text-black border-0 text-xs capitalize"
+                      className="bg-white text-black !border-0 text-xs capitalize"
                     >
                       {headerGroup.headers.map((header) => {
                         return (
-                          <TableHead key={header.id} className="text-grey-550">
+                          <TableHead key={header.id} className="text-black font-medium lg:text-[16px]">
                             {header.isPlaceholder
                               ? null
                               : flexRender(
@@ -192,11 +195,13 @@ const TableElement = React.forwardRef<
                     </TableRow>
                   ))}
                 </TableHeader>
-                <TableBody className="border-b-grey-195 border-b">
+
+                <TableBody className="">
                   {table.getRowModel().rows?.length ? (
                     table.getRowModel().rows.map((row) => {
                       return (
                         <TableRow
+                          className="!border-0"
                           key={row.id}
                           data-state={row.getIsSelected() && 'selected'}
                         >
@@ -220,7 +225,7 @@ const TableElement = React.forwardRef<
             ))}
         </div>
         {!hide && !isLoading && (
-          <div className="flex items-center justify-between px-4 md:px-6 w-full bg-white py-5 md:space-x-6">
+          <div className="flex items-center justify-between px-4 md:px-6 w-full bg-white py-4 md:space-x-6">
             <Button
               variant="outline"
               className="px-3.5 py-2 flex gap-x-2 items-center text-grey-650 shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] border-grey-375 transition-colors duration-300 ease-in"

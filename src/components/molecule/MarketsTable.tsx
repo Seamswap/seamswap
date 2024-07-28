@@ -15,7 +15,7 @@ import { useReactTable } from '@tanstack/react-table';
 import { compactNumberFormatter, Explorer } from '@src/pages/explorer';
 import ilmwstETHLogo from '@assets/tokens/ilmEthUsdc.svg';
 import { Star } from 'lucide-react';
-import { TableButton } from '../atoms/TableUIs';
+import { IlmNameRow, TableButton } from '../atoms/TableUIs';
 
 type Props = {
   data: Explorer[];
@@ -62,32 +62,29 @@ export const marketsColumns: ColumnDef<Explorer>[] = [
   {
     accessorKey: 'id',
     header: '#',
-    cell: ({ getValue }) => <span className="text-gray-500">{getValue() as number}</span>,
+    cell: ({ getValue }) => <span className="text-grey-700">{getValue() as number}</span>,
   },
   {
     accessorKey: 'ilmName',
     header: 'ILM Name',
     cell: ({ getValue }) => {
-      return (
-        <div className="flex items-center gap-x-2">
-          <img src={ilmwstETHLogo.src} className="w-[26px]" alt="ilmwstETHLogo" />
-          <span className="text-black font-normal">{getValue() as string}</span>
-        </div>
-      );
+      return <IlmNameRow value={getValue() as string} />;
     },
   },
   {
     accessorKey: 'TVL',
     header: 'TVL',
     cell: ({ getValue }) => (
-      <span className="">${compactNumberFormatter.format(getValue() as number)}</span>
+      <span className="text-black">
+        ${compactNumberFormatter.format(getValue() as number)}
+      </span>
     ),
   },
   {
     accessorKey: 'EstimatedAPY',
     header: 'Est. % Yield',
     cell: ({ getValue }) => (
-      <span className="text-[#00B25D] text-[17px]">{getValue() as string}%</span>
+      <div className="text-[#00B25D] min-w-[70px]">{getValue() as string}%</div>
     ),
   },
   {
@@ -108,7 +105,7 @@ export const marketsColumns: ColumnDef<Explorer>[] = [
     accessorKey: 'position',
     header: 'Position',
     cell: ({ getValue }) => (
-      <span className="text-gray-500">{Number(getValue()).toLocaleString()}</span>
+      <span className="text-grey-700">{Number(getValue()).toLocaleString()}</span>
     ),
   },
   {
@@ -121,7 +118,7 @@ export const marketsColumns: ColumnDef<Explorer>[] = [
           {watchlisted ? (
             <Star className="text-[#FFBB0B]" fill="#FFBB0B" />
           ) : (
-            <Star className="text-gray-500" />
+            <Star className="text-grey-700" />
           )}
         </div>
       );

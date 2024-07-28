@@ -4,8 +4,8 @@ import { TableElement } from '../ui/Table';
 import { ColumnDef } from '@tanstack/table-core';
 import { useReactTable } from '@tanstack/react-table';
 import { Explorer } from '@src/pages/explorer';
-import ilmwstETHLogo from '@assets/tokens/ilmEthUsdc.svg';
 import Badge from '../ui/Badge';
+import { IlmNameRow } from '../atoms/TableUIs';
 
 type Props = {
   data: Explorer[];
@@ -30,53 +30,45 @@ export const transactionsColumns: ColumnDef<Explorer>[] = [
   {
     accessorKey: 'id',
     header: '#',
-    cell: ({ getValue }) => <span className="text-gray-500">{getValue() as number}</span>,
+    cell: ({ getValue }) => <div className="text-grey-700">{getValue() as number}</div>,
   },
   {
     accessorKey: 'time',
     header: 'Time',
-    cell: ({ getValue }) => <span className="text-gray-800">{getValue() as string}</span>,
+    cell: ({ getValue }) => (
+      <div className="text-black min-w-[90px]">{getValue() as string}</div>
+    ),
   },
   {
     accessorKey: 'from',
     header: 'Swap from',
     cell: ({ getValue }) => {
-      return (
-        <div className="flex items-center gap-x-2">
-          <img src={ilmwstETHLogo.src} className="w-[26px]" alt="ilmwstETHLogo" />
-          <span className="text-black font-normal">{getValue() as string}</span>
-        </div>
-      );
+      return <IlmNameRow value={getValue() as string} />;
     },
   },
   {
     accessorKey: 'to',
     header: 'Swap to',
     cell: ({ getValue }) => {
-      return (
-        <div className="flex items-center gap-x-2">
-          <img src={ilmwstETHLogo.src} className="w-[26px]" alt="ilmwstETHLogo" />
-          <span className="text-black font-normal">{getValue() as string}</span>
-        </div>
-      );
+      return <IlmNameRow value={getValue() as string} />;
     },
   },
   {
     accessorKey: 'quantity_swapped',
     header: 'Quantity swapped',
     cell: ({ getValue, row }) => (
-      <span className="text-gray-800">
+      <div className="text-black min-w-[120px]">
         {getValue() as string} {row.original.from}
-      </span>
+      </div>
     ),
   },
   {
     accessorKey: 'quantity_received',
     header: 'Quantity received',
     cell: ({ getValue, row }) => (
-      <span className="text-gray-800">
+      <div className="text-black min-w-[120px]">
         {getValue() as string} {row.original.to}
-      </span>
+      </div>
     ),
   },
   {
