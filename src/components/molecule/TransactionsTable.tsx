@@ -81,6 +81,8 @@ export const transactionsColumns: ColumnDef<Explorer>[] = [
           : getValue() == 'Confirming'
           ? 'warning'
           : 'error';
+
+      // console.log('TransactionsTable', status);
       return <Badge variant={status}>{getValue() as string}</Badge>;
     },
   },

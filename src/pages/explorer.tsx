@@ -11,15 +11,13 @@ import {
   SortingState,
   VisibilityState,
 } from '@tanstack/table-core';
-import { useReactTable } from '@tanstack/react-table';
-import { TableElement } from '@src/components/ui/Table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@src/components/ui/Tabs';
 import Input from '@src/components/ui/Input';
 import Export from '@src/components/icons/Export.icon';
 import Container from '@src/components/ui/Container';
-import { IlmNameRow, TableButton } from '@src/components/atoms/TableUIs';
 import MarketsTable from '@src/components/molecule/MarketsTable';
 import TransactionsTable from '@src/components/molecule/TransactionsTable';
+import WatchlistTable from '@src/components/molecule/WatchlistTable';
 
 export interface Explorer {
   id: number;
@@ -71,12 +69,6 @@ const Page: NextPage = () => {
     },
   };
 
-  const watchlistTable = useReactTable({
-    data: [...demoData],
-    columns: watchlistColumns,
-    ...tableOptions,
-  });
-
   console.log('explorer.tsx');
 
   return (
@@ -91,7 +83,7 @@ const Page: NextPage = () => {
         <TabHeader currentTab={currentTab} />
 
         <TabsContent value="watchlist">
-          <TableElement columns={watchlistColumns} table={watchlistTable} />
+          <WatchlistTable data={demoData} tableOptions={tableOptions} />
         </TabsContent>
 
         <TabsContent value="markets">
@@ -250,67 +242,6 @@ const demoHistoryData: any[] = [
     quantity_swapped: 0.001,
     quantity_received: 0.001,
     status: 'Failed',
-  },
-];
-
-export const watchlistColumns: ColumnDef<Explorer>[] = [
-  {
-    accessorKey: 'id',
-    header: '#',
-    cell: ({ getValue }) => <span className="text-gray-500">{getValue() as number}</span>,
-  },
-  {
-    accessorKey: 'ilmName',
-    header: 'ILM Name',
-    cell: ({ getValue }) => {
-      return <IlmNameRow value={getValue() as string} />;
-    },
-  },
-  {
-    accessorKey: 'TVL',
-    header: 'TVL',
-    cell: ({ getValue }) => (
-      <span className="text-black">
-        ${compactNumberFormatter.format(getValue() as number)}
-      </span>
-    ),
-  },
-  {
-    accessorKey: 'EstimatedAPY',
-    header: 'Est. % Yield',
-    cell: ({ getValue }) => (
-      <div className="text-[#00B25D] min-w-[70px]">{getValue() as string}%</div>
-    ),
-  },
-  {
-    accessorKey: 'performance',
-    header: 'Performance',
-    cell: ({ getValue }) => (
-      <span className="">{getValue() as string}% cap remaining</span>
-    ),
-  },
-  {
-    accessorKey: 'oraclePrice',
-    header: 'Oracle Price',
-    cell: ({ getValue }) => (
-      <span className="">{compactNumberFormatter.format(getValue() as number)}</span>
-    ),
-  },
-  {
-    accessorKey: 'position',
-    header: 'Position',
-    cell: ({ getValue }) => (
-      <span className="text-gray-500">{Number(getValue()).toLocaleString()}</span>
-    ),
-  },
-
-  {
-    accessorKey: 'actions',
-    header: 'Actions',
-    cell: ({ row }) => {
-      console.log('row', row.id);
-      return <TableButton onClick={() => console.log('swap')} text="Swap" />;
-    },
   },
 ];
 
