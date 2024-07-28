@@ -14,6 +14,7 @@ import { Toaster } from '@src/components/ui/toaster';
 import { WagmiProvider } from 'wagmi';
 import { config, connectors } from '@src/lib/config/rainbow.config';
 import type { WalletClient } from 'viem';
+import Head from 'next/head';
 // const connectors: CreateConnectorFn[] = [injected()];
 
 // Create Wagmi config with default chain and without connectors
@@ -101,6 +102,12 @@ export default function App({ Component, pageProps }: AppProps) {
         <RainbowKitProvider initialChain={base} theme={myRainbowkitThemeConfigV2}>
           <LoginProvider>
             <Layout>
+              <Head>
+                <title>Seamswap</title>
+                <meta name="description" content="Seamswap" />
+                <link rel="icon" href="/favicon.png" />
+              </Head>
+
               <Component {...pageProps} />
               <Toaster />
             </Layout>
@@ -108,6 +115,5 @@ export default function App({ Component, pageProps }: AppProps) {
         </RainbowKitProvider>
       </CustomWagmiProvider>
     </QueryClientProvider>
-  )
-    ;
+  );
 }

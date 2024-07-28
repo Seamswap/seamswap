@@ -18,13 +18,8 @@ const Layout: React.FC<ILayoutProps> = (props) => {
 
       <main className="mt-12">{props.children}</main>
 
-      <Container className="py-5 mt-6">
-        <div className="">
-          Powered by{' '}
-          <span className="text-primary-900 font-medium">
-            Seamless Protocol
-          </span>
-        </div>
+      <Container className="footer py-5 mt-6">
+        Powered by <span className="text-primary-900 font-medium">Seamless Protocol</span>
       </Container>
     </div>
   );
