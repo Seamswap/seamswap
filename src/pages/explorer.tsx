@@ -92,7 +92,7 @@ const Page: NextPage = () => {
 
         <TabsContent value="transaction">
           <div className="mb-3 flex justify-between items-center">
-            <p className="md:text-lg font-medium hidden md:block">
+            <p className="text-xl font-medium hidden md:block">
               {transactionType == 'personal'
                 ? 'Personal history'
                 : 'Protocol wide history'}
@@ -104,14 +104,14 @@ const Page: NextPage = () => {
                 data-state={transactionType === 'personal' ? 'active' : 'inactive'}
                 className="py-[7px] px-4 rounded-[10px] data-[state=active]:bg-primary-50 data-[state=active]:text-primary-900"
               >
-                <div className="text-[#00b7a1] text-sm font-medium">Personal</div>
+                <div className="text-[#00b7a1] text-sm md:text-base font-medium">Personal</div>
               </div>
               <div
                 onClick={() => setTransactionType('protocol_wide')}
                 data-state={transactionType === 'protocol_wide' ? 'active' : 'inactive'}
                 className="py-[7px] px-4 rounded-[10px] data-[state=active]:bg-primary-50 data-[state=active]:text-primary-900"
               >
-                <div className="text-[#868686] text-sm font-medium">Protocol wide</div>
+                <div className="text-[#868686] text-sm md:text-base font-medium">Protocol wide</div>
               </div>
             </div>
           </div>
