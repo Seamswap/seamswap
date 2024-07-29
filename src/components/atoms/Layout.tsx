@@ -21,7 +21,7 @@ const Layout: React.FC<ILayoutProps> = (props) => {
     <div className={`w-full min-h-screen ${inter.className} relative`}>
       <Navbar isDashboardPage={isDashboardPage} />
 
-      <main className="mt-12">{props.children}</main>
+      <main className="mt-12 min-h-[60vh]">{props.children}</main>
 
       <Container className="footer py-6">
         {!isDashboardPage ? (
