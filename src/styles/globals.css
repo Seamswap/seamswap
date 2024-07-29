@@ -33,3 +33,8 @@ body {
     @apply hidden md:block;
   }
 }
+
+/* COMPONENTS */
+input {
+  @apply ring-primary-240;
+}

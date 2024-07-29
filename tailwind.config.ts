@@ -18,6 +18,7 @@ const config: Config = {
           900: '#00B8A1',
           400: '#DBFFFB',
           300: '#EBFFFD',
+          240: '#00b8a31c',
           200: '#B0C8C6',
           150: '#FAFFFE',
           100: '#F5FFFE',
@@ -25,17 +26,17 @@ const config: Config = {
         },
         grey: {
           900: '#778B89',
-          700: '#878787'
+          700: '#878787',
         },
-        warning:{
+        warning: {
           900: '#FFBB0B',
-          200: '#FFF5DB'
-        }
+          200: '#FFF5DB',
+        },
       },
     },
     data: {
       true: 'true="true"',
-    }
+    },
   },
   plugins: [],
 };
