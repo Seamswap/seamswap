@@ -83,23 +83,23 @@ export default function Home() {
         <FeaturesSection />
       </Container>
 
-      <Container className="mt-6">
-        <div className="banner1 bg-grey-960 rounded-[20px] relative overflow-hidden">
-          <div className="content px-6 lg:px-8 py-14 md:w-[80%] lg:w-[60%] text-white">
-            <h3 className="text-3xl md:text-5xl xl:text-5xl font-semibold mb-3">
+      <Container className="mt-6" >
+        <div id='newsletter' className="banner1 bg-grey-960 rounded-[20px] relative overflow-hidden">
+          <div className="content px-6 lg:px-8 py-14 md:w-[80%] lg:w-[64%] text-white">
+            <h3 className="text-3xl md:text-5xl xl:text-[44px] !leading-[55px] font-semibold mb-2">
               Stay updated on what we’re building.
             </h3>
 
             <p>Sign up to our newsletter.</p>
 
-            <div className="mt-6 items-center gap-3 inline-flex">
+            <div className="mt-5 items-center gap-3 inline-flex">
               <Input
                 className="bg-white text-white px-4 py-3 text-base rounded-[10px] w-full xl:min-w-[380px]"
                 placeholder="Enter your email address"
               />
 
               <div className="bg-[#ccfff8] py-2.5 px-4 rounded-[10px] justify-center items-center gap-2.5 inline-flex">
-                <span className="text-[#001f1b] lg:text-lg ">Subscribe</span>
+                <span className="text-[#001f1b] font-medium lg:text-lg">Subscribe</span>
               </div>
             </div>
           </div>
