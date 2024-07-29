@@ -163,7 +163,7 @@ const TableElement = React.forwardRef<
     return (
       <div
         className={cn(
-          'flex flex-col rounded-[10px] border border-primary-900 bg-white overflow-hidden',
+          'flex flex-col rounded-[10px] border-primary bg-white overflow-hidden',
           className,
         )}
       >
@@ -182,7 +182,10 @@ const TableElement = React.forwardRef<
                     >
                       {headerGroup.headers.map((header) => {
                         return (
-                          <TableHead key={header.id} className="text-black font-medium lg:text-[16px]">
+                          <TableHead
+                            key={header.id}
+                            className="text-black font-medium lg:text-[16px]"
+                          >
                             {header.isPlaceholder
                               ? null
                               : flexRender(
