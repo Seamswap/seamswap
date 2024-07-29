@@ -24,18 +24,19 @@ const config: Config = {
           50: '#F0FFFD',
         },
         grey: {
+          960: '#001F1B',
           900: '#778B89',
-          700: '#878787'
+          700: '#878787',
         },
-        warning:{
+        warning: {
           900: '#FFBB0B',
-          200: '#FFF5DB'
-        }
+          200: '#FFF5DB',
+        },
       },
     },
     data: {
       true: 'true="true"',
-    }
+    },
   },
   plugins: [],
 };
