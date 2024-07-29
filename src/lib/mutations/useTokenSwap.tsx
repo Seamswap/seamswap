@@ -15,6 +15,7 @@ export const useTokenSwap = (inToken: Address, outToken: Address, inAmount: stri
     approveAsync,
     justApproved,
     isApproved,
+
   } = useERC20Approve(outToken, lendingPoolAddress, BigInt(route.toAmount));
   const [toAmount, setToAmount] = useState<string>('0');
   const [withdrawalStarted, setWithdrawalStarted] = useState(false);
@@ -107,10 +108,10 @@ export const useTokenSwap = (inToken: Address, outToken: Address, inAmount: stri
     }
   }, [isWithdrawPending, withdrawalStarted]);
   useEffect(() => {
-    if (isApproved) {
+    if (isApproved || justApproved) {
       handleDeposit();
     }
-  }, [isApproved]);
+  }, [isApproved, justApproved]);
 
   return { beginSwap, isPending: isSwapping || isWithdrawPending };
 };

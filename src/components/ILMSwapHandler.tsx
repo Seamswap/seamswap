@@ -14,7 +14,7 @@ export interface ISwapHandlerProps {
   inTokenAmount: string
 }
 
-const SwapHandler: React.FC<ISwapHandlerProps> = ({
+const LendingSwapHandler: React.FC<ISwapHandlerProps> = ({
   route,
   baseToken,
   slippage,
@@ -100,4 +100,4 @@ const SwapHandler: React.FC<ISwapHandlerProps> = ({
     </div>
   );
 };
-export default SwapHandler;
+export default LendingSwapHandler;

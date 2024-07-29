@@ -3,6 +3,8 @@ import { Address, erc20Abi, maxUint256 } from 'viem';
 
 import { useFetchAssetAllowance } from '../queries/useFetchAssetAllowance';
 import { useSeamlessContractWrite } from '@src/lib/shared/useSeamlessContractWrite';
+import { waitForTransaction } from '@src/lib/shared/transactionWrapper';
+import { config } from '@src/lib/config/rainbow.config';
 
 const ALWAYS_APPROVE_MAX = false;
 
@@ -47,7 +49,6 @@ export const useERC20Approve = (tokenAddress?: Address, spenderAddress?: Address
   const { writeContractAsync: approveTokenAsync, isPending } = useSeamlessContractWrite({
     queriesToInvalidate: [queryKey],
   });
-
   useEffect(() => {
     if (amount == null) {
       setIsApproved(false);
@@ -72,20 +73,18 @@ export const useERC20Approve = (tokenAddress?: Address, spenderAddress?: Address
     }
 
     try {
-      await approveTokenAsync(
-        {
-          address: tokenAddress,
-          abi: erc20Abi,
-          functionName: 'approve',
-          args: [spenderAddress, amountToApprove],
-        },
-        {
-          onSuccess: (tx) => {
-            console.log({ tx });
-            setJustApproved(true);
-          },
-        },
-      );
+      const ret = await waitForTransaction(config, async () => {
+        return approveTokenAsync(
+          {
+            address: tokenAddress,
+            abi: erc20Abi,
+            functionName: 'approve',
+            args: [spenderAddress, amountToApprove],
+          })
+      })
+      if(ret.isSuccess){
+        setJustApproved(true)
+      }
     } catch (e: any) {
       // eslint-disable-next-line no-console
       console.error('Error approving token:', e);
@@ -97,6 +96,7 @@ export const useERC20Approve = (tokenAddress?: Address, spenderAddress?: Address
     isApproving: isPending,
     justApproved,
     approveAsync,
-    allowance
+    allowance,
+    setIsApproved: setIsApproved
   };
 };
