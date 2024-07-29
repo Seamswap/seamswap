@@ -14,17 +14,17 @@ const inter = Inter({
 
 const Layout: React.FC<ILayoutProps> = (props) => {
   const { pathname } = useRouter();
-  const landingPageLinks = ['/', '/protocol', '/blog', '/changelog'];
-  const isLandingPage = landingPageLinks.includes(pathname);
+  const dashboardLinks = ['/swap', '/explorer', '/learn', ];
+  const isDashboardPage = dashboardLinks.includes(pathname);
 
   return (
     <div className={`w-full min-h-screen ${inter.className} relative`}>
-      <Navbar isLandingPage={isLandingPage} />
+      <Navbar isDashboardPage={isDashboardPage} />
 
       <main className="mt-12">{props.children}</main>
 
       <Container className="footer py-6">
-        {isLandingPage ? (
+        {!isDashboardPage ? (
           <div className="text-center">
             Copyrights © 2024 All Rights Reserved by Seamswap
           </div>

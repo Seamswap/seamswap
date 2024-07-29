@@ -11,12 +11,13 @@ import ConnectionButton from '../ui/ConnectButton';
 import Container from '../ui/Container';
 
 export interface INavbarProps {
-  isLandingPage: boolean;
+  isDashboardPage: boolean;
 }
 
-const Navbar: React.FC<INavbarProps> = ({ isLandingPage }) => {
+const Navbar: React.FC<INavbarProps> = ({ isDashboardPage }) => {
   const { pathname } = useRouter();
   const [openNavbar, setOpenNavbar] = React.useState(false);
+  const pageNavLinks = isDashboardPage ? LINKS : LandingPageLINKS;
 
   const toggleNavbar = () => {
     setOpenNavbar(!openNavbar);
@@ -46,20 +47,7 @@ const Navbar: React.FC<INavbarProps> = ({ isLandingPage }) => {
           }`}
         >
           <ul className="flex gap-x-5 lg:gap-x-10">
-            {isLandingPage ? (
-              <LandingPageNavLinks pathname={pathname} />
-            ) : (
-              LINKS.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className="font-medium text-black data-true:text-primary-900"
-                  data-true={link.href === pathname}
-                >
-                  {link.name}
-                </Link>
-              ))
-            )}
+            <NavLinks pageNavLinks={pageNavLinks} pathname={pathname} />
           </ul>
         </div>
 
@@ -94,12 +82,15 @@ const Navbar: React.FC<INavbarProps> = ({ isLandingPage }) => {
   );
 };
 
-const LandingPageNavLinks: React.FC<{ pathname: string }> = ({ pathname }) => {
+const NavLinks: React.FC<{ pathname: string; pageNavLinks: Array<any> }> = ({
+  pageNavLinks,
+  pathname,
+}) => {
   const [navDropDown, setNavDropDown] = React.useState(false);
 
   return (
     <>
-      {LandingPageLINKS.map((link) =>
+      {pageNavLinks.map((link) =>
         link.links ? (
           <Link
             key={link.name}
@@ -128,7 +119,7 @@ const LandingPageNavLinks: React.FC<{ pathname: string }> = ({ pathname }) => {
             {navDropDown && (
               <div className="z-10 top-0 mt-11 lg:mt-8 absolute font-normal bg-white border-primary rounded-lg shadow w-44 ">
                 <div className="py-2 text-sm text-black font-medium">
-                  {link.links.map((subLink) => (
+                  {link.links.map((subLink: { name: string; href: string }) => (
                     <li key={subLink.name}>
                       <Link
                         href={subLink.href}
