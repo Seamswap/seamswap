@@ -48,7 +48,7 @@ export default function Home() {
           </div>
 
           <div className="right rounded-[20px] border-primary overflow-hidden">
-            <img src="/img/heroImage.png" className="h-full object-cover" alt="HeroImg" />
+            <img src="/img/heroImage.png" className="w-full h-full object-cover" alt="HeroImg" />
           </div>
         </div>
       </Container>

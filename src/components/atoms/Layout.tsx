@@ -23,7 +23,7 @@ const Layout: React.FC<ILayoutProps> = (props) => {
 
       <main className="mt-12">{props.children}</main>
 
-      <Container className="footer py-5">
+      <Container className="footer py-6">
         {isLandingPage ? (
           <div className="text-center">
             Copyrights © 2024 All Rights Reserved by Seamswap

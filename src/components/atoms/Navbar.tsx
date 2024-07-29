@@ -127,7 +127,7 @@ const LandingPageNavLinks: React.FC<{ pathname: string }> = ({ pathname }) => {
 
             {navDropDown && (
               <div className="z-10 top-0 mt-11 lg:mt-8 absolute font-normal bg-white border-primary rounded-lg shadow w-44 ">
-                <ul className="py-2 text-sm text-black font-medium">
+                <div className="py-2 text-sm text-black font-medium">
                   {link.links.map((subLink) => (
                     <li key={subLink.name}>
                       <Link
@@ -138,7 +138,7 @@ const LandingPageNavLinks: React.FC<{ pathname: string }> = ({ pathname }) => {
                       </Link>
                     </li>
                   ))}
-                </ul>
+                </div>
               </div>
             )}
           </Link>
@@ -168,26 +168,26 @@ const LINKS = [
   },
   {
     name: 'Protocol',
-    href: '/#',
+    href: '/protocol',
   },
   {
     name: 'Learn',
-    href: '/#',
+    href: '/learn',
   },
 ];
 
 const LandingPageLINKS = [
   {
     name: 'Protocol',
-    href: '/swap',
+    href: '/protocol',
   },
   {
     name: 'Blog',
-    href: '/#',
+    href: '/blog',
   },
   {
     name: 'Resources',
-    href: '/#',
+    href: '/resources',
     links: [
       {
         name: 'Changelog',
