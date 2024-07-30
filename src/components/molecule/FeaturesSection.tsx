@@ -22,7 +22,6 @@ const FeaturesSection = () => {
 
   const handleScroll = () => {
     const fImages = document.querySelectorAll('.fImage');
-    console.log(fImages[0]);
 
     fImages.forEach((image) => {
       const rect = image.getBoundingClientRect();
