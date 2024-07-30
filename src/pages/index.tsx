@@ -85,7 +85,7 @@ export default function Home() {
 
       <Container className="mt-6" >
         <div id='newsletter' className="banner1 bg-grey-960 rounded-[20px] relative overflow-hidden">
-          <div className="content px-6 lg:px-8 py-14 md:w-[80%] lg:w-[64%] text-white">
+          <div className="content px-6 lg:px-8 py-14 md:w-[80%] lg:w-[64%] text-white relative z-10">
             <h3 className="text-3xl md:text-5xl xl:text-[44px] md:!leading-[55px] font-semibold mb-2">
               Stay updated on what we’re building.
             </h3>
