@@ -1,30 +1,29 @@
+/* eslint-disable @next/next/no-img-element */
 import React from 'react';
-
-type Props = {};
 
 const FeaturesSection = () => {
   const [currentTab, setCurrentTab] = React.useState('swap');
   const [featureImage, setFeatureImage] = React.useState('/img/swapScreen.png');
 
-	// handle changing feature image on tab change
-	React.useEffect(() => {
-		switch (currentTab) {
-			case 'swap':
-				setFeatureImage('/img/swapScreen.png');
-				break;
-			case 'lessFee':
-				setFeatureImage('/img/lessFeeScreen.png');
-				break;
-			case 'discover':
-				setFeatureImage('/img/discoverScreen.png');
-				break;
-			case 'send':
-				setFeatureImage('/img/sendScreen.png');
-				break;
-			default:
-				setFeatureImage('/img/swapScreen.png');
-		}
-	}, [currentTab]);
+  // handle changing feature image on tab change
+  const getFeatureImage = (tab: string) => {
+    switch (tab) {
+      case 'swap':
+        return '/img/swapScreen.png';
+      case 'lessFee':
+        return '/img/lessFeeScreen.png';
+      case 'discover':
+        return '/img/discoverScreen.png';
+      case 'send':
+        return '/img/sendScreen.png';
+      default:
+        return '/img/swapScreen.png';
+    }
+  };
+
+  React.useEffect(() => {
+    setFeatureImage(getFeatureImage(currentTab));
+  }, [currentTab]);
 
   const FeatureItem = ({
     id,
@@ -38,25 +37,31 @@ const FeaturesSection = () => {
     id: string;
   }) => {
     return (
-      <div
-        data-state={currentTab === id}
-        onClick={() => setCurrentTab(id)}
-        className="item w-full mb-4 last-of-type:mb-0 justify-start items-start gap-5 inline-flex py-3 p-2.5 lg:px-4 rounded-s-xl cursor-pointer
-				data-[state=true]:bg-[#00CCB4] data-[state=true]:border-grey-960 data-[state=true]:border-[0.5px]"
-      >
-        <div className="p-3 bg-grey-960 rounded-[10px]">{icon}</div>
+      <>
+        <div
+          data-state={currentTab === id}
+          onClick={() => setCurrentTab(id)}
+          className="item w-full md:mb-4 last-of-type:mb-0 justify-start items-start gap-4 inline-flex py-3 px-4 lg:px-5 !border-r-0 rounded-s-[20px] cursor-pointer
+				data-[state=true]:md:bg-[#00CCB4] data-[state=true]:border-grey-960 data-[state=true]:md:border-[0.5px]"
+        >
+          <div className="p-3 bg-grey-960 rounded-[10px]">{icon}</div>
 
-        <div className="">
-          <div className="text-2xl font-semibold mb-[2px]">{title}</div>
-          <p className="text-sm lg:text-base">{description}</p>
+          <div className="">
+            <div className="text-2xl font-semibold mb-[2px]">{title}</div>
+            <p className="text-sm lg:text-base">{description}</p>
+          </div>
         </div>
-      </div>
+
+        <div className="mx-4 mb-5 mt-2 px-3 py-4 md:hidden bg-white rounded-[10px]">
+          <img src={getFeatureImage(id)} className="w-full" alt="featureScreen" />
+        </div>
+      </>
     );
   };
 
   return (
     <div className="grid md:grid-cols-2 gap-x-5 gap-y-4">
-      <div className="left py-8 pl-5 bg-[#00B8A1] rounded-[20px] relative overflow-hidden">
+      <div className="left py-8 md:pl-5 bg-[#00B8A1] rounded-[20px] relative overflow-hidden">
         <div className="content text-grey-960 z-10 relative">
           {/*  */}
           <FeatureItem
@@ -65,7 +70,7 @@ const FeaturesSection = () => {
             description="Easily swap between ILM positions. Skip the back and forth process of withdrawing and depositing."
             icon={
               <svg
-                className="w-[42px]"
+                className="w-[40px]"
                 viewBox="0 0 40 40"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -112,7 +117,7 @@ const FeaturesSection = () => {
             description="Get the best rate for swapping your position, also save some transaction fee."
             icon={
               <svg
-                className="w-[42px]"
+                className="w-[40px]"
                 viewBox="0 0 40 40"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -148,7 +153,7 @@ const FeaturesSection = () => {
             description="Explore the integrated liquidity marketplace, learn, and earn from participation."
             icon={
               <svg
-                className="w-[42px]"
+                className="w-[40px]"
                 viewBox="0 0 40 40"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -177,7 +182,7 @@ const FeaturesSection = () => {
             description="Transfer your positions to another when swapping."
             icon={
               <svg
-                className="w-[42px]"
+                className="w-[40px]"
                 viewBox="0 0 40 40"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -204,7 +209,7 @@ const FeaturesSection = () => {
         </div>
       </div>
 
-      <div className="right rounded-[20px] border-primary overflow-hidden p-2 lg:p-6 grid items-center">
+      <div className="right hidden md:grid rounded-[20px] border-primary overflow-hidden p-2 lg:p-6 items-center">
         <img src={featureImage} className="w-full" alt="featureScreen" />
       </div>
     </div>
