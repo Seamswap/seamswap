@@ -34,6 +34,11 @@ body {
   }
 }
 
+/* COMPONENTS */
+input {
+  @apply ring-primary-240;
+}
+
 /*  */
 .stats {
 	@apply text-center grid gap-y-12 md:gap-y-14 md:grid-cols-2 lg:grid-cols-4;
@@ -41,3 +46,4 @@ body {
 .stats .item {
 	@apply grid gap-3 [&>b]:text-4xl [&>b]:xl:text-5xl [&>b]:font-bold [&>span]:text-lg;
 }
+

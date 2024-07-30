@@ -18,6 +18,7 @@ const config: Config = {
           900: '#00B8A1',
           400: '#DBFFFB',
           300: '#EBFFFD',
+          240: '#00b8a31c',
           200: '#B0C8C6',
           150: '#FAFFFE',
           100: '#F5FFFE',
