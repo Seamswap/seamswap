@@ -39,15 +39,15 @@ export interface IConnectButtonProps {
 }
 
 const ConnectorButton: React.FC<IConnectButtonProps> = ({
-  account,
-  chain,
-  openAccountModal,
-  openChainModal,
-  openConnectModal,
-  authenticationStatus,
-  mounted,
-  isExternal,
-}) => {
+                                                          account,
+                                                          chain,
+                                                          openAccountModal,
+                                                          openChainModal,
+                                                          openConnectModal,
+                                                          authenticationStatus,
+                                                          mounted,
+                                                          isExternal,
+                                                        }) => {
   const [userNameImage, setUserNameImage] = React.useState<string>('');
   const { openLoginModal, login } = React.useContext(LoginProviderContext);
 
@@ -109,13 +109,13 @@ const ConnectorButton: React.FC<IConnectButtonProps> = ({
               type="button"
               className="connectBtn bg-primary-400 px-4 py-1 md:py-2 gap-x-3 rounded-md flex items-center text-primary-900"
             >
-              <Image
+              {userNameImage && <Image
                 src={userNameImage}
                 alt="User Avatar"
                 width={26}
                 height={26}
                 className="md:w-[28px]"
-              />
+              />}
               <span>{account.displayName}</span>
             </button>
           </div>
