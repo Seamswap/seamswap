@@ -3,30 +3,34 @@ import * as React from 'react';
 import { Button } from './ui/Button';
 import { truncateWalletAddress } from '@src/lib/utils';
 import ConnectionButton, { Account } from './ui/ConnectButton';
-import { useTokenSwap } from '@src/lib/mutations/useTokenSwap';
-import { Address } from 'viem';
+import { useILMsTokenSwap } from '@src/lib/mutations/useILMsTokenSwap';
+import { ExtendedToken } from '@src/pages/swap';
 
 export interface ISwapHandlerProps {
   route: Route;
   baseToken: Token | null;
   slippage: number | string;
   account?: Account;
-  inTokenAmount: string
+  inTokenAmount: string;
+  fromToken: ExtendedToken;
+  toToken: ExtendedToken;
 }
 
 const LendingSwapHandler: React.FC<ISwapHandlerProps> = ({
-  route,
-  baseToken,
-  slippage,
-  account,
-  inTokenAmount
-}) => {
-  const { beginSwap, isPending } = useTokenSwap(
-    route.fromToken.address as Address,
-    route.toToken.address as Address,
+                                                           route,
+                                                           baseToken,
+                                                           slippage,
+                                                           account,
+                                                           fromToken,
+                                                           toToken,
+                                                           inTokenAmount,
+                                                         }) => {
+  const { beginSwap, isPending } = useILMsTokenSwap(
+    fromToken,
+    toToken,
     inTokenAmount,
     route,
-    account?.address
+    account?.address!,
   );
   React.useEffect(() => {
 
