@@ -14,11 +14,11 @@ import seamSwap from '@assets/tokens/seamswap.svg';
 
 
 const rpcConfig = [
+  { url: 'https://base-mainnet.g.alchemy.com/v2/ITJZYemtXDZswsfcino5vXg6ikpUq1zI', isWebSocket: false },
+  { url: 'wss://base-mainnet.g.alchemy.com/v2/ITJZYemtXDZswsfcino5vXg6ikpUq1zI', isWebSocket: true },
   { url: 'https://lb.drpc.org/ogrpc?network=base&dkey=AvBCZwsn-kqoqXOvbbV6cPmFUTfiS3oR77PsvmJKmvm9', isWebSocket: false },
   { url: 'wss://lb.drpc.org/ogws?network=base&dkey=AvBCZwsn-kqoqXOvbbV6cPmFUTfiS3oR77PsvmJKmvm9', isWebSocket: true },
   { url: 'https://rpc.ankr.com/base', isWebSocket: false },
-  // { url: 'https://base-mainnet.g.alchemy.com/v2/ITJZYemtXDZswsfcino5vXg6ikpUq1zI', isWebSocket: false },
-  // { url: 'wss://base-mainnet.g.alchemy.com/v2/ITJZYemtXDZswsfcino5vXg6ikpUq1zI', isWebSocket: true },
 ].filter(({ url }) => url);
 
 export const connectors = connectorsForWallets(
