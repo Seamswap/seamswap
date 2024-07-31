@@ -83,10 +83,6 @@ export const useTokenSwap = (inToken: Address, outToken: Address, inAmount: stri
       step.execution?.process.forEach((process, index, array) => {
         if (process.txHash) {
           setSteps([0, 1, 2]);
-          toast.toast({
-            title: `Transaction Hash for Step ${index + 1}, Process ${process.type}:`,
-            description: process.txHash,
-          });
           console.log(
             `Transaction Hash for Step ${index + 1}, Process ${process.type}:`,
             process.txHash,

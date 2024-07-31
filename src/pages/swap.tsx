@@ -230,7 +230,7 @@ const Page: NextPage = () => {
                     <p className={'mx-auto'}>Swap was executed successfully</p>
                     <button
                       className="bg-primary-900 px-5 py-3.5 text-white w-full rounded-xl"
-                      onClick={() => setSwapIsSuccessfull(true)}
+                      onClick={() => setSwapIsSuccessfull(false)}
                     >
                       Close
                     </button>
