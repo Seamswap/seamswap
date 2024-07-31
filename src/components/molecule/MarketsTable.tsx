@@ -161,7 +161,6 @@ export const marketsColumns = (
       accessorKey: 'actions',
       header: 'Actions',
       cell: ({ row }) => {
-        console.log('MarketsTable', row.id);
         return <TableButton onClick={() => {}} text="Swap" />;
       },
     },

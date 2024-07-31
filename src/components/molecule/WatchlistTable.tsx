@@ -88,7 +88,6 @@ export const watchlistColumns: ColumnDef<Explorer>[] = [
     accessorKey: 'actions',
     header: 'Actions',
     cell: ({ row }) => {
-      console.log('WatchlistTable', row.id);
       return <TableButton onClick={() => console.log('swap')} text="Swap" />;
     },
   },
