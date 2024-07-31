@@ -1,15 +1,15 @@
-import { waitForTransactionReceipt } from "@wagmi/core";
-import { Hash } from "viem";
-import { Config } from "wagmi";
+import { waitForTransactionReceipt } from '@wagmi/core';
+import { Hash } from 'viem';
+import { Config } from 'wagmi';
 
-export async function waitForTransaction(config: Config, writeFunction: () => Promise<Hash | undefined>) {
+export async function waitForTransaction(config: Config, writeFunction: () => ((Promise<Hash | undefined>) | Hash)) {
   const txHash = await writeFunction();
 
   if (txHash == null) {
     return {
       txHash,
-      isSuccess: false
-    }
+      isSuccess: false,
+    };
   }
   const result = await waitForTransactionReceipt(config, {
     hash: txHash,
@@ -17,6 +17,6 @@ export async function waitForTransaction(config: Config, writeFunction: () => Pr
 
   return {
     txHash,
-    isSuccess: result.status === "success",
+    isSuccess: result.status === 'success',
   };
 }

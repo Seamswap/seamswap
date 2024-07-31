@@ -1,9 +1,13 @@
 import { Address } from "viem";
-import { simulateWithdraw } from "../../../../shared/utils/bundles";
+
 import { useFetchStrategyAsset } from "../metadataQueries/useFetchStrategyAsset";
 import { useQuery } from "@tanstack/react-query";
-import { fFetchBigIntStructured, mergeQueryStates, useToken } from "@shared";
+
 import { DebouncedDelayConfig } from "../config/DebouncedDelayConfig";
+import { useToken } from '@src/lib/queries/useToken';
+import { mergeQueryStates } from '@src/lib/formatters/mergeQueryStates';
+import { fFetchBigIntStructured } from '@src/lib/formatters/getFetchBigIntFormatted';
+import { simulateWithdraw } from '@src/lib/utils/bundles';
 
 export const useFetchSimulateWithdraw = (account: Address, amount: string, strategy?: Address) => {
   const { data: underlyingAsset, ...strategyAssetRest } = useFetchStrategyAsset(strategy);

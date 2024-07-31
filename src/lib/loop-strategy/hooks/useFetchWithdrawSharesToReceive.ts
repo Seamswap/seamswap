@@ -1,19 +1,14 @@
-import { Address } from "viem";
-import { ONE_ETHER, walletBalanceDecimalsOptions } from "@meta";
-import { formatFetchBigIntToViewBigInt } from "../../../../shared/utils/helpers";
-import {
-  Displayable,
-  fFetchBigIntStructured,
-  fUsdValueStructured,
-  mergeQueryStates,
-  useToken,
-  ViewBigInt,
-} from "@shared";
-import { FetchBigInt, FetchData } from "src/shared/types/Fetch";
-import { useAccount } from "wagmi";
-import { useFetchAssetPrice } from "../../common/queries/useFetchViewAssetPrice";
-import { useFetchSimulateWithdraw } from "../queries/useFetchSimulateWithdraw";
-import { useFetchStrategyAsset } from "../metadataQueries/useFetchStrategyAsset";
+import { Address } from 'viem';
+import { useAccount } from 'wagmi';
+import { useFetchSimulateWithdraw } from '../queries/useFetchSimulateWithdraw';
+import { useFetchStrategyAsset } from '../metadataQueries/useFetchStrategyAsset';
+import { ONE_ETHER, walletBalanceDecimalsOptions } from '@src/lib/meta';
+import { Displayable, FetchBigInt, FetchData, formatFetchBigIntToViewBigInt } from '@src/lib/types/helpers';
+import { useToken } from '@src/lib/queries/useToken';
+import { mergeQueryStates } from '@src/lib/formatters/mergeQueryStates';
+import { fFetchBigIntStructured, fUsdValueStructured } from '@src/lib/formatters/getFetchBigIntFormatted';
+import { useFetchAssetPrice } from '@src/lib/queries/useFetchViewAssetPrice';
+import { ViewBigInt } from '@meta/Displayable';
 
 const cAssetsToReceive = (assetsValue?: bigint) => {
   if (assetsValue == null) return undefined;
@@ -69,7 +64,7 @@ export interface ViewPreviewWithdraw {
 
 export const useFetchViewWithdrawSharesToReceive = (
   amount: string,
-  subStrategy?: Address
+  subStrategy?: Address,
 ): Displayable<ViewPreviewWithdraw> => {
   const {
     data: { assetsToReceive, assetsToReceiveInUsd },

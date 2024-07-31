@@ -32,7 +32,6 @@ export const useMutateSupplyLending = (asset?: Address) => {
     },
     settings?: SeamlessWriteAsyncParams,
   ) => {
-    console.log([asset!, decimals ? parseUnits(args.amount, decimals) : undefined!, address as Address, 0], args.amount, { data });
     await writeContractAsync(
       {
         ...lendingPoolConfig,

@@ -1,21 +1,17 @@
-import { Address } from "viem";
-import { useFetchAssetPrice } from "../../common/queries/useFetchViewAssetPrice";
-import { useFetchSimulateDeposit } from "../queries/useFetchSimulateDeposit";
-import { useAccount } from "wagmi";
-import {
-  Displayable,
-  FetchBigInt,
-  FetchData,
-  fFetchBigIntStructured,
-  formatFetchBigIntToViewBigInt,
-  fUsdValueStructured,
-  mergeQueryStates,
-  useToken,
-  ViewBigInt,
-} from "@shared";
-import { walletBalanceDecimalsOptions } from "@meta";
-import { useFetchStrategyAsset } from "../metadataQueries/useFetchStrategyAsset";
-import { cValueInUsd } from "../../common/math/cValueInUsd";
+import { Address } from 'viem';
+import { useFetchSimulateDeposit } from '../queries/useFetchSimulateDeposit';
+import { useAccount } from 'wagmi';
+
+import { useFetchStrategyAsset } from '../metadataQueries/useFetchStrategyAsset';
+import { FetchBigInt, FetchData, formatFetchBigIntToViewBigInt } from '@src/lib/types/helpers';
+import { walletBalanceDecimalsOptions } from '@src/lib/meta';
+import { Displayable, ViewBigInt } from '@meta/Displayable';
+import { mergeQueryStates } from '@src/lib/formatters/mergeQueryStates';
+import { fFetchBigIntStructured, fUsdValueStructured } from '@src/lib/formatters/getFetchBigIntFormatted';
+import { useToken } from '@src/lib/queries/useToken';
+import { cValueInUsd } from '@src/lib/utils/cValueInUsd';
+import { useFetchAssetPrice } from '@src/lib/queries/useFetchViewAssetPrice';
+
 
 interface SharesToReceiveData {
   sharesToReceive?: FetchBigInt;
@@ -29,19 +25,18 @@ export const useFetchDepositSharesToReceive = (
   const account = useAccount();
 
   const { data: underlyingAsset, ...configRest } = useFetchStrategyAsset(subStrategy);
-  console.log({ underlyingAsset });
   const {
     data: { symbol: underlyingAssetSymbol, decimals: strategyDecimals },
     ...underlyingAssetRest
   } = useToken(underlyingAsset);
   const { data: shares, ...sharesRest } = useFetchSimulateDeposit(account.address as Address, amount, subStrategy);
-  console.log({ shares });
   const { data: sharePrice, ...sharePriceRest } = useFetchAssetPrice({
     asset: subStrategy,
   });
 
   const sharesToReceive = shares?.bigIntValue === undefined ? undefined : (shares.bigIntValue * 999n) / 1000n;
-  const sharesToReceiveInUsd = cValueInUsd(sharesToReceive, sharePrice?.bigIntValue, shares.decimals);
+  const sharesToReceiveInUsd =
+    cValueInUsd(sharesToReceive, sharePrice?.bigIntValue, shares.decimals);
 
   return {
     ...mergeQueryStates([sharesRest, sharePriceRest, configRest, underlyingAssetRest]),

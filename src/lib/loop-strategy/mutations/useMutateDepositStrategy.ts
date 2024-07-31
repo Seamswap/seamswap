@@ -6,14 +6,14 @@ import { SeamlessWriteAsyncParams, useSeamlessContractWrite } from '@src/lib/sha
 import { loopStrategyAbi } from '@src/lib/config/contract';
 import { StrategyState } from '@meta/StateTypes';
 
-export const useMutateDepositStrategy = (strategy?: StrategyState, subStrategyAddress?: Address) => {
+export const useMutateDepositStrategy = (underLyingAddress?: Address, subStrategyAddress?: Address) => {
   // meta data
   const { address } = useAccount();
 
   // cache data
-  const { queryKey: accountAssetBalanceQK } = useFetchAssetBalance(strategy?.underlyingAsset.address);
+  const { queryKey: accountAssetBalanceQK } = useFetchAssetBalance(underLyingAddress);
   const { queryKey: assetAllowanceQK } = useFetchAssetAllowance({
-    asset: strategy?.underlyingAsset.address,
+    asset: underLyingAddress,
     spender: subStrategyAddress,
   });
 

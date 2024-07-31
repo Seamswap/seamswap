@@ -1,5 +1,6 @@
-import { Address } from "viem";
+import { Address } from 'viem';
 import { StaticImageData } from 'next/image';
+import { StrategyState } from '@meta/StateTypes';
 
 export interface AssetBaseConfig {
   name?: string;
@@ -46,5 +47,4 @@ export interface StrategyConfig extends AssetBaseConfig {
   debtAsset: LendMarketConfig;
   // todo remove and fetch
   subStrategyData: SubStrategyDataConfig[];
-
 }

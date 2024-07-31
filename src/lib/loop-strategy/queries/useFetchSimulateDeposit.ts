@@ -1,9 +1,10 @@
 import { Address } from "viem";
-import { simulateDeposit } from "../../../../shared/utils/bundles";
 import { useFetchStrategyAsset } from "../metadataQueries/useFetchStrategyAsset";
 import { useQuery } from "@tanstack/react-query";
-import { mergeQueryStates, useToken } from "@shared";
-import { FIVE_SECONDS_IN_MS } from "../../settings/queryConfig";
+import { simulateDeposit } from '@src/lib/utils/bundles';
+import { FIVE_SECONDS_IN_MS } from '@src/lib/utils/queryConfig';
+import { mergeQueryStates } from '@src/lib/formatters/mergeQueryStates';
+import { useToken } from '@src/lib/queries/useToken';
 
 export const useFetchSimulateDeposit = (account: Address, amount: string, subStrategy?: Address) => {
   const {

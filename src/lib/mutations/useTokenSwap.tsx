@@ -1,43 +1,44 @@
 import { Address, formatUnits } from 'viem';
 import { useMutateWithdrawLending } from './useMutateWithdrawLending';
-import { useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { executeRoute, Route, RouteExtended } from '@lifi/sdk';
 import { useToast } from '../hooks/use-toast';
 import { useMutateSupplyLending } from './useMutateSupplyLending';
 import { useERC20Approve } from '@src/lib/mutations/useERC20Approve';
 import { lendingPoolAddress } from '@src/lib/config/contract';
+import { SwapContext } from '@src/pages/swap';
+import { waitForTransaction } from '@src/lib/shared/transactionWrapper';
+import { config } from '@src/lib/config/rainbow.config';
 
 export const useTokenSwap = (inToken: Address, outToken: Address, inAmount: string, route: Route, spenderAddress?: Address) => {
   const { withdrawAsync, isPending, isWithdrawPending } = useMutateWithdrawLending(inToken);
   const { supplyAsync } = useMutateSupplyLending(outToken);
-  console.log(route.toAmount);
+  const { setSwapOngoing, setSteps, setSwapIsSuccessfull } = useContext(SwapContext);
   const {
     approveAsync,
     justApproved,
     isApproved,
-
   } = useERC20Approve(outToken, lendingPoolAddress, BigInt(route.toAmount));
-  const [toAmount, setToAmount] = useState<string>('0');
+  // const [toAmount, setToAmount] = useState<string>('0');
   const [withdrawalStarted, setWithdrawalStarted] = useState(false);
   const [isSwapping, setIsSwapping] = useState(false);
   const toast = useToast();
   const beginSwap = async () => {
     try {
+      setSwapOngoing(true);
       await withdrawAsync({ amount: inAmount }, {
-        onSuccess(txHash) {
-          toast.toast({
-            title: 'Withdrawal Successful',
-            description: txHash,
-          });
-          handleSwap();
-        },
-        onSettled: () => {
-          console.log('here...');
-
+        async onSuccess(txHash) {
+          const ret = await waitForTransaction(config, () => txHash!);
+          if (ret.isSuccess) {
+            setSteps([0, 1]);
+            await handleSwap();
+          }
         },
       });
     } catch (e) {
       console.log(e);
+      setSteps([0]);
+      setSwapOngoing(false);
       toast.toast({
         title: 'Error',
         description: 'withdrawal failed',
@@ -51,15 +52,25 @@ export const useTokenSwap = (inToken: Address, outToken: Address, inAmount: stri
       const executedRoute = await executeRoute(route, {
         updateRouteHook: getTransactionLinks,
       });
-      console.log({ executedRoute });
       const isSuccessful = executedRoute.steps.every(step => step.execution?.status === 'DONE');
+      setSteps([0, 1, 2, 3]);
       const tokenAmount = BigInt(executedRoute?.steps.at(-1)?.execution?.toAmount || '0');
       const toAmount = formatUnits(tokenAmount, executedRoute?.steps.at(-1)?.execution?.toToken?.decimals || 0);
-      setToAmount(toAmount);
-      console.log({ toAmount, isSuccessful });
-      await approveAsync();
+      const isApproved = await approveAsync(tokenAmount);
+      if (isApproved) {
+        await supplyAsync({ amount: toAmount }, {
+          onSuccess(txHash) {
+            setSteps([0]);
+            setSwapOngoing(false);
+            setSwapIsSuccessfull(true)
+          },
+        });
+      }
     } catch (e) {
       console.log(e);
+      setSteps([0]);
+      setSwapOngoing(false);
+
       toast.toast({
         title: 'Error',
         description: 'swap failed',
@@ -67,23 +78,11 @@ export const useTokenSwap = (inToken: Address, outToken: Address, inAmount: stri
       });
     }
   };
-  const handleDeposit = async () => {
-    await supplyAsync({ amount: toAmount }, {
-      onSuccess(txHash) {
-        toast.toast({
-          title: 'Deposit Successful',
-          description: txHash,
-        });
-      },
-      onSettled: () => {
-        console.log('here...');
-      },
-    });
-  };
   const getTransactionLinks = (route: RouteExtended) => {
     route.steps.forEach((step, index) => {
       step.execution?.process.forEach((process, index, array) => {
         if (process.txHash) {
+          setSteps([0, 1, 2]);
           toast.toast({
             title: `Transaction Hash for Step ${index + 1}, Process ${process.type}:`,
             description: process.txHash,
@@ -102,16 +101,6 @@ export const useTokenSwap = (inToken: Address, outToken: Address, inAmount: stri
     });
   };
 
-  useEffect(() => {
-    if (!isWithdrawPending && withdrawalStarted) {
-      handleSwap();
-    }
-  }, [isWithdrawPending, withdrawalStarted]);
-  useEffect(() => {
-    if (isApproved || justApproved) {
-      handleDeposit();
-    }
-  }, [isApproved, justApproved]);
 
   return { beginSwap, isPending: isSwapping || isWithdrawPending };
 };

@@ -59,7 +59,7 @@ export const useERC20Approve = (tokenAddress?: Address, spenderAddress?: Address
     }
   }, [allowance, amount]);
 
-  const approveAsync = async () => {
+  const approveAsync = async (amount?: bigint) => {
     const amountToApprove = ALWAYS_APPROVE_MAX ? maxUint256 : amount;
 
     if (!spenderAddress) {
@@ -85,6 +85,7 @@ export const useERC20Approve = (tokenAddress?: Address, spenderAddress?: Address
       if(ret.isSuccess){
         setJustApproved(true)
       }
+      return ret.isSuccess
     } catch (e: any) {
       // eslint-disable-next-line no-console
       console.error('Error approving token:', e);

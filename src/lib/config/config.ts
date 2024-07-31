@@ -1,20 +1,20 @@
 import {
-  wstETHBooster_ADDRESS,
-  WSTETH_ADDRESS,
-  WETH_ADDRESS,
-  USDC_ADDRESS,
   AERO_ADDRESS,
   BRETT_ADDRESS,
   CBETH_ADDRESS,
   DAI_ADDRESS,
   DEGEN_ADDRESS,
+  ESSEAM_ADDRESS,
+  ethLong, ethLong_3x,
+  ILMETH_USDC,
+  multiplyETH_ADDRESS_STRATEGY_ID,
   rWETH_ADDRESS,
   rwstETH_ADDRESS,
+  sBRETT_ADDRESS,
   scbETH_ADDRESS,
   sDAI_ADDRESS,
   sDEGEN_ADDRESS,
   SEAM_ADDRESS,
-  ESSEAM_ADDRESS,
   srWETH_ADDRESS,
   srwstETH_ADDRESS,
   sSEAM_ADDRESS,
@@ -23,6 +23,7 @@ import {
   sWETH_ADDRESS,
   swstETH_ADDRESS,
   USDBC_ADDRESS,
+  USDC_ADDRESS,
   variableDebtSeamcbETH_ADDRESS,
   variableDebtSeamDAI_ADDRESS,
   variableDebtSeamDEGEN_ADDRESS,
@@ -33,27 +34,29 @@ import {
   variableDebtSeamUSDC_ADDRESS,
   variableDebtSeamWETH_ADDRESS,
   variableDebtSeamwstETH_ADDRESS,
-  ethLong,
-  multiplyETH_ADDRESS_STRATEGY_ID,
-  wstETHBooster_ADDRESS_STRATEGY_ID, sBRETT_ADDRESS,
+  WETH_ADDRESS,
+  WSTETH_ADDRESS,
+  wstETHBooster_ADDRESS,
+  wstETHBooster_ADDRESS_STRATEGY_ID,
 } from '@meta/constants';
-import ilmwstETHLogo from "@assets/tokens/ilmWstethEth.svg";
-import ilmEthUsdcLogo from "@assets/tokens/ilmEthUsdc.svg";
-import WstEthLogo from "@assets/tokens/wsteth.svg";
-import wstEthDiagram from "@assets/wsteth-diagram.png";
-import usdcLogo from "@assets/tokens/usdc.svg";
-import usdbcLogo from "@assets/tokens/usdbc.svg";
-import cbethLogo from "@assets/tokens/cbeth.svg";
-import daiLogo from "@assets/tokens/dai.svg";
-import seamLogo from "@assets/tokens/seam.svg";
-import degenLogo from "@assets/tokens/degen.svg";
-import aeroLogo from "@assets/tokens/aero.svg";
-import brettLogo from "@assets/tokens/brett.svg";
-import wethLogo from "@assets/tokens/weth.svg";
+import ilmwstETHLogo from '@assets/tokens/ilmWstethEth.svg';
+import ilmEthUsdcLogo from '@assets/tokens/ilmEthUsdc.svg';
+import WstEthLogo from '@assets/tokens/wsteth.svg';
+import wstEthDiagram from '@assets/wsteth-diagram.png';
+import usdcLogo from '@assets/tokens/usdc.svg';
+import usdbcLogo from '@assets/tokens/usdbc.svg';
+import cbethLogo from '@assets/tokens/cbeth.svg';
+import daiLogo from '@assets/tokens/dai.svg';
+import seamLogo from '@assets/tokens/seam.svg';
+import degenLogo from '@assets/tokens/degen.svg';
+import aeroLogo from '@assets/tokens/aero.svg';
+import brettLogo from '@assets/tokens/brett.svg';
+import wethLogo from '@assets/tokens/weth.svg';
 
-import { Address } from "viem";
-import { LendMarketConfig, StrategyConfig } from "../meta/configTypes";
-const vaultsFyiUrl = "https://www.vaults.fyi/vaults/base";
+import { Address } from 'viem';
+import { LendMarketConfig, StrategyConfig } from '../meta/configTypes';
+
+const vaultsFyiUrl = 'https://www.vaults.fyi/vaults/base';
 export const RouterConfig = {
   // This is used everywhere in app, for navigation and links to build dynamic routes
   Builder: {
@@ -63,96 +66,96 @@ export const RouterConfig = {
 
 export const assetsConfig: { [key: Address]: LendMarketConfig } = {
   [WETH_ADDRESS]: {
-    name: "Wrapped Ethereum",
+    name: 'Wrapped Ethereum',
     address: WETH_ADDRESS,
     logo: wethLogo,
     sTokenAddress: sWETH_ADDRESS,
     debtTokenAddress: variableDebtSeamWETH_ADDRESS,
     vaultsFyiLink: RouterConfig.Builder.vaults(sWETH_ADDRESS),
-    description: "Wrapped Ethereum (WETH) allows Ethereum to be traded & used directly in smart contracts.",
+    description: 'Wrapped Ethereum (WETH) allows Ethereum to be traded & used directly in smart contracts.',
   },
   [USDBC_ADDRESS]: {
-    name: "USD Base Coin",
+    name: 'USD Base Coin',
     address: USDBC_ADDRESS,
     logo: usdbcLogo,
     sTokenAddress: sUSDbC_ADDRESS,
     debtTokenAddress: variableDebtSeamUSDbC_ADDRESS,
     vaultsFyiLink: RouterConfig.Builder.vaults(sUSDbC_ADDRESS),
-    description: "USD Base Coin (USDbC) is a stablecoin pegged to the USD, providing a stable value for transactions.",
+    description: 'USD Base Coin (USDbC) is a stablecoin pegged to the USD, providing a stable value for transactions.',
   },
   [CBETH_ADDRESS]: {
-    name: "Coinbase Wrapped Staked Ether",
+    name: 'Coinbase Wrapped Staked Ether',
     address: CBETH_ADDRESS,
     logo: cbethLogo,
     sTokenAddress: scbETH_ADDRESS,
     debtTokenAddress: variableDebtSeamcbETH_ADDRESS,
     vaultsFyiLink: RouterConfig.Builder.vaults(scbETH_ADDRESS),
-    description: "Coinbase ETH (cbETH) represents Ethereum staked through Coinbase, earning interest over time.",
+    description: 'Coinbase ETH (cbETH) represents Ethereum staked through Coinbase, earning interest over time.',
   },
   [USDC_ADDRESS]: {
-    name: "USD Coin",
+    name: 'USD Coin',
     address: USDC_ADDRESS,
-    symbol: "USDC",
+    symbol: 'USDC',
     logo: usdcLogo,
     sTokenAddress: sUSDC_ADDRESS,
     debtTokenAddress: variableDebtSeamUSDC_ADDRESS,
-    description: "USD Coin (USDC) is a digital stablecoin that is pegged to the United States dollar.",
+    description: 'USD Coin (USDC) is a digital stablecoin that is pegged to the United States dollar.',
     isGauntletOptimized: true,
     vaultsFyiLink: RouterConfig.Builder.vaults(sUSDC_ADDRESS),
   },
   [DAI_ADDRESS]: {
-    name: "Dai",
+    name: 'Dai',
     address: DAI_ADDRESS,
     logo: daiLogo,
     sTokenAddress: sDAI_ADDRESS,
     debtTokenAddress: variableDebtSeamDAI_ADDRESS,
     vaultsFyiLink: RouterConfig.Builder.vaults(sDAI_ADDRESS),
-    description: "Dai is a decentralized, unbiased, collateral-backed cryptocurrency soft-pegged to the US Dollar.",
+    description: 'Dai is a decentralized, unbiased, collateral-backed cryptocurrency soft-pegged to the US Dollar.',
   },
   [WSTETH_ADDRESS]: {
-    name: "Wrapped liquid Staked Ether 2.0",
+    name: 'Wrapped liquid Staked Ether 2.0',
     address: WSTETH_ADDRESS,
     logo: WstEthLogo,
     sTokenAddress: swstETH_ADDRESS,
     debtTokenAddress: variableDebtSeamwstETH_ADDRESS,
     vaultsFyiLink: RouterConfig.Builder.vaults(swstETH_ADDRESS),
     description:
-      "wstETH is a wrapped version of stETH. Due to the nature of Lido, the amount of stETH on your balance is not constant - it changes daily as staking rewards come in.",
+      'wstETH is a wrapped version of stETH. Due to the nature of Lido, the amount of stETH on your balance is not constant - it changes daily as staking rewards come in.',
   },
   [DEGEN_ADDRESS]: {
-    name: "Degen",
+    name: 'Degen',
     address: DEGEN_ADDRESS,
     logo: degenLogo,
     sTokenAddress: sDEGEN_ADDRESS,
     debtTokenAddress: variableDebtSeamDEGEN_ADDRESS,
     useCoinGeckoPrice: true,
     description:
-      "DEGEN is dubbed as the unofficial token created for the Farcaster community, a decentralized social network.",
+      'DEGEN is dubbed as the unofficial token created for the Farcaster community, a decentralized social network.',
   },
   [SEAM_ADDRESS]: {
-    name: "Seamless",
+    name: 'Seamless',
     address: SEAM_ADDRESS,
     logo: seamLogo,
     sTokenAddress: sSEAM_ADDRESS,
     debtTokenAddress: variableDebtSeamSEAM_ADDRESS,
     useCoinGeckoPrice: true,
-    description: "SEAM is the fair launch utility governance token of Seamless Protocol.",
+    description: 'SEAM is the fair launch utility governance token of Seamless Protocol.',
   },
   [AERO_ADDRESS]: {
-    name: "Aerodrome",
+    name: 'Aerodrome',
     address: AERO_ADDRESS,
     logo: aeroLogo,
     useCoinGeckoPrice: false,
-    description: "AERO is a central trading and liquidity marketplace on Base.",
+    description: 'AERO is a central trading and liquidity marketplace on Base.',
   },
   [BRETT_ADDRESS]: {
-    name: "Brett",
-    symbol: "BRETT",
+    name: 'Brett',
+    symbol: 'BRETT',
     address: BRETT_ADDRESS,
     sTokenAddress: sBRETT_ADDRESS,
     logo: brettLogo,
     useCoinGeckoPrice: true,
-    description: "BRETT is PEPE's best friend on Base.",
+    description: 'BRETT is PEPE\'s best friend on Base.',
   },
   [rwstETH_ADDRESS]: {
     address: rwstETH_ADDRESS,
@@ -175,10 +178,10 @@ export const assetsConfig: { [key: Address]: LendMarketConfig } = {
 
 export const strategiesConfig: { [key: string]: StrategyConfig } = {
   [wstETHBooster_ADDRESS_STRATEGY_ID]: {
-    name: "Boost wstETH",
-    subTitle: "Increase ETH staking rewards automatically",
+    name: 'Boost wstETH',
+    subTitle: 'Increase ETH staking rewards automatically',
     description:
-      "This Integrated Liquidity Market (ILM) uses wstETH deposits to borrow ETH, which is used to purchase more wstETH to achieve the targeted multiple.",
+      'This Integrated Liquidity Market (ILM) uses wstETH deposits to borrow ETH, which is used to purchase more wstETH to achieve the targeted multiple.',
     address: wstETHBooster_ADDRESS_STRATEGY_ID as Address,
     logo: ilmwstETHLogo,
     diagram: wstEthDiagram,
@@ -189,7 +192,7 @@ export const strategiesConfig: { [key: string]: StrategyConfig } = {
         address: wstETHBooster_ADDRESS,
         targetMultiple: {
           value: 3,
-          symbol: "x",
+          symbol: 'x',
         },
       },
     ],
@@ -201,7 +204,7 @@ export const strategiesConfig: { [key: string]: StrategyConfig } = {
     description:
       "This Integrated Liquidity Market (ILM) uses ETH deposits to borrow USDC, which is used to purchase more ETH to achieve the targeted multiple",
     address: multiplyETH_ADDRESS_STRATEGY_ID as Address,
-    multiplier: "Up to 1.5x",
+    multiplier: "Up to 3x",
     logo: ilmEthUsdcLogo,
     underlyingAsset: assetsConfig[WETH_ADDRESS],
     debtAsset: assetsConfig[USDC_ADDRESS],
@@ -210,6 +213,13 @@ export const strategiesConfig: { [key: string]: StrategyConfig } = {
         address: ethLong,
         targetMultiple: {
           value: 1.5,
+          symbol: "x",
+        },
+      },
+      {
+        address: ethLong_3x,
+        targetMultiple: {
+          value: 3,
           symbol: "x",
         },
       },
