@@ -123,7 +123,9 @@ const NavLinks: React.FC<{ pathname: string; pageNavLinks: Array<any> }> = ({
                     <li key={subLink.name}>
                       <Link
                         href={subLink.href}
-                        className="block !px-4 py-2 hover:bg-gray-100 "
+                        className="block !px-4 py-2 hover:bg-gray-100 data-true:text-primary-900"
+                        data-true={subLink.href === pathname}
+                        target={subLink.href.startsWith('http') ? '_blank' : ''}
                       >
                         {subLink.name}
                       </Link>
@@ -136,9 +138,13 @@ const NavLinks: React.FC<{ pathname: string; pageNavLinks: Array<any> }> = ({
         ) : (
           <Link
             key={link.name}
-            href={link.href}
-            className="font-medium text-black data-true:text-primary-900"
+            href={link.href || '#'}
+            className={
+              'font-medium text-black data-true:text-primary-900 ' +
+              (link.href ? '' : 'text-[#a1a1a1] cursor-default')
+            }
             data-true={link.href === pathname}
+            target={link.href.startsWith('http') ? '_blank' : ''}
           >
             {link.name}
           </Link>
@@ -159,18 +165,18 @@ const LINKS = [
   },
   {
     name: 'Protocol',
-    href: '/protocol',
+    href: 'https://www.seamlessprotocol.com/',
   },
   {
     name: 'Learn',
-    href: '/learn',
+    href: '',
   },
 ];
 
 const LandingPageLINKS = [
   {
     name: 'Protocol',
-    href: '/protocol',
+    href: 'https://www.seamlessprotocol.com/',
   },
   {
     name: 'Blog',

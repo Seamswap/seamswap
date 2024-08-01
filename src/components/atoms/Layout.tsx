@@ -3,6 +3,7 @@ import Navbar from '@src/components/atoms/Navbar';
 import { Inter } from 'next/font/google';
 import Container from '../ui/Container';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 export interface ILayoutProps {
   children: React.ReactNode;
@@ -14,7 +15,7 @@ const inter = Inter({
 
 const Layout: React.FC<ILayoutProps> = (props) => {
   const { pathname } = useRouter();
-  const dashboardLinks = ['/swap', '/explorer', '/learn', ];
+  const dashboardLinks = ['/swap', '/explorer', '/learn'];
   const isDashboardPage = dashboardLinks.includes(pathname);
 
   return (
@@ -31,7 +32,13 @@ const Layout: React.FC<ILayoutProps> = (props) => {
         ) : (
           <div className="mt-6">
             Powered by{' '}
-            <span className="text-primary-900 font-medium">Seamless Protocol</span>
+            <Link
+              href="https://www.seamlessprotocol.com/"
+							target='_blank'
+              className="text-primary-900 font-medium"
+            >
+              Seamless Protocol
+            </Link>
           </div>
         )}
       </Container>
