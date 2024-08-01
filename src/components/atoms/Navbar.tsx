@@ -141,7 +141,7 @@ const NavLinks: React.FC<{ pathname: string; pageNavLinks: Array<any> }> = ({
             href={link.href || '#'}
             className={
               'font-medium text-black data-true:text-primary-900 ' +
-              (link.href ? '' : 'text-[#a1a1a1] cursor-default')
+              (link.href ? '' : '!text-[#a1a1a1] cursor-default')
             }
             data-true={link.href === pathname}
             target={link.href.startsWith('http') ? '_blank' : ''}
