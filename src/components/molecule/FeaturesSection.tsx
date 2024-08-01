@@ -3,7 +3,6 @@ import React from 'react';
 
 const FeaturesSection = () => {
   const [currentTab, setCurrentTab] = React.useState('swap');
-  const [featureImage, setFeatureImage] = React.useState('/img/swapScreen.png');
 
   // handle changing feature image on tab change
   const getFeatureImage = (tab: string) => {
@@ -21,9 +20,36 @@ const FeaturesSection = () => {
     }
   };
 
+  const handleScroll = () => {
+    const fImages = document.querySelectorAll('.fImage');
+
+    fImages.forEach((image) => {
+      const rect = image.getBoundingClientRect();
+      const category = image.getAttribute('data-category');
+
+      if (
+        rect.top >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight)
+      ) {
+        setCurrentTab(category || 'swap');
+      }
+    });
+  };
+
   React.useEffect(() => {
-    setFeatureImage(getFeatureImage(currentTab));
-  }, [currentTab]);
+    // Check if the screen width is above 768px
+    const isDesktop = window.innerWidth >= 768;
+
+    if (isDesktop) {
+      window.addEventListener('scroll', handleScroll);
+    }
+
+    return () => {
+      if (isDesktop) {
+        window.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, []);
 
   const FeatureItem = ({
     id,
@@ -60,8 +86,8 @@ const FeaturesSection = () => {
   };
 
   return (
-    <div className="grid md:grid-cols-2 gap-x-5 gap-y-4">
-      <div className="left py-8 md:pl-5 bg-[#00B8A1] rounded-[20px] relative overflow-hidden">
+    <div className="grid md:grid-cols-2 gap-x-5 gap-y-4 items-start">
+      <div className="left sticky top-[30px] py-8 md:pl-5 bg-[#00B8A1] rounded-[20px] overflow-hidden">
         <div className="content text-grey-960 z-10 relative">
           {/*  */}
           <FeatureItem
@@ -209,8 +235,23 @@ const FeaturesSection = () => {
         </div>
       </div>
 
-      <div className="right hidden md:grid rounded-[20px] border-primary overflow-hidden p-2 lg:p-6 items-center">
-        <img src={featureImage} className="w-full" alt="featureScreen" />
+      <div className="right hidden md:flex flex-col">
+        {/* Left section omitted for brevity */}
+        <div className="right hidden md:flex flex-col">
+          {['swap', 'lessFee', 'discover', 'send'].map((category, index) => (
+            <div
+              key={index}
+              className="fImage mb-8 h-fit rounded-[20px] border-primary px-2 py-12 lg:px-6"
+              data-category={category}
+            >
+              <img
+                src={getFeatureImage(category)}
+                className="w-full"
+                alt="featureScreen"
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
