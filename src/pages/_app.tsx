@@ -6,7 +6,14 @@ import { lightTheme, RainbowKitProvider, Theme } from '@rainbow-me/rainbowkit';
 import { base } from 'wagmi/chains';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import LoginProvider from '@src/components/providers/LoginProvider';
-import { ChainId, ChainType, config as lifiConfig, createConfig, EVM, getChains } from '@lifi/sdk';
+import {
+  ChainId,
+  ChainType,
+  config as lifiConfig,
+  createConfig,
+  EVM,
+  getChains,
+} from '@lifi/sdk';
 import { getWalletClient } from '@wagmi/core';
 import { FC, PropsWithChildren } from 'react';
 import { useSyncWagmiConfig } from '@lifi/wallet-management';
@@ -14,6 +21,7 @@ import { Toaster } from '@src/components/ui/toaster';
 import { WagmiProvider } from 'wagmi';
 import { config, connectors } from '@src/lib/config/rainbow.config';
 import type { WalletClient } from 'viem';
+import Head from 'next/head';
 // const connectors: CreateConnectorFn[] = [injected()];
 
 // Create Wagmi config with default chain and without connectors
@@ -31,11 +39,14 @@ import type { WalletClient } from 'viem';
 createConfig({
   integrator: 'Seamswap',
   rpcUrls: {
-    [ChainId.BAS]: ['https://base-mainnet.g.alchemy.com/v2/ITJZYemtXDZswsfcino5vXg6ikpUq1zI', 'wss://base-mainnet.g.alchemy.com/v2/ITJZYemtXDZswsfcino5vXg6ikpUq1zI'],
+    [ChainId.BAS]: [
+      'https://base-mainnet.g.alchemy.com/v2/ITJZYemtXDZswsfcino5vXg6ikpUq1zI',
+      'wss://base-mainnet.g.alchemy.com/v2/ITJZYemtXDZswsfcino5vXg6ikpUq1zI',
+    ],
   },
   providers: [
     EVM({
-      getWalletClient: (() => (getWalletClient(config))) as any,
+      getWalletClient: (() => getWalletClient(config)) as any,
       // switchChain: async (chainId) => {
       //   const chain = await switchChain(config, { chainId });
       //   return getWalletClient(config, { chainId: chain.id });
@@ -63,11 +74,7 @@ export const CustomWagmiProvider: FC<PropsWithChildren> = ({ children }) => {
   // Synchronize fetched chains with Wagmi config and update connectors
   // useSyncWagmiConfig(config, connectors, [base]);
 
-  return (
-    <WagmiProvider config={config}>
-      {children}
-    </WagmiProvider>
-  );
+  return <WagmiProvider config={config}>{children}</WagmiProvider>;
 };
 
 const ltheme = lightTheme();
@@ -101,6 +108,51 @@ export default function App({ Component, pageProps }: AppProps) {
         <RainbowKitProvider initialChain={base} theme={myRainbowkitThemeConfigV2}>
           <LoginProvider>
             <Layout>
+              <Head>
+                <title>Seamswap</title>
+                <meta
+                  name="description"
+                  content="Seamlessly swap between ILM positions with Seamless Protocol. Enable faster ILM strategy position swaps with reduced transaction fees."
+                  key="desc"
+                />
+                {/* Meta tags for SEO */}
+                <meta property="og:title" content="Seamswap" key="title" />
+                <meta
+                  property="og:description"
+                  content="Seamlessly swap between ILM positions with Seamless Protocol. Enable faster ILM strategy position swaps with reduced transaction fees."
+                />
+                <meta property="og:image" content="/favicon-32x32.png" />
+                <meta property="og:type" content="website" />
+                <meta name="twitter:card" content="summary" />
+                <meta name="twitter:title" content="Seamswap" />
+                <meta
+                  name="twitter:description"
+                  content="Seamlessly swap between ILM positions with Seamless Protocol. Enable faster ILM strategy position swaps with reduced transaction fees."
+                />
+                <meta name="twitter:image" content="/favicon-32x32.png" />
+                <meta name="twitter:site" content="@seamswap" />
+                <meta name="twitter:creator" content="@seamswap" />
+
+                <link
+                  rel="apple-touch-icon"
+                  sizes="180x180"
+                  href="/apple-touch-icon.png"
+                />
+                <link
+                  rel="icon"
+                  type="image/png"
+                  sizes="32x32"
+                  href="/favicon-32x32.png"
+                />
+                <link
+                  rel="icon"
+                  type="image/png"
+                  sizes="16x16"
+                  href="/favicon-16x16.png"
+                />
+                <link rel="manifest" href="/site.webmanifest" />
+              </Head>
+
               <Component {...pageProps} />
               <Toaster />
             </Layout>
@@ -108,6 +160,5 @@ export default function App({ Component, pageProps }: AppProps) {
         </RainbowKitProvider>
       </CustomWagmiProvider>
     </QueryClientProvider>
-  )
-    ;
+  );
 }

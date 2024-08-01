@@ -1,0 +1,36 @@
+{
+	"name": "Seamswap",
+	"short_name": "Seamswap",
+	"description": "Seamlessly swap between ILM positions with Seamless Protocol. Enable faster ILM strategy position swaps with reduced transaction fees.",
+	"icons": [
+		{
+			"src": "/apple-touch-icon.png",
+			"sizes": "180x180",
+			"type": "image/png"
+		},
+		{
+			"src": "/favicon-32x32.png",
+			"sizes": "32x32",
+			"type": "image/png"
+		},
+		{
+			"src": "/favicon-16x16.png",
+			"sizes": "16x16",
+			"type": "image/png"
+		},
+		{
+			"src": "/android-chrome-192x192.png",
+			"sizes": "192x192",
+			"type": "image/png"
+		},
+		{
+			"src": "/android-chrome-512x512.png",
+			"sizes": "512x512",
+			"type": "image/png"
+		}
+	],
+	"start_url": "/",
+	"display": "standalone",
+	"background_color": "#f0fffd",
+	"theme_color": "#f0fffd"
+}

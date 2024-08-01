@@ -21,13 +21,13 @@ body {
   .mobile_nav {
     left: 0;
     right: 0;
-    @apply absolute top-[64px] w-[85%] mx-auto border-y border-gray-50 rounded-xl bg-white shadow-md;
+    @apply absolute top-[72px] w-[85%] mx-auto border-y border-gray-50 rounded-xl bg-white shadow-lg z-50;
   }
   .mobile_nav ul {
     @apply flex flex-col items-start divide-y divide-gray-100 *:w-full;
   }
   .mobile_nav ul a {
-    @apply block py-[13px] px-4 w-full;
+    @apply flex py-[13px] px-4 w-full;
   }
   .connectBtn span {
     @apply hidden md:block;
@@ -38,3 +38,12 @@ body {
 input {
   @apply ring-primary-240;
 }
+
+/*  */
+.stats {
+	@apply text-center grid gap-y-12 md:gap-y-14 md:grid-cols-2 lg:grid-cols-4;
+}
+.stats .item {
+	@apply grid gap-3 [&>b]:text-4xl [&>b]:xl:text-5xl [&>b]:font-bold [&>span]:text-lg;
+}
+
