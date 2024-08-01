@@ -180,7 +180,7 @@ const LandingPageLINKS = [
   },
   {
     name: 'Blog',
-    href: '/blog',
+    href: '',
   },
   {
     name: 'Resources',
