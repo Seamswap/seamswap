@@ -49,4 +49,5 @@ function convertSvgToPng(svgData: string): Promise<string> {
 }
 export const metadataQueryConfig = {
   staleTime: Infinity,
+
 };
