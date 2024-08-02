@@ -1,7 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 import * as React from 'react';
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
 import Container from '@src/components/ui/Container';
 import Link from 'next/link';
 import WalletAdd from '@src/components/icons/WalletAdd.icon';
@@ -9,10 +7,6 @@ import FeaturesSection from '@src/components/molecule/FeaturesSection';
 import Input from '@src/components/ui/Input';
 
 export default function Home() {
-  // const { push } = useRouter();
-  // useEffect(() => {
-  //   push('/swap');
-  // }, []);
 
   return (
     <>
@@ -38,7 +32,7 @@ export default function Home() {
                 className="bg-grey-960 px-6 py-3 gap-x-3 rounded-md text-white inline-flex items-center"
               >
                 <WalletAdd className="" />
-                <span className="">Get started</span>
+                <span className="">Launch app</span>
               </Link>
             </div>
 
@@ -48,7 +42,11 @@ export default function Home() {
           </div>
 
           <div className="right rounded-[22px] border-primary overflow-hidden">
-            <img src="/img/heroImage.png" className="w-full h-full object-cover" alt="HeroImg" />
+            <img
+              src="/img/heroImage.png"
+              className="w-full h-full object-cover"
+              alt="HeroImg"
+            />
           </div>
         </div>
       </Container>
@@ -83,8 +81,11 @@ export default function Home() {
         <FeaturesSection />
       </Container>
 
-      <Container className="mt-6" >
-        <div id='newsletter' className="banner1 bg-grey-960 rounded-[20px] relative overflow-hidden">
+      <Container className="mt-6">
+        <div
+          id="newsletter"
+          className="banner1 bg-grey-960 rounded-[20px] relative overflow-hidden"
+        >
           <div className="content px-6 lg:px-8 py-14 md:w-[80%] lg:w-[64%] text-white relative z-10">
             <h3 className="text-3xl md:text-5xl xl:text-[44px] md:!leading-[55px] font-semibold mb-2">
               Stay updated on what we’re building.

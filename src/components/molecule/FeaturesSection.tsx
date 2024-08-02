@@ -39,7 +39,6 @@ const FeaturesSection = () => {
   React.useEffect(() => {
     // Check if the screen width is above 768px
     const isDesktop = window.innerWidth >= 768;
-
     if (isDesktop) {
       window.addEventListener('scroll', handleScroll);
     }
@@ -50,6 +49,18 @@ const FeaturesSection = () => {
       }
     };
   }, []);
+
+  const handleTitleClick = (id: string) => {
+    // Check if the screen width is above 768px
+    const isDesktop = window.innerWidth >= 768;
+    if (isDesktop) {
+      const fElement = document.getElementById(id);
+      if (fElement) {
+        const y = fElement.getBoundingClientRect().top + window.scrollY + -32; // add offset to scroll
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+    }
+  };
 
   const FeatureItem = ({
     id,
@@ -66,7 +77,7 @@ const FeaturesSection = () => {
       <>
         <div
           data-state={currentTab === id}
-          onClick={() => setCurrentTab(id)}
+          onClick={() => handleTitleClick(id)}
           className="item w-full md:mb-4 last-of-type:mb-0 justify-start items-start gap-4 inline-flex py-3 px-4 lg:px-5 !border-r-0 rounded-s-[20px] cursor-pointer
 				data-[state=true]:md:bg-[#00CCB4] data-[state=true]:border-grey-960 data-[state=true]:md:border-[0.5px]"
         >
@@ -241,6 +252,7 @@ const FeaturesSection = () => {
           {['swap', 'lessFee', 'discover', 'send'].map((category, index) => (
             <div
               key={index}
+              id={category}
               className="fImage mb-8 h-fit rounded-[20px] border-primary px-2 py-12 lg:px-6"
               data-category={category}
             >
