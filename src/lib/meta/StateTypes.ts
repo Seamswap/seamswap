@@ -16,5 +16,6 @@ export interface StrategyState extends AssetBase {
   underlyingAsset: LendMarketConfig;
   debtAsset: LendMarketConfig;
   subStrategyData: SubStrategyDataConfig[];
+  subStrategy?: Address;
   multiplier?: string;
 }

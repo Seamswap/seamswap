@@ -6,7 +6,7 @@ export interface Displayable<T> extends ExtendedQueryState<T> {
 }
 
 export interface ViewValueSymbolPair {
-  viewValue?: string | undefined;
+  viewValue: string;
   symbol?: string | undefined;
 }
 

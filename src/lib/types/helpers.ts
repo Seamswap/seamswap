@@ -1,6 +1,7 @@
 import { QueryKey, UseQueryResult } from "@tanstack/react-query";
 import { formatUnits } from "viem";
-import { INFINITE_HEALTH_FACTOR_BORDER } from '@src/lib/meta';
+import { INFINITE_HEALTH_FACTOR_BORDER, ONE_USD, SECONDS_PER_YEAR } from '@src/lib/meta';
+import { ViewBigInt, ViewNumber } from '@meta/Displayable';
 
 export interface FetchNumber {
   value?: number;
@@ -128,7 +129,7 @@ export function formatFetchBigIntToHealthFactor(
 export function formatFetchBigIntToViewBigInt(
   data?: FetchBigInt,
   decimalsOptions?: Partial<DecimalsOptions>
-): AssetBalance {
+): ViewBigInt {
   if (data === undefined) {
     return {
       value: undefined,
@@ -151,4 +152,63 @@ export function formatFetchBigIntToViewBigInt(
     bigIntValue,
     symbol,
   };
+}
+
+export function formatFetchBigIntToViewBigIntTemp(
+  data: FetchBigInt | undefined,
+  decimalsOptions?: Partial<DecimalsOptions>
+): ViewBigInt | undefined {
+  if (!data) return undefined;
+
+  const { bigIntValue, decimals, symbol = "" } = data;
+  const decimalsFormattingOptions = {
+    ...defaultDecimalsOptions,
+    ...decimalsOptions,
+  };
+  const value = decimals ? formatUnitsToNumber(bigIntValue, decimals) : undefined;
+
+  return {
+    value: bigIntValue && decimals ? formatUnits(bigIntValue, decimals) : undefined,
+    viewValue: formatToDisplayable(value, decimalsFormattingOptions),
+    bigIntValue,
+    symbol,
+  };
+}
+
+
+export function formatFetchNumberToViewNumber(
+  fetchNumber?: FetchNumber,
+  decimalsOptions?: Partial<DecimalsOptions>
+): ViewNumber {
+  if (!fetchNumber)
+    return {
+      value: undefined,
+      viewValue: "/",
+      symbol: "/",
+    };
+
+  const decimalsFormattingOptions = {
+    ...defaultDecimalsOptions,
+    ...decimalsOptions,
+  };
+  return {
+    value: fetchNumber.value,
+    viewValue: formatToDisplayable(fetchNumber.value, decimalsFormattingOptions),
+    symbol: fetchNumber.symbol,
+  };
+}
+
+export function convertRatioToMultiple(ratio: bigint | undefined = 0n) {
+  return (ratio * ONE_USD) / (ratio - ONE_USD);
+}
+
+export function convertAprToApy(apr: number): number {
+  return ((1 + apr / SECONDS_PER_YEAR) ** SECONDS_PER_YEAR - 1) * 100;
+}
+
+export function normalizeDecimals(value: bigint, valueDecimals: bigint, toDecimals: bigint): bigint {
+  if (valueDecimals <= toDecimals) {
+    return value * 10n ** (toDecimals - valueDecimals);
+  }
+  return value / 10n ** (valueDecimals - toDecimals);
 }
