@@ -10,6 +10,11 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+  .fx_between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 
   .border-primary {
     @apply border-primary-900 border-[0.5px];
@@ -41,9 +46,8 @@ input {
 
 /*  */
 .stats {
-	@apply text-center grid gap-y-12 md:gap-y-14 md:grid-cols-2 lg:grid-cols-4;
+  @apply text-center grid gap-y-12 md:gap-y-14 md:grid-cols-2 lg:px-12 lg:fx_between;
 }
 .stats .item {
-	@apply grid gap-3 [&>b]:text-4xl [&>b]:xl:text-5xl [&>b]:font-bold [&>span]:text-lg;
+  @apply grid gap-3 [&>b]:text-4xl [&>b]:xl:text-5xl [&>b]:font-bold [&>span]:text-lg;
 }
-

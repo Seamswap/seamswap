@@ -75,7 +75,17 @@ const Navbar: React.FC<INavbarProps> = ({ isDashboardPage }) => {
             </svg>
           </button>
 
-          <ConnectionButton />
+          {isDashboardPage ? (
+            <ConnectionButton />
+          ) : (
+            <Link
+              href={'/swap'}
+              className="connectBtn bg-primary-900 px-4 py-2 md:py-3 gap-x-2 text-sm rounded-md text-white inline-flex items-center"
+            >
+              <WalletAdd className="" />
+              <span>Launch app</span>
+            </Link>
+          )}
         </div>
       </nav>
     </Container>

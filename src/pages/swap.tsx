@@ -219,7 +219,7 @@ const Page: NextPage = () => {
           <div className="flex flex-col items-start justify-start min-h-[80vh]">
 
             {swapIsSuccessfull ? (
-                <div className="mx-auto w-5/12 flex flex-col space-y-2 mt-16">
+                <div className="mx-auto w-5/12 flex flex-col space-y-2 mt-10">
                   <div
                     className="w-full bg-white pt-6 pb-14 px-8 rounded-xl border-primary space-y-4 flex flex-col relative">
                     <h3 className="text-xl font-medium">Swap Successful</h3>
@@ -239,7 +239,7 @@ const Page: NextPage = () => {
               )
 
               : (
-                <div className="mx-auto flex flex-col space-y-2 mt-16">
+                <div className="mx-auto flex flex-col space-y-2 mt-10">
                   <h2 className="max-w-[540px] mx-auto font-semibold text-2xl md:text-4xl text-center mb-3">
                     Swap Positions Seamlessly, Maximize reward.
                   </h2>
