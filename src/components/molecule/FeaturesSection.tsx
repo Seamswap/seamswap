@@ -39,7 +39,6 @@ const FeaturesSection = () => {
   React.useEffect(() => {
     // Check if the screen width is above 768px
     const isDesktop = window.innerWidth >= 768;
-
     if (isDesktop) {
       window.addEventListener('scroll', handleScroll);
     }
@@ -52,10 +51,14 @@ const FeaturesSection = () => {
   }, []);
 
   const handleTitleClick = (id: string) => {
-    const fElement = document.getElementById(id);
-    if (fElement) {
-      const y = fElement.getBoundingClientRect().top + window.scrollY + -34; // add offset to scroll
-      window.scrollTo({ top: y, behavior: 'smooth' });
+    // Check if the screen width is above 768px
+    const isDesktop = window.innerWidth >= 768;
+    if (isDesktop) {
+      const fElement = document.getElementById(id);
+      if (fElement) {
+        const y = fElement.getBoundingClientRect().top + window.scrollY + -32; // add offset to scroll
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
     }
   };
 
