@@ -1,6 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 import * as React from 'react';
 import ilmwstETHLogo from '@assets/tokens/ilmEthUsdc.svg';
+import { useFullTokenData } from '@src/lib/queries/useFullTokenData';
+import { Address } from 'viem';
+import { FC } from 'react';
+import Image from 'next/image';
 
 export const TableButton = ({
   text,
@@ -14,11 +18,19 @@ export const TableButton = ({
   </button>
 );
 
-export const IlmNameRow = ({ value }: { value: string }) => {
+interface Props {
+  address: Address;
+}
+
+
+export const IlmNameRow: FC<Props> = ({ address }) => {
+  const {
+    data: { logo, name, subTitle, isGauntletOptimized },
+  } = useFullTokenData(address);
   return (
     <div className="flex items-center gap-x-2 min-w-[140px]">
-      <img src={ilmwstETHLogo.src} className="w-[26px]" alt="ilmwstETHLogo" />
-      <span className="text-black font-normal">{value}</span>
+      <Image src={logo!} className="w-[26px]" alt="ilmwstETHLogo" />
+      <span className="text-black font-normal">{name}</span>
     </div>
   );
 };

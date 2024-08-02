@@ -26,6 +26,7 @@ import { loopStrategyAbi } from '@src/lib/config/contract';
 import { readContract } from 'wagmi/actions';
 import { Address } from 'viem';
 import { Check } from 'lucide-react';
+import { useRouter } from 'next/router';
 
 export interface ExtendedToken extends Token {
   balance?: {
@@ -80,6 +81,7 @@ const Page: NextPage = () => {
   const [swapOngoing, setSwapOngoing] = React.useState<boolean>(false);
   const [steps, setSteps] = React.useState<number[]>([0]);
   const [swapIsSuccessfull, setSwapIsSuccessfull] = React.useState<boolean>(false);
+  const { query } = useRouter()
   const context = {
     swapOngoing,
     setSwapOngoing,
@@ -131,6 +133,14 @@ const Page: NextPage = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedValue, fromToken, toToken, currentTab]);
+  useEffect(() => {
+    if (query.fromToken) {
+      handleFromTokenChange(query.fromToken as Address);
+    }
+    if (query.tab) {
+      setCurrentTab(query.tab as string);
+    }
+  },[query])
   const handlePositionSwap = () => {
     setFromToken(toToken);
     setToToken(fromToken);
@@ -215,7 +225,7 @@ const Page: NextPage = () => {
   return (
     <SwapContext.Provider value={context}>
       <Container>
-        <Tabs defaultValue="ILMS" onValueChange={(val) => setCurrentTab(val)}>
+        <Tabs value={currentTab} onValueChange={(val) => setCurrentTab(val)}>
           <div className="flex flex-col items-start justify-start min-h-[80vh]">
 
             {swapIsSuccessfull ? (

@@ -1,40 +1,28 @@
 /* eslint-disable @next/next/no-img-element */
-import React from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { TableElement } from '../ui/Table';
 import {
   ColumnDef,
-  ColumnFiltersState,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  SortingState,
-  VisibilityState,
 } from '@tanstack/table-core';
 import { useReactTable } from '@tanstack/react-table';
-import { compactNumberFormatter, Explorer } from '@src/pages/explorer';
+import { Explorer } from '@src/pages/explorer';
 import { IlmNameRow, TableButton } from '../atoms/TableUIs';
+import { useFetchAllAssets } from '@src/lib/queries/useFetchAllAssets';
+import { AssetApy } from '@components/ui/AssetApy';
+import { AssetTvl } from '@components/ui/AssetTvl';
+import OraclePrice from '@components/ui/OraclePrice';
+import Link from 'next/link';
+import { getIsStrategy } from '@src/lib/utils/configUtils';
 
 type Props = {
   data: Explorer[];
   tableOptions: any;
 };
-
-const WatchlistTable = ({ data, tableOptions }: Props) => {
-  const table = useReactTable({
-    data: data,
-    columns: watchlistColumns,
-    ...tableOptions,
-  });
-
-  return (
-    <>
-      <TableElement columns={watchlistColumns} table={table} />
-    </>
-  );
-};
-
-export const watchlistColumns: ColumnDef<Explorer>[] = [
+const columns: ColumnDef<Explorer>[] = [
   {
     accessorKey: 'id',
     header: '#',
@@ -43,54 +31,81 @@ export const watchlistColumns: ColumnDef<Explorer>[] = [
   {
     accessorKey: 'ilmName',
     header: 'ILM Name',
-    cell: ({ getValue }) => {
-      return <IlmNameRow value={getValue() as string} />;
+    cell: ({ row }) => {
+      return <IlmNameRow {...row.original} />;
     },
   },
   {
     accessorKey: 'TVL',
     header: 'TVL',
-    cell: ({ getValue }) => (
-      <span className="text-black">
-        ${compactNumberFormatter.format(getValue() as number)}
-      </span>
+    cell: ({ row }) => (
+      <AssetTvl {...row.original} />
     ),
   },
   {
     accessorKey: 'EstimatedAPY',
     header: 'Est. % Yield',
-    cell: ({ getValue }) => (
-      <div className="text-[#00B25D] min-w-[70px]">{getValue() as string}%</div>
+    cell: ({ row }) => (
+      <AssetApy {...row.original} />
     ),
   },
-  {
-    accessorKey: 'performance',
-    header: 'Performance',
-    cell: ({ getValue }) => (
-      <span className="">{getValue() as string}% cap remaining</span>
-    ),
-  },
+  // {
+  //   accessorKey: 'performance',
+  //   header: 'Performance',
+  //   cell: ({ getValue }) => (
+  //     <span className="">{getValue() as string}% cap remaining</span>
+  //   ),
+  // },
   {
     accessorKey: 'oraclePrice',
     header: 'Oracle Price',
-    cell: ({ getValue }) => (
-      <span className="">{compactNumberFormatter.format(getValue() as number)}</span>
+    cell: ({ row }) => (
+      <OraclePrice {...row.original} />
     ),
   },
-  {
-    accessorKey: 'position',
-    header: 'Position',
-    cell: ({ getValue }) => (
-      <span className="text-gray-500">{Number(getValue()).toLocaleString()}</span>
-    ),
-  },
+  // {
+  //   accessorKey: 'position',
+  //   header: 'Position',
+  //   cell: ({ getValue }) => (
+  //     <span className="text-gray-500">{Number(getValue()).toLocaleString()}</span>
+  //   ),
+  // },
   {
     accessorKey: 'actions',
     header: 'Actions',
     cell: ({ row }) => {
-      return <TableButton onClick={() => console.log('swap')} text="Swap" />;
+      const isILM = getIsStrategy(row.original.address);
+      return <Link
+        href={`/swap?fromToken=${isILM ? row.original?.underlyingAsset?.address : row.original.address}&tab=${isILM ? 'ILMS' : 'Lending'}`}><TableButton
+        text="Swap" /></Link>;
     },
   },
 ];
 
-export default WatchlistTable;
+const WatchlistTable = ({ tableOptions }: any) => {
+  const { data: state, isSuccess } = useFetchAllAssets();
+  const [data, setData] = useState<Array<Explorer>>([]);
+  const table = useReactTable({
+    data,
+    columns: columns,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    ...tableOptions,
+  });
+  useEffect(() => {
+    if (!state) return;
+    console.log(state);
+    const data = state.map((item, index) => ({ ...item, id: index + 1 }));
+    setData(data as Explorer[]);
+  }, [isSuccess]);
+  return (
+    <>
+      <TableElement columns_length={columns.length} table={table} />
+    </>
+  );
+};
+
+
+export default memo(WatchlistTable);

@@ -120,7 +120,7 @@ const TableElement = React.forwardRef<
     table: TableType<any>;
     hide?: boolean;
     tableClass?: string;
-    columns: ColumnDef<any>[];
+  columns_length: number;
     isLoading?: boolean;
   }
 >(
@@ -131,13 +131,13 @@ const TableElement = React.forwardRef<
       className,
       hide,
       tableClass,
-      columns,
+      columns_length,
+
       isLoading,
       ...props
     },
     ref,
   ) => {
-    const columns_length = React.useMemo(() => columns?.length, [columns]);
     const tablePageArrays = Array.from(
       {
         length: table.getPageCount(),
@@ -166,6 +166,7 @@ const TableElement = React.forwardRef<
           'flex flex-col rounded-[10px] border-primary bg-white overflow-hidden',
           className,
         )}
+        // ref={ref}
       >
         <div className="">
           {header}

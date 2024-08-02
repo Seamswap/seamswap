@@ -2,7 +2,6 @@
 import type { NextPage } from 'next';
 import * as React from 'react';
 import {
-  ColumnDef,
   ColumnFiltersState,
   getCoreRowModel,
   getFilteredRowModel,
@@ -18,17 +17,11 @@ import Container from '@src/components/ui/Container';
 import MarketsTable from '@src/components/molecule/MarketsTable';
 import TransactionsTable from '@src/components/molecule/TransactionsTable';
 import WatchlistTable from '@src/components/molecule/WatchlistTable';
+import { LendMarketState, StrategyState } from '@meta/StateTypes';
+import { PaginationState } from '@tanstack/react-table';
 
-export interface Explorer {
+export interface Explorer extends StrategyState {
   id: number;
-  ilmName: string;
-  TVL: number;
-  EstimatedAPY: number;
-  performance: number;
-  oraclePrice: number;
-  position: number;
-  actions: string;
-  [key: string]: any;
 }
 
 export const currencyFormatter = new Intl.NumberFormat('en-US', {
@@ -51,7 +44,19 @@ const Page: NextPage = () => {
   const [rowSelection, setRowSelection] = React.useState({});
   const [transactionType, setTransactionType] = React.useState('personal');
   const [currentTab, setCurrentTab] = React.useState('watchlist');
+  const [{ pageIndex, pageSize }, setPagination] =
+    React.useState<PaginationState>({
+      pageIndex: 0,
+      pageSize: 40,
+    });
 
+  const pagination = React.useMemo(
+    () => ({
+      pageIndex,
+      pageSize,
+    }),
+    [pageIndex, pageSize],
+  );
   const tableOptions = {
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -61,11 +66,14 @@ const Page: NextPage = () => {
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    onPaginationChange: setPagination,
+    manualPagination: true,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
       rowSelection,
+      pagination,
     },
   };
 
@@ -83,11 +91,11 @@ const Page: NextPage = () => {
         <TabHeader currentTab={currentTab} />
 
         <TabsContent value="watchlist">
-          <WatchlistTable data={demoData} tableOptions={tableOptions} />
+          <WatchlistTable tableOptions={tableOptions} />
         </TabsContent>
 
         <TabsContent value="markets">
-          <MarketsTable data={demoData} tableOptions={tableOptions} />
+          <MarketsTable tableOptions={tableOptions} />
         </TabsContent>
 
         <TabsContent value="transaction">
@@ -98,7 +106,8 @@ const Page: NextPage = () => {
                 : 'Protocol wide history'}
             </p>
 
-            <div className="px-2 py-[6px] bg-white rounded-[10px] justify-center items-center gap-[8px] flex *:cursor-pointer">
+            <div
+              className="px-2 py-[6px] bg-white rounded-[10px] justify-center items-center gap-[8px] flex *:cursor-pointer">
               <div
                 onClick={() => setTransactionType('personal')}
                 data-state={transactionType === 'personal' ? 'active' : 'inactive'}
