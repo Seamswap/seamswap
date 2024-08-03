@@ -22,7 +22,7 @@ import { Account } from '../ui/ConnectButton';
 
 type Props = {
   tableOptions: any;
-  account: Account
+  account?: Account
 };
 const columns: ColumnDef<Explorer>[] = [
   {

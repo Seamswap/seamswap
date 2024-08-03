@@ -19,6 +19,8 @@ import TransactionsTable from '@src/components/molecule/TransactionsTable';
 import WatchlistTable from '@src/components/molecule/WatchlistTable';
 import { LendMarketState, StrategyState } from '@meta/StateTypes';
 import { PaginationState } from '@tanstack/react-table';
+import { LoginProviderContext } from '@src/components/providers/LoginProvider';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 export interface Explorer extends StrategyState {
   id: number;
@@ -43,6 +45,7 @@ const Page: NextPage = () => {
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
   const [transactionType, setTransactionType] = React.useState('personal');
+  const { account } = React.useContext(LoginProviderContext);
   const [currentTab, setCurrentTab] = React.useState('watchlist');
   const [{ pageIndex, pageSize }, setPagination] =
     React.useState<PaginationState>({
@@ -91,7 +94,7 @@ const Page: NextPage = () => {
         <TabHeader currentTab={currentTab} />
 
         <TabsContent value="watchlist">
-          <WatchlistTable tableOptions={tableOptions} />
+          <WatchlistTable account={account} tableOptions={tableOptions} />
         </TabsContent>
 
         <TabsContent value="markets">
