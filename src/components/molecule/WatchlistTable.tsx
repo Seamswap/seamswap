@@ -17,10 +17,12 @@ import { AssetTvl } from '@components/ui/AssetTvl';
 import OraclePrice from '@components/ui/OraclePrice';
 import Link from 'next/link';
 import { getIsStrategy } from '@src/lib/utils/configUtils';
+import { api } from '@src/utils/trpc';
+import { Account } from '../ui/ConnectButton';
 
 type Props = {
-  data: Explorer[];
   tableOptions: any;
+  account: Account
 };
 const columns: ColumnDef<Explorer>[] = [
   {
@@ -77,14 +79,17 @@ const columns: ColumnDef<Explorer>[] = [
       const isILM = getIsStrategy(row.original.address);
       return <Link
         href={`/swap?fromToken=${isILM ? row.original?.underlyingAsset?.address : row.original.address}&tab=${isILM ? 'ILMS' : 'Lending'}`}><TableButton
-        text="Swap" /></Link>;
+          text="Swap" /></Link>;
     },
   },
 ];
 
-const WatchlistTable = ({ tableOptions }: any) => {
+const WatchlistTable = ({ tableOptions, account }: Props) => {
   const { data: state, isSuccess } = useFetchAllAssets();
   const [data, setData] = useState<Array<Explorer>>([]);
+  const { data: wishlist, isLoading } = api.wishlist.getWishList.useQuery({ wallet_address: account?.address as string }, {
+    enabled: !!account?.address,
+  });
   const table = useReactTable({
     data,
     columns: columns,
@@ -95,12 +100,12 @@ const WatchlistTable = ({ tableOptions }: any) => {
     ...tableOptions,
   });
   useEffect(() => {
-    if (!state) return;
-    console.log(state);
+    if (!state || !wishlist) return;
     const data = state.map((item, index) => ({ ...item, id: index + 1 }));
-    setData(data as Explorer[]);
-  }, [isSuccess]);
-  return (
+    const filteredData = data.filter((val) => wishlist.some((w) => w.asset_address === val.address));
+    setData(filteredData as Explorer[]);
+  }, [isSuccess, wishlist]);
+  return isLoading ? <span>Loading...</span> : (
     <>
       <TableElement columns_length={columns.length} table={table} />
     </>
