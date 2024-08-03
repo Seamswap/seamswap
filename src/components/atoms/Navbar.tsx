@@ -1,10 +1,6 @@
 import * as React from 'react';
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import Image from 'next/image';
-import WalletAdd from '@src/components/icons/WalletAdd.icon';
-
-import { LoginProviderContext } from '@src/components/providers/LoginProvider';
-import { generateUserNameImage, truncateWalletAddress } from '@src/lib/utils';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import ConnectionButton from '../ui/ConnectButton';
@@ -17,7 +13,6 @@ export interface INavbarProps {
 const Navbar: React.FC<INavbarProps> = ({ isDashboardPage }) => {
   const { pathname } = useRouter();
   const [openNavbar, setOpenNavbar] = React.useState(false);
-  const pageNavLinks = isDashboardPage ? LINKS : LandingPageLINKS;
 
   const toggleNavbar = () => {
     setOpenNavbar(!openNavbar);
@@ -30,7 +25,8 @@ const Navbar: React.FC<INavbarProps> = ({ isDashboardPage }) => {
 
   return (
     <Container className="relative">
-      <nav className="px-5 py-4 xl:px-6 xl:py-3 flex justify-between items-center mx-auto bg-white mt-6 border-primary rounded-xl">
+      <nav
+        className="px-5 py-4 xl:px-6 xl:py-3 flex justify-between items-center mx-auto bg-white mt-6 border-primary rounded-xl">
         <Link href="/">
           <Image
             src={'/logo.png'}
@@ -47,7 +43,7 @@ const Navbar: React.FC<INavbarProps> = ({ isDashboardPage }) => {
           }`}
         >
           <ul className="flex gap-x-5 lg:gap-x-10">
-            <NavLinks pageNavLinks={pageNavLinks} pathname={pathname} />
+            <NavLinks pageNavLinks={LINKS} pathname={pathname} />
           </ul>
         </div>
 
@@ -75,17 +71,8 @@ const Navbar: React.FC<INavbarProps> = ({ isDashboardPage }) => {
             </svg>
           </button>
 
-          {isDashboardPage ? (
-            <ConnectionButton />
-          ) : (
-            <Link
-              href={'/swap'}
-              className="connectBtn bg-primary-900 px-4 py-2 md:py-3 gap-x-2 text-sm rounded-md text-white inline-flex items-center"
-            >
-              <WalletAdd className="" />
-              <span>Launch app</span>
-            </Link>
-          )}
+          <ConnectionButton />
+
         </div>
       </nav>
     </Container>
@@ -93,9 +80,9 @@ const Navbar: React.FC<INavbarProps> = ({ isDashboardPage }) => {
 };
 
 const NavLinks: React.FC<{ pathname: string; pageNavLinks: Array<any> }> = ({
-  pageNavLinks,
-  pathname,
-}) => {
+                                                                              pageNavLinks,
+                                                                              pathname,
+                                                                            }) => {
   const [navDropDown, setNavDropDown] = React.useState(false);
 
   return (
@@ -127,7 +114,8 @@ const NavLinks: React.FC<{ pathname: string; pageNavLinks: Array<any> }> = ({
             </svg>
 
             {navDropDown && (
-              <div className="z-10 top-0 mt-11 lg:mt-8 absolute font-normal bg-white border-primary rounded-lg shadow w-44 ">
+              <div
+                className="z-10 top-0 mt-11 lg:mt-8 absolute font-normal bg-white border-primary rounded-lg shadow w-44 ">
                 <div className="py-2 text-sm text-black font-medium">
                   {link.links.map((subLink: { name: string; href: string }) => (
                     <li key={subLink.name}>
