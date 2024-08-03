@@ -4,9 +4,10 @@ import Image from 'next/image';
 import { generateUserNameImage } from '@src/lib/utils';
 import WalletAdd from '../icons/WalletAdd.icon';
 import { LoginProviderContext } from '../providers/LoginProvider';
+import { Address } from 'viem';
 
 export interface Account {
-  address: `0x${string}`;
+  address: Address;
   balanceDecimals?: number;
   balanceFormatted?: string;
   balanceSymbol?: string;
