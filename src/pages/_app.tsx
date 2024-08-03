@@ -6,22 +6,14 @@ import { lightTheme, RainbowKitProvider, Theme } from '@rainbow-me/rainbowkit';
 import { base } from 'wagmi/chains';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import LoginProvider from '@src/components/providers/LoginProvider';
-import {
-  ChainId,
-  ChainType,
-  config as lifiConfig,
-  createConfig,
-  EVM,
-  getChains,
-} from '@lifi/sdk';
+import { ChainId, ChainType, config as lifiConfig, createConfig, EVM, getChains } from '@lifi/sdk';
 import { getWalletClient } from '@wagmi/core';
 import { FC, PropsWithChildren } from 'react';
-import { useSyncWagmiConfig } from '@lifi/wallet-management';
 import { Toaster } from '@src/components/ui/toaster';
 import { WagmiProvider } from 'wagmi';
-import { config, connectors } from '@src/lib/config/rainbow.config';
-import type { WalletClient } from 'viem';
+import { config } from '@src/lib/config/rainbow.config';
 import Head from 'next/head';
+import { api } from '@src/utils/trpc';
 // const connectors: CreateConnectorFn[] = [injected()];
 
 // Create Wagmi config with default chain and without connectors
@@ -100,7 +92,7 @@ export const myRainbowkitThemeConfigV2: Theme = {
   },
 };
 
-export default function App({ Component, pageProps }: AppProps) {
+const App = ({ Component, pageProps }: AppProps) => {
   const queryClient = new QueryClient();
   return (
     <QueryClientProvider client={queryClient}>
@@ -161,4 +153,5 @@ export default function App({ Component, pageProps }: AppProps) {
       </CustomWagmiProvider>
     </QueryClientProvider>
   );
-}
+};
+export default  api.withTRPC(App)

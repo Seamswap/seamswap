@@ -1,0 +1,15 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Wishlist {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  asset_address  String
+  wallet_address String
+  createdAt      DateTime @default(now())
+}
