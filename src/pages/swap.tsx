@@ -140,7 +140,7 @@ const Page: NextPage = () => {
     if (query.tab) {
       setCurrentTab(query.tab as string);
     }
-  },[query])
+  }, [query])
   const handlePositionSwap = () => {
     setFromToken(toToken);
     setToToken(fromToken);
@@ -222,6 +222,15 @@ const Page: NextPage = () => {
     setFromAmount('');
     setToAmount('');
   }, [currentTab]);
+  useEffect(() => {
+    if (swapIsSuccessfull) {
+      setRoute(null);
+      setFromToken(null);
+      setToToken(null);
+      setFromAmount('');
+      setToAmount('');
+    }
+  }, [swapIsSuccessfull]);
   return (
     <SwapContext.Provider value={context}>
       <Container>
@@ -229,24 +238,24 @@ const Page: NextPage = () => {
           <div className="flex flex-col items-start justify-start min-h-[80vh]">
 
             {swapIsSuccessfull ? (
-                <div className="mx-auto w-5/12 flex flex-col space-y-2 mt-10">
+              <div className="mx-auto w-5/12 flex flex-col space-y-2 mt-10">
+                <div
+                  className="w-full bg-white pt-6 pb-14 px-8 rounded-xl border-primary space-y-4 flex flex-col relative">
+                  <h3 className="text-xl font-medium">Swap Successful</h3>
                   <div
-                    className="w-full bg-white pt-6 pb-14 px-8 rounded-xl border-primary space-y-4 flex flex-col relative">
-                    <h3 className="text-xl font-medium">Swap Successful</h3>
-                    <div
-                      className={`w-40 h-40 mx-auto rounded-full border-4 border-primary-900 grid place-content-center bg-primary-900`}>
-                      <Check className="text-white w-20 h-auto" />
-                    </div>
-                    <p className={'mx-auto'}>Swap was executed successfully</p>
-                    <button
-                      className="bg-primary-900 px-5 py-3.5 text-white w-full rounded-xl"
-                      onClick={() => setSwapIsSuccessfull(false)}
-                    >
-                      Close
-                    </button>
+                    className={`w-40 h-40 mx-auto rounded-full border-4 border-primary-900 grid place-content-center bg-primary-900`}>
+                    <Check className="text-white w-20 h-auto" />
                   </div>
+                  <p className={'mx-auto'}>Swap was executed successfully</p>
+                  <button
+                    className="bg-primary-900 px-5 py-3.5 text-white w-full rounded-xl"
+                    onClick={() => setSwapIsSuccessfull(false)}
+                  >
+                    Close
+                  </button>
                 </div>
-              )
+              </div>
+            )
 
               : (
                 <div className="mx-auto flex flex-col space-y-2 mt-10">
@@ -270,7 +279,7 @@ const Page: NextPage = () => {
                                 <div className="flex items-center space-x-2 my-8">
                                   <div
                                     className={`w-10 h-10 rounded-full border-4 border-primary-900 grid place-content-center ${steps.includes(index) && 'bg-primary-900'}`}>{
-                                    (steps.includes(index) && <Check className="text-white" />)}</div>
+                                      (steps.includes(index) && <Check className="text-white" />)}</div>
                                   <span>{step}</span>
                                 </div>
                                 {index !== (arr.length - 1) && <div
@@ -320,8 +329,8 @@ const Page: NextPage = () => {
                                 onChange={(e) => setSlippage(e.target.value)}
                               />
                               <span className="absolute right-4 inset-y-0 flex items-center grid-cols-2">
-                        %
-                      </span>
+                                %
+                              </span>
                             </div>
                             <div className="flex flex-col space-y-2">
                               <Button className="py-4 rounded-xl">Update Tolerance</Button>
@@ -339,8 +348,8 @@ const Page: NextPage = () => {
 
                           {fromToken?.balance && (
                             <span>
-                      balance: {fromToken.balance.formatted} {fromToken.balance.symbol}
-                    </span>
+                              balance: {fromToken.balance.formatted} {fromToken.balance.symbol}
+                            </span>
                           )}
                         </div>
                         <div className={'flex w-full gap-4'}>
@@ -384,9 +393,9 @@ const Page: NextPage = () => {
                         <div className="flex justify-between">
                           <span className="text-grey-900">${fromToken?.priceUSD}</span>
                           <span className="underline cursor-pointer underline-offset-2 text-primary-900"
-                                onClick={() => setFromAmount(fromToken?.balance?.formatted!)}>
-                    Max
-                  </span>
+                            onClick={() => setFromAmount(fromToken?.balance?.formatted!)}>
+                            Max
+                          </span>
                         </div>
                       </div>
 
@@ -449,13 +458,13 @@ const Page: NextPage = () => {
                       ) : (
                         route && (
                           <span className="text-grey-900">
-                    1 {route?.fromToken?.coinKey} ={' '}
+                            1 {route?.fromToken?.coinKey} ={' '}
                             {(
                               parseFloat(route?.fromToken?.priceUSD) /
                               parseFloat(route?.toToken?.priceUSD)
                             ).toFixed(3)}{' '}
                             {route?.toToken.coinKey}
-                  </span>
+                          </span>
                         )
                       )}
 
