@@ -17,13 +17,14 @@ import Container from '@src/components/ui/Container';
 import MarketsTable from '@src/components/molecule/MarketsTable';
 import TransactionsTable from '@src/components/molecule/TransactionsTable';
 import WatchlistTable from '@src/components/molecule/WatchlistTable';
-import { LendMarketState, StrategyState } from '@meta/StateTypes';
+import { StrategyState } from '@meta/StateTypes';
 import { PaginationState } from '@tanstack/react-table';
 import { LoginProviderContext } from '@src/components/providers/LoginProvider';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { Address } from 'viem';
 
 export interface Explorer extends StrategyState {
   id: number;
+  vaultAddress?: Address;
 }
 
 export const currencyFormatter = new Intl.NumberFormat('en-US', {

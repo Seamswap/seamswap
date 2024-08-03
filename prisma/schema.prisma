@@ -8,7 +8,7 @@ generator client {
 }
 
 model Wishlist {
-  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  id             String   @id @default(uuid()) @map("_id") @db.ObjectId
   asset_address  String
   wallet_address String
   createdAt      DateTime @default(now())

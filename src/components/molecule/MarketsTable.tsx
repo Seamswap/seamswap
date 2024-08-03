@@ -18,6 +18,7 @@ import OraclePrice from '@components/ui/OraclePrice';
 import { getIsStrategy } from '@src/lib/utils/configUtils';
 import Link from 'next/link';
 import WishListStar from '@components/ui/WishListStar';
+import Holders from '@components/ui/Holders';
 
 type Props = {
   tableOptions: any;
@@ -68,13 +69,13 @@ const MarketsTable = ({ tableOptions }: Props) => {
         <OraclePrice {...row.original} />
       ),
     },
-    // {
-    //   accessorKey: 'position',
-    //   header: 'Position',
-    //   cell: ({ getValue }) => (
-    //     <span className="text-gray-500">{Number(getValue()).toLocaleString()}</span>
-    //   ),
-    // },
+    {
+      accessorKey: 'position',
+      header: 'Position',
+      cell: ({ row }) => (
+        <Holders {...row.original} />
+      ),
+    },
     {
       accessorKey: 'actions',
       header: 'Actions',

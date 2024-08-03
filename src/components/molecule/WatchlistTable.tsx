@@ -19,6 +19,7 @@ import Link from 'next/link';
 import { getIsStrategy } from '@src/lib/utils/configUtils';
 import { api } from '@src/utils/trpc';
 import { Account } from '../ui/ConnectButton';
+import Holders from '@components/ui/Holders';
 
 type Props = {
   tableOptions: any;
@@ -65,13 +66,13 @@ const columns: ColumnDef<Explorer>[] = [
       <OraclePrice {...row.original} />
     ),
   },
-  // {
-  //   accessorKey: 'position',
-  //   header: 'Position',
-  //   cell: ({ getValue }) => (
-  //     <span className="text-gray-500">{Number(getValue()).toLocaleString()}</span>
-  //   ),
-  // },
+  {
+    accessorKey: 'position',
+    header: 'Position',
+    cell: ({ row }) => (
+      <Holders {...row.original} />
+    ),
+  },
   {
     accessorKey: 'actions',
     header: 'Actions',

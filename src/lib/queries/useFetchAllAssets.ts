@@ -5,7 +5,7 @@ import { useSeamlessContractRead } from '@src/lib/shared/useSeamlessContractRead
 import { lendingPoolAbi, lendingPoolAddress } from '@src/lib/config/contract';
 import { metadataQueryConfig } from '@src/lib/utils';
 import { lendingAssetToHide } from '@src/lib/meta';
-import { strategiesConfig } from '@src/lib/config/config';
+import { assetsConfig, strategiesConfig } from '@src/lib/config/config';
 
 /**
  * This hook combines data from multiple sources: the lending pool and configured strategies.
@@ -22,7 +22,6 @@ export const useFetchAllAssets = (): FetchData<(LendMarketState | StrategyState)
       query: {
         ...metadataQueryConfig,
         refetchOnMount: false,
-
       },
     });
     const lendingMarkets: LendMarketState[] | undefined = lendingAssets
@@ -33,6 +32,7 @@ export const useFetchAllAssets = (): FetchData<(LendMarketState | StrategyState)
         address: asset,
         isStrategy: false,
         tags: ['LEND'],
+        vaultAddress: assetsConfig[asset].sTokenAddress
       }));
 
     // todo: fetch rest of the things for strategies?

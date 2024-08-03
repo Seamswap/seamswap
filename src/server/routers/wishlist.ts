@@ -44,7 +44,7 @@ export const wishListRouter = createTRPCRouter({
     .input(z.object({ asset_address: z.string(), wallet_address: z.string().optional().default(".") }))
     .query(async ({ input: { asset_address, wallet_address }, ctx }) => {
       if (!wallet_address) {
-        
+        return {}
       }
       return await ctx.db.wishlist.findFirst({
         where: {
