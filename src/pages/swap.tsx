@@ -81,7 +81,7 @@ const Page: NextPage = () => {
   const [swapOngoing, setSwapOngoing] = React.useState<boolean>(false);
   const [steps, setSteps] = React.useState<number[]>([0]);
   const [swapIsSuccessfull, setSwapIsSuccessfull] = React.useState<boolean>(false);
-  const { query } = useRouter()
+  const { query } = useRouter();
   const context = {
     swapOngoing,
     setSwapOngoing,
@@ -101,8 +101,9 @@ const Page: NextPage = () => {
         fromTokenAddress: fromToken?.address, // USDC on Arbitrum
         toTokenAddress: toToken?.address, // DAI on Optimism
         fromAmount: (parseFloat(debouncedValue) * 10 ** fromToken.decimals).toString(), // 10 USDC,
-        options: { slippage: parseFloat(slippage) },
+        options: { slippage: parseFloat(slippage), fee: 0.03 },
         fromAddress: account?.address,
+
       };
       if (currentTab === 'ILMS') {
         const value = await simulateWithdraw(account?.address!, fromToken.subStrategy!, debouncedValue);
@@ -140,7 +141,7 @@ const Page: NextPage = () => {
     if (query.tab) {
       setCurrentTab(query.tab as string);
     }
-  }, [query])
+  }, [query]);
   const handlePositionSwap = () => {
     setFromToken(toToken);
     setToToken(fromToken);
@@ -238,24 +239,24 @@ const Page: NextPage = () => {
           <div className="flex flex-col items-start justify-start min-h-[80vh]">
 
             {swapIsSuccessfull ? (
-              <div className="mx-auto w-5/12 flex flex-col space-y-2 mt-10">
-                <div
-                  className="w-full bg-white pt-6 pb-14 px-8 rounded-xl border-primary space-y-4 flex flex-col relative">
-                  <h3 className="text-xl font-medium">Swap Successful</h3>
+                <div className="mx-auto w-5/12 flex flex-col space-y-2 mt-10">
                   <div
-                    className={`w-40 h-40 mx-auto rounded-full border-4 border-primary-900 grid place-content-center bg-primary-900`}>
-                    <Check className="text-white w-20 h-auto" />
+                    className="w-full bg-white pt-6 pb-14 px-8 rounded-xl border-primary space-y-4 flex flex-col relative">
+                    <h3 className="text-xl font-medium">Swap Successful</h3>
+                    <div
+                      className={`w-40 h-40 mx-auto rounded-full border-4 border-primary-900 grid place-content-center bg-primary-900`}>
+                      <Check className="text-white w-20 h-auto" />
+                    </div>
+                    <p className={'mx-auto'}>Swap was executed successfully</p>
+                    <button
+                      className="bg-primary-900 px-5 py-3.5 text-white w-full rounded-xl"
+                      onClick={() => setSwapIsSuccessfull(false)}
+                    >
+                      Close
+                    </button>
                   </div>
-                  <p className={'mx-auto'}>Swap was executed successfully</p>
-                  <button
-                    className="bg-primary-900 px-5 py-3.5 text-white w-full rounded-xl"
-                    onClick={() => setSwapIsSuccessfull(false)}
-                  >
-                    Close
-                  </button>
                 </div>
-              </div>
-            )
+              )
 
               : (
                 <div className="mx-auto flex flex-col space-y-2 mt-10">
@@ -279,7 +280,7 @@ const Page: NextPage = () => {
                                 <div className="flex items-center space-x-2 my-8">
                                   <div
                                     className={`w-10 h-10 rounded-full border-4 border-primary-900 grid place-content-center ${steps.includes(index) && 'bg-primary-900'}`}>{
-                                      (steps.includes(index) && <Check className="text-white" />)}</div>
+                                    (steps.includes(index) && <Check className="text-white" />)}</div>
                                   <span>{step}</span>
                                 </div>
                                 {index !== (arr.length - 1) && <div
@@ -393,7 +394,7 @@ const Page: NextPage = () => {
                         <div className="flex justify-between">
                           <span className="text-grey-900">${fromToken?.priceUSD}</span>
                           <span className="underline cursor-pointer underline-offset-2 text-primary-900"
-                            onClick={() => setFromAmount(fromToken?.balance?.formatted!)}>
+                                onClick={() => setFromAmount(fromToken?.balance?.formatted!)}>
                             Max
                           </span>
                         </div>
