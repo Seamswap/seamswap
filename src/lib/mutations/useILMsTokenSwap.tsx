@@ -99,6 +99,7 @@ export const useILMsTokenSwap = (fromToken: ExtendedToken, toToken: ExtendedToke
       setSwapOngoing(true);
       const value = await simulateWithdraw(spenderAddress!, subStrategyAddress!, inAmount);
       if (!value?.data.assetsToReceive) {
+      throw new Error('withdrawal failed');
         // TODO: toast error
       }
       const { txHash } = await withdrawAsync(
