@@ -1,6 +1,6 @@
-import { useConfig, useWriteContract } from "wagmi";
-import { Address } from "viem";
-import { useState } from "react";
+import { useConfig, useWriteContract } from 'wagmi';
+import { Address } from 'viem';
+import { useState } from 'react';
 import { loopStrategyAbi } from '@src/lib/config/contract';
 import { waitForTransaction } from '@src/lib/shared/transactionWrapper';
 
@@ -19,14 +19,13 @@ export const useWriteStrategyWithdraw = (subStrategy?: Address) => {
       const ret = await waitForTransaction(config, async () => {
         if (!subStrategy) {
           // eslint-disable-next-line no-console
-          console.warn("useWriteStrategyWithdraw: subStrategy is undefined.");
+          console.warn('useWriteStrategyWithdraw: subStrategy is undefined.');
           return undefined;
         }
-
         return writeContractAsync({
           address: subStrategy,
           abi: loopStrategyAbi,
-          functionName: "redeem",
+          functionName: 'redeem',
           args: [shares, from, receiver, minToReceive],
         });
       });

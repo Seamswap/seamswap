@@ -116,7 +116,7 @@ export const LENDING_TOKENS = [{
     address: WSTETH_ADDRESS,
   },
   {
-    name: 'Wrapped Compound Ether',
+    name: 'Coinbase Wrapped Staked Ether',
     address: CBETH_ADDRESS,
   },
   {
@@ -124,7 +124,7 @@ export const LENDING_TOKENS = [{
     address: USDC_ADDRESS,
   },
   {
-    name: 'USD Coin Borrowed',
+    name: 'USD Base Coin',
     address: USDBC_ADDRESS,
   },
   {

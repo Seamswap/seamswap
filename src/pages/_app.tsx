@@ -36,6 +36,8 @@ createConfig({
       'wss://lb.drpc.org/ogws?network=base&dkey=AvBCZwsn-kqoqXOvbbV6cPmFUTfiS3oR77PsvmJKmvm9',
       'https://base-mainnet.g.alchemy.com/v2/ITJZYemtXDZswsfcino5vXg6ikpUq1zI',
       'wss://base-mainnet.g.alchemy.com/v2/ITJZYemtXDZswsfcino5vXg6ikpUq1zI',
+      'https://base.gateway.tenderly.co/6bfWwrr1dPk69jC2YXS9bt',
+      'wss://base.gateway.tenderly.co/6bfWwrr1dPk69jC2YXS9bt'
     ],
   },
   providers: [

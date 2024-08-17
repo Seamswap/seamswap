@@ -14,6 +14,8 @@ import seamSwap from '@assets/tokens/seamswap.svg';
 
 
 const rpcConfig = [
+  { url: 'https://base.gateway.tenderly.co/6bfWwrr1dPk69jC2YXS9bt', isWebSocket: false },
+  { url: 'wss://base.gateway.tenderly.co/6bfWwrr1dPk69jC2YXS9bt', isWebSocket: true },
   { url: 'https://base-mainnet.g.alchemy.com/v2/ITJZYemtXDZswsfcino5vXg6ikpUq1zI', isWebSocket: false },
   { url: 'wss://base-mainnet.g.alchemy.com/v2/ITJZYemtXDZswsfcino5vXg6ikpUq1zI', isWebSocket: true },
   { url: 'https://lb.drpc.org/ogrpc?network=base&dkey=AvBCZwsn-kqoqXOvbbV6cPmFUTfiS3oR77PsvmJKmvm9', isWebSocket: false },
