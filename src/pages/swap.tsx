@@ -289,7 +289,12 @@ const Page: NextPage = () => {
                             ))
                           }
                           <button
-                            className="mx-auto px-16 rounded-xl py-4 bg-primary-300 text-primary-900 w-10/12 block">Cancel
+                            className="mx-auto px-16 rounded-xl py-4 bg-primary-300 text-primary-900 w-10/12 block"
+                            onClick={() => {
+                              setSteps([0]);
+                              setSwapOngoing(false);
+                            }}
+                          >Cancel
                           </button>
                         </div>
                       )}

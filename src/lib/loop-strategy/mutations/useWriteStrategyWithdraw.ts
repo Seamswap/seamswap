@@ -22,6 +22,7 @@ export const useWriteStrategyWithdraw = (subStrategy?: Address) => {
           console.warn('useWriteStrategyWithdraw: subStrategy is undefined.');
           return undefined;
         }
+        console.log({ shares, from, receiver, minToReceive });
         return writeContractAsync({
           address: subStrategy,
           abi: loopStrategyAbi,

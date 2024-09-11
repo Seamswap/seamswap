@@ -32,8 +32,9 @@ export const useFetchAllAssets = (): FetchData<(LendMarketState | StrategyState)
         address: asset,
         isStrategy: false,
         tags: ['LEND'],
-        vaultAddress: assetsConfig[asset].sTokenAddress
+        vaultAddress: assetsConfig[asset]?.sTokenAddress
       }));
+    console.log({lendingAssets})
 
     // todo: fetch rest of the things for strategies?
     const ilmMarkets: StrategyState[] = [];

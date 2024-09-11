@@ -62,7 +62,7 @@ export const useILMsTokenSwap = (fromToken: ExtendedToken, toToken: ExtendedToke
               setSwapOngoing(false);
               setSwapIsSuccessfull(true);
 
-            }
+            },
           });
       }
     } catch (e) {
@@ -98,8 +98,16 @@ export const useILMsTokenSwap = (fromToken: ExtendedToken, toToken: ExtendedToke
     try {
       setSwapOngoing(true);
       const value = await simulateWithdraw(spenderAddress!, subStrategyAddress!, inAmount);
+      console.log({ value })
       if (!value?.data.assetsToReceive) {
-      throw new Error('withdrawal failed');
+        throw new Error('withdrawal failed');
+        setSteps([0]);
+        setSwapOngoing(false);
+        toast.toast({
+          title: 'Error',
+          description: 'withdrawal simulation failed',
+          variant: 'destructive',
+        });
         // TODO: toast error
       }
       const { txHash } = await withdrawAsync(
