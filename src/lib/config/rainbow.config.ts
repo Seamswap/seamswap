@@ -56,12 +56,17 @@ export const connectors = connectorsForWallets(
 export const config = createConfig({
   connectors,
   chains: [base],
-
   transports: {
-    [base.id]: fallback(
-      rpcConfig.map(({ url, isWebSocket }) => (isWebSocket ? webSocket(url) : http(url))),
-      { rank: true },
-    ),
+    [base.id]: fallback([
+      http('https://base-mainnet.g.alchemy.com/v2/ITJZYemtXDZswsfcino5vXg6ikpUq1zI'),
+      // webSocket('wss://base-mainnet.g.alchemy.com/v2/ITJZYemtXDZswsfcino5vXg6ikpUq1zI'),
+      http('https://lb.drpc.org/ogrpc?network=base&dkey=AvBCZwsn-kqoqXOvbbV6cPmFUTfiS3oR77PsvmJKmvm9'),
+      // webSocket('wss://lb.drpc.org/ogws?network=base&dkey=AvBCZwsn-kqoqXOvbbV6cPmFUTfiS3oR77PsvmJKmvm9'),
+      http('https://rpc.ankr.com/base'),
+      http('https://base.gateway.tenderly.co/6bfWwrr1dPk69jC2YXS9bt'),
+      // webSocket('wss://base.gateway.tenderly.co/6bfWwrr1dPk69jC2YXS9bt'),
+    //
+    ]),
   },
 });
 
