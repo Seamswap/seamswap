@@ -88,6 +88,7 @@ export async function simulateWithdraw(
   const { logs } = result[0];
   // Withdraw event is the last event
   const withdrawEvent = (logs ? logs[logs.length - 1] : undefined)?.raw;
+  console.log({ withdrawEvent })
 
   if (!withdrawEvent) throw new Error('Failed to find withdraw event');
   const decodedWithdrawEvent = decodeEventLog({
