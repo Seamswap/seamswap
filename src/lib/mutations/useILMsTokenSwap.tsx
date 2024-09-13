@@ -1,4 +1,4 @@
-import { Address, etherUnits, formatUnits, parseUnits } from 'viem';
+import { Address, formatUnits, parseUnits } from 'viem';
 import { executeRoute, Route, RouteExtended } from '@lifi/sdk';
 import { useToast } from '../hooks/use-toast';
 import { useERC20Approve } from '@src/lib/mutations/useERC20Approve';
@@ -22,7 +22,7 @@ export const useILMsTokenSwap = (fromToken: ExtendedToken, toToken: ExtendedToke
   const toast = useToast();
   const { setSwapOngoing, setSteps, setSwapIsSuccessfull } = useContext(SwapContext);
 
-  const { isApproved, isApproving, justApproved, approveAsync } = useERC20Approve(
+  const { approveAsync } = useERC20Approve(
     outAddress,
     toSubStrategyAddress,
     BigInt(route.toAmount),
@@ -57,7 +57,7 @@ export const useILMsTokenSwap = (fromToken: ExtendedToken, toToken: ExtendedToke
             amount: toAmount,
             sharesToReceive: value.sharesToReceive,
           }, {
-            onSuccess(txHash) {
+            onSuccess() {
               setSteps([0]);
               setSwapOngoing(false);
               setSwapIsSuccessfull(true);
@@ -77,7 +77,7 @@ export const useILMsTokenSwap = (fromToken: ExtendedToken, toToken: ExtendedToke
     }
   };
   const getTransactionLinks = (route: RouteExtended) => {
-    route.steps.forEach((step, index) => {
+    route.steps.forEach((step) => {
       step.execution?.process.forEach((process, index, array) => {
         if (process.txHash) {
           setSteps([0, 1, 2]);
@@ -99,7 +99,6 @@ export const useILMsTokenSwap = (fromToken: ExtendedToken, toToken: ExtendedToke
       setSwapOngoing(true);
       const value = await simulateWithdraw(spenderAddress!, subStrategyAddress!, inAmount);
       if (!value?.data.assetsToReceive) {
-        throw new Error('withdrawal failed');
         setSteps([0]);
         setSwapOngoing(false);
         toast.toast({
