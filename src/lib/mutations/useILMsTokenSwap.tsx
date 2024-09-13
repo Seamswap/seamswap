@@ -98,7 +98,6 @@ export const useILMsTokenSwap = (fromToken: ExtendedToken, toToken: ExtendedToke
     try {
       setSwapOngoing(true);
       const value = await simulateWithdraw(spenderAddress!, subStrategyAddress!, inAmount);
-      console.log({ value, inAmount });
       if (!value?.data.assetsToReceive) {
         throw new Error('withdrawal failed');
         setSteps([0]);
@@ -108,7 +107,6 @@ export const useILMsTokenSwap = (fromToken: ExtendedToken, toToken: ExtendedToke
           description: 'withdrawal simulation failed',
           variant: 'destructive',
         });
-        // TODO: toast error
       }
       const { txHash } = await withdrawAsync(
         parseUnits(inAmount, 18),
