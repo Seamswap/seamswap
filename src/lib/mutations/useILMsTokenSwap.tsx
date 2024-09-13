@@ -35,6 +35,15 @@ export const useILMsTokenSwap = (fromToken: ExtendedToken, toToken: ExtendedToke
 
       });
       const isSuccessful = executedRoute.steps.every(step => step.execution?.status === 'DONE');
+      // if (!isSuccessful) {
+      //   setSteps([0]);
+      //   setSwapOngoing(false);
+      //   toast.toast({
+      //     title: 'Error',
+      //     description: 'swap failed',
+      //     variant: 'destructive',
+      //   });
+      // }
       setSteps([0, 1, 2, 3]);
       const tokenAmount = BigInt(executedRoute?.steps.at(-1)?.execution?.toAmount || '0');
       const toAmount = formatUnits(tokenAmount, executedRoute?.steps.at(-1)?.execution?.toToken?.decimals || 0);
